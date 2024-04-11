@@ -8,7 +8,13 @@
 -  Snack (Grid)
 -  Tetris (Grid)
 -  PacMan (Grid)
+-  Puzzel Game (GRid / 2D)
 
 ## Software
--  
+-  Com. Discord
+-  Managment GitHub
  
+## Game Design
+-  2D Game
+-  Vektor-Based Movement
+-  
