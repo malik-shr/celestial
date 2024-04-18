@@ -1,18 +1,25 @@
 export default class GraphicsPipeline{
     player
+    canvas
+    ctx
 
-    constructor(player) {
+    constructor(player, canvas) {
         this.player = player
+        this.canvas = canvas
+        this.ctx = canvas.getContext("2d");
     }
     
     render() {
-        const canvas = window.document.getElementById("canvas")
-        const ctx = canvas.getContext("2d");
-        
-        this.renderPlayer(ctx)
+        // clears the canvas each time render is called
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.renderPlayer()
     }
 
-    renderPlayer(ctx) {
-        ctx.fillRect(this.player.x, this.player.y, 20, 20)
+    renderPlayer() {
+        this.ctx.beginPath()
+        this.ctx.rect(this.player.x, this.player.y, 50, 50);
+        this.ctx.fillStyle = "red";
+        this.ctx.fill(); 
+        this.ctx.closePath()
     }
 }

@@ -4,22 +4,22 @@ import GraphicsPipeline from "./graphics/graphicsPipeline"
 
 export class Game {
     counter
-    
-    // TEMP
     player
     engine
     graphicsPipeline
+    canvas
+    ctx
 
-    constructor() {
-        this.counter
-    
-        // TEMP
-        this.player = new Player(240, 160)
-        this.engine = new Engine(this.player)
-        this.graphicsPipeline = new GraphicsPipeline(this.player)
+    constructor(player) {
+        this.counter = 0
+        this.canvas = window.document.getElementById("canvas")
+        this.ctx = canvas.getContext("2d");
+        this.player = player
+        this.engine = new Engine(this.player) 
+        this.graphicsPipeline = new GraphicsPipeline(this.player, this.canvas)
     }
 
-    start() {
+    start() {   
         window.requestAnimationFrame(this.tick.bind(this))
     }
 
@@ -28,11 +28,12 @@ export class Game {
         this.engine.engine()
         this.graphicsPipeline.render()
 
-        window.requestAnimationFrame(this.tick.bind(this))
-
         // Avoid to high number
         if(this.counter >= 100_0000) {
             counter = 0
         }
+
+        window.requestAnimationFrame(this.tick.bind(this))
     }
 }
+
