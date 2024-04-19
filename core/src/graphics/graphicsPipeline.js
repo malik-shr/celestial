@@ -11,7 +11,7 @@ export default class GraphicsPipeline{
     
     render() {
         // clears the canvas each time render is called
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.renderPlayer()
     }
 
