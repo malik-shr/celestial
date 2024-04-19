@@ -1,13 +1,15 @@
 import KeyboardListener from "./engine/listener/keyboardListener"
 import { Game } from "./game"
-import Player from "./engine/player"
 
-const player = new Player(240, 160)
-const game = new Game(player)
-const keyboardListener = new KeyboardListener(player)
+const game = new Game()
+const keyboardListener = new KeyboardListener()
 
 window.addEventListener("keydown", (event) => {
-    keyboardListener.listen(event)
+    keyboardListener.handleKeyDown(event)
+})
+
+window.addEventListener("keyup", (event) => {
+    keyboardListener.handleKeyUp(event)
 })
 
 game.start()

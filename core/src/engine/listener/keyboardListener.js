@@ -1,27 +1,15 @@
+import { keysPressed } from "../store"
+
 export default class KeyboardListener{
+    handleKeyDown(event) {
+        if(!keysPressed.has(event.key)) return
 
-    player
-
-    constructor(player) {
-        this.player = player
+        keysPressed.set(event.key, true)
     }
 
-    listen(event) {
-        console.log(event)
-        if(event.key === "ArrowRight") {
-            this.player.x += 5 
-        }
-    
-        if(event.key === "ArrowLeft") {
-            this.player.x -= 5 
-        }
-    
-        if(event.key === "ArrowDown") {
-            this.player.y -= 5 
-        }
-    
-        if(event.key === "ArrowDown") {
-            this.player.y += 5 
-        }
+    handleKeyUp(event) {
+        if(!keysPressed.has(event.key)) return
+
+        keysPressed.set(event.key, false)
     }
 }

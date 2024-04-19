@@ -1,38 +1,38 @@
 import Engine from "./engine/engine"
+import Player from "./engine/player"
 import GraphicsPipeline from "./graphics/graphicsPipeline"
+import { level1 } from "./levels/level1"
 
 export class Game {
-    counter
+    raf
     player
     engine
     graphicsPipeline
-    canvas
-    ctx
+    level
 
-    constructor(player) {
-        this.counter = 0
-        this.canvas = window.document.getElementById("canvas")
-        this.ctx = this.canvas.getContext("2d")
-        this.player = player
-        this.engine = new Engine(this.player) 
-        this.graphicsPipeline = new GraphicsPipeline(this.player, this.canvas)
+    constructor() {
+        this.raf         
+        this.player = new Player(240, 160)
+        
+        this.level = level1 // Set to Level 1 by default fe
+
+        this.engine = new Engine(this.player, this) 
+        this.graphicsPipeline = new GraphicsPipeline(this.player, this)
     }
 
     start() {   
-        window.requestAnimationFrame(this.tick.bind(this))
+        this.raf = window.requestAnimationFrame(this.tick.bind(this))
+    }
+
+    stop() {
+        window.cancelAnimationFrame(this.raf)
     }
 
     tick() {
-        ++this.counter
         this.engine.engine()
         this.graphicsPipeline.render()
 
-        // Avoid to high number
-        if(this.counter >= 100_0000) {
-            this.counter = 0
-        }
-
-        window.requestAnimationFrame(this.tick.bind(this))
+        this.raf = window.requestAnimationFrame(this.tick.bind(this))
     }
 }
 

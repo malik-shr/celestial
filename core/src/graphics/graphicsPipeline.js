@@ -3,10 +3,12 @@ export default class GraphicsPipeline{
     canvas
     ctx
 
-    constructor(player, canvas) {
+    constructor(player, game) {
         this.player = player
-        this.canvas = canvas
-        this.ctx = canvas.getContext("2d");
+        this.game = game
+
+        this.canvas = window.document.getElementById("canvas")
+        this.ctx = this.canvas.getContext("2d")
     }
     
     render() {
