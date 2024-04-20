@@ -15,4 +15,12 @@ export default class Player{
         this.velocityY = 0
         this.isJumping = false
     }
+
+    draw(ctx) {
+        ctx.beginPath()
+        ctx.rect(this.x, this.y, 50, 50);
+        ctx.fillStyle = "red";
+        ctx.fill(); 
+        ctx.closePath()
+    }
 }
