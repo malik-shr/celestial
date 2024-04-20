@@ -21,11 +21,5 @@ export default class ElementList extends Array {
         }
     }
 
-    action() {
-        for (let i = 0; i < this.length; i++) {
-            this[i].action()
-        }
-    }
-
     checkCollision(element) { }
 }

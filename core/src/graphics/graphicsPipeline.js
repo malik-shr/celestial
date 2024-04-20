@@ -14,14 +14,7 @@ export default class GraphicsPipeline{
     render(tickCounter) {
         // clears the canvas each time render is called
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.renderPlayer()
-    }
-
-    renderPlayer() {
-        this.ctx.beginPath()
-        this.ctx.rect(this.player.x, this.player.y, 50, 50);
-        this.ctx.fillStyle = "red";
-        this.ctx.fill(); 
-        this.ctx.closePath()
+        this.player.draw(this.ctx)
+        this.game.level.draw(this.ctx)
     }
 }

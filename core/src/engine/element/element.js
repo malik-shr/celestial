@@ -1,5 +1,6 @@
 export default class Element{
-    action() {}
+    // TODO extend element class
+    constructor() {}
 
     draw(ctx) {}
 
