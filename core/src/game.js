@@ -9,11 +9,14 @@ export class Game {
     engine
     graphicsPipeline
     level
+    levelList
 
-    constructor() {
+    constructor(levelList) {
         this.raf         
         this.player = new Player(240, 160)
-        
+
+
+        this.levelList = levelList
         this.level = level1 // Set to Level 1 by default fe
 
         this.engine = new Engine(this.player, this) 

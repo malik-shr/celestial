@@ -5,7 +5,7 @@ import LevelList from "./levels/levelList"
 // TODO Implement logic for level architecture
 const levelList = new LevelList()
 
-const game = new Game()
+const game = new Game(levelList)
 const keyboardListener = new KeyboardListener()
 
 window.addEventListener("keydown", (event) => keyboardListener.handleKeyDown(event))
