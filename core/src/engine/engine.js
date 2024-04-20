@@ -1,4 +1,4 @@
-import { keysPressed } from "./store"
+import { keysPressed } from "../store"
 
 export default class Engine {
     player
