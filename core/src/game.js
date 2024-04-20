@@ -9,15 +9,17 @@ export class Game {
     engine
     graphicsPipeline
     level
+    tickCounter
 
     constructor() {
         this.raf         
-        this.player = new Player(240, 160)
+        this.player = new Player(100, 250)
         
         this.level = level1 // Set to Level 1 by default fe
 
         this.engine = new Engine(this.player, this) 
         this.graphicsPipeline = new GraphicsPipeline(this.player, this)
+        this.tickCounter = 0
     }
 
     start() {   
@@ -29,9 +31,9 @@ export class Game {
     }
 
     tick() {
-        this.engine.engine()
-        this.graphicsPipeline.render()
-
+        this.engine.engine(this.tickCounter)
+        this.graphicsPipeline.render(this.tickCounter)
+        this.tickCounter += 1
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
     }
 }
