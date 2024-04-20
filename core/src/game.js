@@ -10,11 +10,12 @@ export class Game {
     graphicsPipeline
     level
     tickCounter
+    levelList
 
-    constructor() {
+    constructor(levelList) {
         this.raf         
         this.player = new Player(100, 250)
-        
+        this.levelList = levelList
         this.level = level1 // Set to Level 1 by default fe
 
         this.engine = new Engine(this.player, this) 
