@@ -5,18 +5,25 @@ import GraphicsPipeline from "./graphics/graphicsPipeline"
 import { level1 } from "./level/level1"
 
 // Singleton class
-export class Game {
-    raf
+export default class Game {
+    
     player
+    
     engine
     graphicsPipeline
-    level
-    tickCounter
+
     levelList
+    level
+
+    raf
+    gravity
+    tickCounter
+    
 
     constructor() {
         this.raf         
         this.player = new Player(100, 250)
+        this.gravity = 0
         this.levelList = new LevelList()
         this.level = level1 // Set to Level 1 as default level
 

@@ -1,5 +1,5 @@
 import KeyboardListener from "./engine/listener/keyboardListener"
-import { Game } from "./game"
+import Game from "./game"
 
 const game = new Game()
 const keyboardListener = new KeyboardListener()

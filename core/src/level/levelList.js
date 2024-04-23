@@ -2,6 +2,7 @@ import { level1 } from "./level1"
 
 // Singleton Class
 export default class LevelList extends Map {
+    
     constructor() {
         super()
         this.initLevels()

@@ -1,4 +1,5 @@
 export default class GraphicsPipeline{
+    
     player
     canvas
     ctx
