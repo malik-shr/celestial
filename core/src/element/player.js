@@ -1,4 +1,4 @@
-import { keysPressed } from "../../store"
+import { keysPressed } from "../store"
 import Element from "./element"
 
 export default class Player extends Element {

@@ -1,4 +1,4 @@
-import KeyboardListener from "./engine/listener/keyboardListener"
+import KeyboardListener from "./listener/keyboardListener"
 import Game from "./game"
 
 const game = new Game()
