@@ -1,34 +1,26 @@
-import Engine from "./engine/engine"
-import Player from "./engine/player"
 import LevelList from "./level/levelList"
-import GraphicsPipeline from "./graphics/graphicsPipeline"
 import { level1 } from "./level/level1"
 
 // Singleton class
 export default class Game {
     
-    player
-    
-    engine
-    graphicsPipeline
-
     levelList
     level
 
     raf
-    gravity
+
+    canvas
+    ctx
+
     tickCounter
     
-
     constructor() {
-        this.raf         
-        this.player = new Player(100, 250)
-        this.gravity = 0
+        this.canvas = window.document.getElementById("canvas")
+        this.ctx = this.canvas.getContext("2d")
+
         this.levelList = new LevelList()
         this.level = level1 // Set to Level 1 as default level
 
-        this.engine = new Engine(this.player, this) 
-        this.graphicsPipeline = new GraphicsPipeline(this.player, this)
         this.tickCounter = 0
     }
 
@@ -41,8 +33,12 @@ export default class Game {
     }
 
     tick() {
-        this.engine.engine(this.tickCounter)
-        this.graphicsPipeline.render(this.tickCounter)
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.level.elementList.action()
+        this.level.elementList.draw(this.ctx)
+        this.level.elementList.checkCollision()
+
         this.tickCounter += 1
 
         //Avoid to high number

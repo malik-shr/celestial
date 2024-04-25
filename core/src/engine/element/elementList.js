@@ -16,11 +16,21 @@ export default class ElementList extends Array {
         this.splice(i, 1)
     }
 
-    draw(ctx) {
-        for (let i = 0; i < this.length; i++) {
-            this[i].draw(ctx)
+    checkCollision() {
+        for (const element of this) {
+            element.checkCollision()
         }
     }
 
-    checkCollision(element) { }
+    action() {
+        for(const element of this) {
+            element.action()
+        }
+    }
+
+    draw(ctx) {
+        for (const element of this) {
+            element.draw(ctx)
+        }
+    }
 }

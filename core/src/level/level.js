@@ -1,16 +1,18 @@
+import ElementList from "../engine/element/elementList"
+
 export default class Level{
     
     // TODO extend level class
     name
     elementList
 
-    constructor(name, elementList) {
-        this.name = name
-        this.elementList = elementList
-    }
+    gravity
+    groundPosition
 
-     // Draws each element of the element list
-    draw(ctx) {
-        this.elementList.draw()
+    constructor(name) {
+        this.name = name
+        this.elementList = new ElementList()
+        this.gravity = 0
+        this.groundPosition = 250
     }
 }
