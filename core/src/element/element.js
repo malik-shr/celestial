@@ -1,7 +1,16 @@
-export default class Element{
-    
+export default class Element {
+    x
+    y
+    sizeX
+    sizeY
+
     // TODO extend element class
-    constructor() {}
+    constructor(x, y, sizeX = 1, sizeY = 1) {
+        this.x = x
+        this.y = y
+        this.sizeX = sizeX
+        this.sizeY = sizeY
+    }
 
     action() {}
 

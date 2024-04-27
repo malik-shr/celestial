@@ -6,8 +6,21 @@ export default [
   {languageOptions: { globals: globals.browser }},
   pluginJs.configs.recommended,
   {
+    extends: ["prettier"],
+    plugins: ["prettier"],
     rules: {
-      "no-unused-vars": "off"
-    }
+      "no-unused-vars": "warn",
+      "eqeqeq": "warn",
+      "camelcase": "warn",
+      "new-cap": "warn",
+      "prefer-const": "warn", 
+      "no-else-return": "warn",
+      "no-const-assign": "error",
+      "one-var": ["error","never"],
+      "no-multi-assign": "error",
+      "no-var": "error",
+      "no-duplicate-imports": "error",
+      "prettier/prettier": ["error"]
+    },
   }
 ];

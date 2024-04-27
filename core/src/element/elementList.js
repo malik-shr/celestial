@@ -1,5 +1,4 @@
 export default class ElementList extends Array {
-    
     constructor() {
         super()
     }
@@ -16,21 +15,21 @@ export default class ElementList extends Array {
         this.splice(i, 1)
     }
 
-    checkCollision() {
-        for (const element of this) {
-            element.checkCollision()
+    checkCollision(element) {
+        for (const elementItem of this) {
+            elementItem.checkCollision(element)
         }
     }
 
     action() {
-        for(const element of this) {
-            element.action()
+        for (const elementItem of this) {
+            elementItem.action()
         }
     }
 
     draw(ctx) {
-        for (const element of this) {
-            element.draw(ctx)
+        for (const elementItem of this) {
+            elementItem.draw(ctx)
         }
     }
 }

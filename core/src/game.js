@@ -3,7 +3,6 @@ import { level1 } from "./level/level1"
 
 // Singleton class
 export default class Game {
-    
     levelList
     level
 
@@ -63,4 +62,3 @@ export default class Game {
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
     }
 }
-

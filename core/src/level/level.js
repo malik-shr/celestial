@@ -1,7 +1,6 @@
 import ElementList from "../element/elementList"
 
-export default class Level{
-    
+export default class Level {
     // TODO extend level class
     name
     elementList
@@ -13,6 +12,6 @@ export default class Level{
         this.name = name
         this.elementList = new ElementList()
         this.gravity = 0
-        this.groundPosition = 250
+        this.groundPosition = 256
     }
 }

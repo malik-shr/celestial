@@ -1,5 +1,12 @@
 {
-    "eslint.workingDirectories": [
-        { "pattern": "core/src" }
-    ],
+  "eslint.workingDirectories": [{ "pattern": "core/src" }],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.ignorePath": "core/.prettierignore",
+
+  "javascript.updateImportsOnFileMove.enabled": "always"
 }
