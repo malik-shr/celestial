@@ -5,4 +5,4 @@ import Level from "./level";
 
 export const level1 = new Level("1")
 
-level1.elementList.add(new Player(100, 250, level1))
+level1.elementList.add(new Player(100, 0, level1))

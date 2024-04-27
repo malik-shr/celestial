@@ -26,33 +26,35 @@ export default class Player extends Element {
 
     changeVelocities() {
         // gravity accumulates every tick
-        this.level.gravity += 2
+        this.level.gravity += 7
+
+        // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
+        if(!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft") || 
+        keysPressed.get("ArrowRight") && this.direction === "left" ||
+        keysPressed.get("ArrowLeft") && this.direction === "right") {
+            this.velocityX = 0
+        }
 
         // beschleunigung wenn man die jeweilige taste drückt
-        if(keysPressed.get("ArrowRight") && this.velocityX < 50) {
-            this.velocityX += 1.5
+        if(keysPressed.get("ArrowRight") && this.velocityX < 120) {
+            this.velocityX += 8
+            this.direction = "right"
         }
 
-        if(keysPressed.get("ArrowLeft")  && this.velocityX > -50) {
-            this.velocityX -= 1.5
-        }
-
-        // entschleunigung wenn man die jeweilige taste nicht drückt
-        if(!keysPressed.get("ArrowRight") && this.velocityX > 1.5) {
-            this.velocityX -= 1.5 
-        }
-
-        if(!keysPressed.get("ArrowLeft") && this.velocityX < -1.5) {
-            this.velocityX += 1.5 
+        if(keysPressed.get("ArrowLeft")  && this.velocityX > -120) {
+            this.velocityX -= 8
+            this.direction = "left"
         }
 
         // second part means you can only jump if grounded
         if(keysPressed.get(" ") && this.y === this.level.groundPosition) {
-            this.velocityY -= 75
+            this.velocityY = -150
+            this.isJumping = true
         }
 
-        if(keysPressed.get("ArrowUp") && this.y === this.level.groundPosition) {
-            this.velocityY -= 75
+        if(!keysPressed.get(" ") && this.velocityY < -this.level.gravity-32 && this.isJumping === true) {
+            this.velocityY = -this.level.gravity-32
+            this.isJumping = false
         }
     }
 
@@ -70,6 +72,7 @@ export default class Player extends Element {
             this.y = this.level.groundPosition
             this.velocityY = 0
             this.level.gravity = 0
+            this.isJumping = false
         }
     }
 

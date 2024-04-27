@@ -13,6 +13,10 @@ export default class Game {
     ctx
 
     tickCounter
+    startTime
+    elapsed
+    now
+    then
     
     constructor() {
         this.canvas = window.document.getElementById("canvas")
@@ -22,9 +26,12 @@ export default class Game {
         this.level = level1 // Set to Level 1 as default level
 
         this.tickCounter = 0
+        this.startTime = performance.now()
+        
     }
 
     start() {   
+        this.then = this.startTime
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
     }
 
@@ -33,6 +40,14 @@ export default class Game {
     }
 
     tick() {
+
+        this.now = performance.now()
+
+        this.elapsed = this.now-this.then
+
+        // caps to about 60 fps
+        if(this.elapsed>1000/60){
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.level.elementList.action()
@@ -40,10 +55,9 @@ export default class Game {
         this.level.elementList.checkCollision()
 
         this.tickCounter += 1
+    
+        this.then = this.now - (this.elapsed % 1000/60)
 
-        //Avoid to high number
-        if (this.tickCounter === 100_000) {
-            this.tickCounter = 0
         }
 
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
