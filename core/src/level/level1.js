@@ -7,4 +7,4 @@ import Level from "./level"
 export const level1 = new Level("1")
 
 level1.elementList.add(new Player(32, 64, level1))
-level1.elementList.add(new SolidBlock(64, 224, 2, 1))
+level1.elementList.add(new SolidBlock(0, 480, 64, 1))

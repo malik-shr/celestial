@@ -47,8 +47,8 @@ export default class Player extends Element {
             this.isJumping = true
         }
 
-        if(!keysPressed.get(" ") && this.velocityY < -this.level.gravity-32 && this.isJumping === true) {
-            this.velocityY = -this.level.gravity-32
+        if(!keysPressed.get(" ") && this.velocityY < -this.level.gravity-64 && this.isJumping === true) {
+            this.velocityY = -this.level.gravity-64
             this.isJumping = false
         }
     }

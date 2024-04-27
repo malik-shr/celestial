@@ -12,6 +12,6 @@ export default class Level {
         this.name = name
         this.elementList = new ElementList()
         this.gravity = 0
-        this.groundPosition = 256
+        this.groundPosition = 448
     }
 }
