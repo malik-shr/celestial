@@ -1,10 +1,8 @@
 import { keysPressed } from "../store"
 import Element from "./element"
+import SolidBlock from "./solidBlock"
 
 export default class Player extends Element {
-    x
-    y
-
     velocityX
     velocityY
 
@@ -13,10 +11,8 @@ export default class Player extends Element {
     level
 
     constructor(x, y, level) {
-        super()
+        super(x, y)
 
-        this.x = x
-        this.y = y
         this.velocityX = 0
         this.velocityY = 0
         this.isJumping = false
@@ -67,7 +63,7 @@ export default class Player extends Element {
     }
 
     // Override
-    checkCollision() {
+    checkCollision(element) {
         // makes sure player doesnt go below ground and resets velocities in y direction
         if (this.y >= this.level.groundPosition) {
             this.y = this.level.groundPosition
@@ -85,7 +81,7 @@ export default class Player extends Element {
     // Override
     draw(ctx) {
         ctx.beginPath()
-        ctx.rect(this.x, this.y, 50, 50)
+        ctx.rect(this.x, this.y, this.sizeX * 32, this.sizeY * 32)
         ctx.fillStyle = "red"
         ctx.fill()
         ctx.closePath()
