@@ -1,5 +1,5 @@
-import Player from "../element/player";
-import Level from "./level";
+import Player from "../element/player"
+import Level from "./level"
 
 // TODO add some elements to level1 and determine element logic
 

@@ -1,5 +1,4 @@
-export default class Element{
-    
+export default class Element {
     // TODO extend element class
     constructor() {}
 

@@ -1,5 +1,4 @@
 export default class ElementList extends Array {
-    
     constructor() {
         super()
     }
@@ -23,7 +22,7 @@ export default class ElementList extends Array {
     }
 
     action() {
-        for(const element of this) {
+        for (const element of this) {
             element.action()
         }
     }

@@ -1,7 +1,6 @@
 import ElementList from "../element/elementList"
 
-export default class Level{
-    
+export default class Level {
     // TODO extend level class
     name
     elementList

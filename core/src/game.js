@@ -3,7 +3,6 @@ import { level1 } from "./level/level1"
 
 // Singleton class
 export default class Game {
-    
     levelList
     level
 
@@ -13,7 +12,7 @@ export default class Game {
     ctx
 
     tickCounter
-    
+
     constructor() {
         this.canvas = window.document.getElementById("canvas")
         this.ctx = this.canvas.getContext("2d")
@@ -24,7 +23,7 @@ export default class Game {
         this.tickCounter = 0
     }
 
-    start() {   
+    start() {
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
     }
 
@@ -33,7 +32,7 @@ export default class Game {
     }
 
     tick() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         this.level.elementList.action()
         this.level.elementList.draw(this.ctx)
@@ -49,4 +48,3 @@ export default class Game {
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
     }
 }
-
