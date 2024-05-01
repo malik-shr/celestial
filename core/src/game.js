@@ -50,8 +50,8 @@ export default class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.level.elementList.action()
-        this.level.elementList.draw(this.ctx)
         this.level.elementList.checkCollision()
+        this.level.elementList.draw(this.ctx)
 
         this.tickCounter += 1
     
