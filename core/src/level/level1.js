@@ -18,3 +18,4 @@ level1.elementList.add(new SolidBlock(getRandomInt(0, 700), getRandomInt(0, 384)
 level1.elementList.add(new SolidBlock(getRandomInt(0, 700), getRandomInt(0, 384), getRandomInt(1, 5), getRandomInt(1, 5)))
 level1.elementList.add(new SolidBlock(getRandomInt(0, 700), getRandomInt(0, 384), getRandomInt(1, 5), getRandomInt(1, 5)))
 level1.elementList.add(new SolidBlock(getRandomInt(0, 700), getRandomInt(0, 384), getRandomInt(1, 5), getRandomInt(1, 5)))
+
