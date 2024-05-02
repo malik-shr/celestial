@@ -8,10 +8,10 @@ export default class Level {
     gravity
     groundPosition
 
-    constructor(name) {
+    constructor(name, gravity) {
         this.name = name
         this.elementList = new ElementList()
-        this.gravity = 0
+        this.gravity = gravity
         this.groundPosition = 448
     }
 }
