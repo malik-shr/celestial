@@ -22,6 +22,7 @@ export default class Player extends Element {
             y: 0,
         }
         this.isJumping = false
+        this.canMove = 10
         this.level = level
         this.gravity = 0
 
@@ -36,15 +37,13 @@ export default class Player extends Element {
         }
     }
 
-    changeVelocities(){
-        
+    changeVelocities() {
         this.gravity += this.level.gravity
 
         // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
         // check with velocities not direction
         if (
-            (!keysPressed.get("ArrowRight") &&
-                !keysPressed.get("ArrowLeft")) ||
+            (!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft")) ||
             (keysPressed.get("ArrowRight") && this.velocity.x < 0) ||
             (keysPressed.get("ArrowLeft") && this.velocity.x > 0)
         ) {
@@ -79,58 +78,107 @@ export default class Player extends Element {
         }
 
         this.isJumping = true
-
     }
 
     // Override
     checkCollision() {
+        const previousVelocityX = Math.round(this.velocity.x / 10)
+        const previousVelocityY =
+            Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)
+
         for (const elementItem of this.level.elementList) {
+            let collidedy = false
+
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
 
-            // touching upper bound: this.position.y > elementItem.position.y-this.sizeY*32
-            // touching lower bound: this.position.y < elementItem.position.y + elementItem.sizeY*32
-            // touching left: elementItem.position.x-this.sizeX*32 < this.position.x
-            // touching right: this.position.x < elementItem.position.x+elementItem.sizeX*32
+            // inside upper bound: this.position.y > elementItem.position.y-this.sizeY*32
+            // inside lower bound: this.position.y < elementItem.position.y + elementItem.sizeY*32
+            // inside left: elementItem.position.x-this.sizeX*32 < this.position.x
+            // inside right: this.position.x < elementItem.position.x+elementItem.sizeX*32
 
-            // damit in dieser funktion geänderte werte nicht auf folgende if anfragen einfluss haben    
-            const previousVelocityX = Math.round(this.velocity.x / 10)
-            const previousVelocityY = Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)    
-            
-            // can get stuck if x and y are changed in the same frame (like upper right corner) then the ifs are true if you dont press a button and constantly reset the positions
-            // should be fixed now 
+            // damit in dieser funktion geänderte werte nicht auf folgende if anfragen einfluss haben
 
-            if (elementItem.constructor.name === "SolidBlock" &&
+            // debug
+            // schnittstelle herausfinden (kurvenschnittpunkt)
+
+            // 1. Ein Block darf nicht die y koordinate verändern nachdem er die x koordinate verändert hat
+            // 2. Ein anderer Block darf es unter bestimmten Umständen auch nicht (welche?)
+
+            // soweit in die kommende richtung zurück bis es nicht mehr collided
+            // oder nicht in den block reingehen
+
+            if (
+                elementItem.constructor.name === "SolidBlock" &&
                 this.position.y > elementItem.position.y - this.sizeY * 32 &&
-                this.position.y < elementItem.position.y + elementItem.sizeY * 32 &&
+                this.position.y <
+                    elementItem.position.y + elementItem.sizeY * 32 &&
                 elementItem.position.x - this.sizeX * 32 < this.position.x &&
-                this.position.x < elementItem.position.x + elementItem.sizeX * 32) 
-            {
-                if (this.position.x - previousVelocityX <= elementItem.position.x - this.sizeX * 32) 
-                {
-                    this.position.x = elementItem.position.x - this.sizeX * 32
-                    this.velocity.x = 0
-
-                    break
-                }
-                if (this.position.x - previousVelocityX >= elementItem.position.x + elementItem.sizeX * 32) 
-                {
-                    this.position.x = elementItem.position.x + elementItem.sizeX * 32
-                    this.velocity.x = 0
-
-                    break
-                }
-                if (this.position.y - previousVelocityY <= elementItem.position.y - this.sizeY * 32) 
-                {
+                this.position.x <
+                    elementItem.position.x + elementItem.sizeX * 32
+            ) {
+                if (
+                    this.position.y - previousVelocityY <=
+                    elementItem.position.y - this.sizeY * 32
+                ) {
                     this.position.y = elementItem.position.y - this.sizeY * 32
+
+                    this.cameraBox.position.y =
+                        this.position.y +
+                        this.height / 2 -
+                        this.cameraBox.height / 2
+
                     this.velocity.y = 0
                     this.gravity = 0
                     this.isJumping = false
+
+                    // collidedy = true
                 }
-                if (this.position.y - previousVelocityY >= elementItem.position.y + elementItem.sizeY * 32) 
-                {
-                    this.position.y = elementItem.position.y + elementItem.sizeY * 32
+                if (
+                    this.position.y - previousVelocityY >=
+                    elementItem.position.y + elementItem.sizeY * 32
+                ) {
+                    this.position.y =
+                        elementItem.position.y + elementItem.sizeY * 32
+
+                    this.cameraBox.position.y =
+                        this.position.y +
+                        this.height / 2 -
+                        this.cameraBox.height / 2
+
                     this.velocity.y = 0
                     this.gravity = 0
+
+                    // collidedy = true
+                }
+
+                if (
+                    this.position.x - previousVelocityX <=
+                        elementItem.position.x - this.sizeX * 32 &&
+                    collidedy === false
+                ) {
+                    this.position.x = elementItem.position.x - this.sizeX * 32
+
+                    this.cameraBox.position.x =
+                        this.position.x +
+                        this.width / 2 -
+                        this.cameraBox.width / 2
+
+                    this.velocity.x = 0
+                }
+                if (
+                    this.position.x - previousVelocityX >=
+                        elementItem.position.x + elementItem.sizeX * 32 &&
+                    collidedy === false
+                ) {
+                    this.position.x =
+                        elementItem.position.x + elementItem.sizeX * 32
+
+                    this.cameraBox.position.x =
+                        this.position.x +
+                        this.width / 2 -
+                        this.cameraBox.width / 2
+
+                    this.velocity.x = 0
                 }
             }
         }
@@ -138,7 +186,6 @@ export default class Player extends Element {
 
     // Override
     action() {
-
         this.changeVelocities()
 
         // rounding for more fine grained velocity
@@ -146,7 +193,6 @@ export default class Player extends Element {
         this.position.y +=
             Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)
 
-        //camera box can wiggle during collision because we dont have half pixels?
         this.cameraBox.position.x =
             this.position.x + this.width / 2 - this.cameraBox.width / 2
         this.cameraBox.position.y =
