@@ -8,12 +8,13 @@ export default class Player extends Element {
     direction
     isJumping
     level
+    camera
     cameraBox
 
     width = 32
     height = 32
 
-    constructor(x, y, level) {
+    constructor(x, y, level, camera) {
         super(x, y)
 
         this.velocity = {
@@ -24,6 +25,8 @@ export default class Player extends Element {
         this.level = level
         this.gravity = 0
 
+        this.camera = camera
+        console.log(this.camera)
         this.cameraBox = {
             position: {
                 x: 0,
@@ -35,8 +38,55 @@ export default class Player extends Element {
         }
     }
 
+    applyVelocities(){
+        
+        this.gravity += this.level.gravity
+
+        // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
+        // check with velocities not direction
+        if (
+            (!keysPressed.get("ArrowRight") &&
+                !keysPressed.get("ArrowLeft")) ||
+            (keysPressed.get("ArrowRight") && this.velocity.x < 0) ||
+            (keysPressed.get("ArrowLeft") && this.velocity.x > 0)
+        ) {
+            this.velocity.x = 0
+        }
+
+        // beschleunigung wenn man die jeweilige taste drückt
+        if (keysPressed.get("ArrowRight")) {
+            if (this.velocity.x < 120) {
+                this.velocity.x += 8
+            }
+
+            // doesnt work because doesnt pan right when player velocitity changed by non key press
+        }
+
+        if (keysPressed.get("ArrowLeft")) {
+            if (this.velocity.x > -120) {
+                this.velocity.x -= 8
+            }
+        }
+
+        // second part means you can only jump if grounded
+        if (keysPressed.get(" ") && this.isJumping === false) {
+            this.velocity.y = -150
+            this.isJumping = true
+        }
+
+        if (
+            !keysPressed.get(" ") &&
+            this.velocity.y < -this.gravity - 64 &&
+            this.isJumping === true
+        ) {
+            this.velocity.y = -this.gravity - 64
+        }
+
+        this.isJumping = true
+    }
+
     // Override
-    checkCollision(element) {
+    checkCollision() {
         for (const elementItem of this.level.elementList) {
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
 
@@ -84,49 +134,6 @@ export default class Player extends Element {
 
     // Override
     action() {
-
-        this.gravity += this.level.gravity
-
-        // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
-        // check with velocities not direction
-        if (
-            (!keysPressed.get("ArrowRight") &&
-                !keysPressed.get("ArrowLeft")) ||
-            (keysPressed.get("ArrowRight") && this.velocity.x < 0) ||
-            (keysPressed.get("ArrowLeft") && this.velocity.x > 0)
-        ) {
-            this.velocity.x = 0
-        }
-
-        // beschleunigung wenn man die jeweilige taste drückt
-        if (keysPressed.get("ArrowRight")) {
-            if (this.velocity.x < 120) {
-                this.velocity.x += 8
-            }
-
-            // doesnt work because doesnt pan right when player velocitity changed by non key press
-        }
-
-        if (keysPressed.get("ArrowLeft")) {
-            if (this.velocity.x > -120) {
-                this.velocity.x -= 8
-            }
-
-        }
-
-        // second part means you can only jump if grounded
-        if (keysPressed.get(" ") && this.isJumping === false) {
-            this.velocity.y = -150
-            this.isJumping = true
-        }
-
-        if (
-            !keysPressed.get(" ") &&
-            this.velocity.y < -this.gravity - 64 &&
-            this.isJumping === true
-        ) {
-            this.velocity.y = -this.gravity - 64
-        }
 
         // rounding for more fine grained velocity
         this.position.x += Math.round(this.velocity.x / 10)

@@ -2,8 +2,7 @@ import LevelList from "./level/levelList"
 import { level1 } from "./level/level1"
 import Player from "./element/player"
 import KeyboardListener from "./listener/keyboardListener"
-import Camera from  "./Camera/Camera"
-import { keysPressed } from "./listener/store"
+import Camera from "./Camera/Camera"
 
 // Singleton class
 export default class Game {
@@ -38,7 +37,7 @@ export default class Game {
 
         this.player = this.getPlayer()
 
-        this.camera = new Camera(0,0,this.canvas, this.player)
+        this.camera = new Camera(0,0,this.canvas,this.player)
 
         this.keyboardListener = new KeyboardListener()
 
@@ -69,12 +68,13 @@ export default class Game {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.save()
 
-            this.level.elementList.action()
-            this.level.elementList.checkCollision()
+            this.player.applyVelocities()
             this.camera.pan()
+            this.player.action()
+            this.level.elementList.checkCollision()
+
 
             this.ctx.translate(this.camera.position.x, 0)
-
             this.level.elementList.draw(this.ctx)
 
             this.ctx.restore()

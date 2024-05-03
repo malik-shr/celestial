@@ -1,3 +1,5 @@
+import { keysPressed } from "../listener/store"
+
 class position {
     x
     y
@@ -10,6 +12,7 @@ class position {
 
 export default class Camera {
     position
+    canvas
     player
 
     constructor(x, y, canvas, player) {
@@ -18,25 +21,29 @@ export default class Camera {
         this.player = player
     }
 
-    shouldPanCameraToTheLeft(canvas, player) {
+    shouldPanCameraToTheLeft() {
         const cameraBoxRightSide =
-            player.cameraBox.position.x + player.cameraBox.width
+            this.player.cameraBox.position.x + this.player.cameraBox.width
 
-        if (cameraBoxRightSide >= canvas.width + Math.abs(this.position.x)) {
-            this.position.x -= Math.round(player.velocity.x / 10)
+        if (cameraBoxRightSide >= this.canvas.width + Math.abs(this.position.x)) {
+            this.position.x -= Math.round(this.player.velocity.x / 10)
         }
     }
 
-    shouldPanCameraToTheRight(canvas, player) {
-        if (player.cameraBox.position.x <= 0) return
+    shouldPanCameraToTheRight() {
+        if (this.player.cameraBox.position.x <= 0) return
 
-        if (player.cameraBox.position.x <= Math.abs(this.position.x)) {
-            this.position.x -= Math.round(player.velocity.x / 10)
+        if (this.player.cameraBox.position.x <= Math.abs(this.position.x)) {
+            this.position.x -= Math.round(this.player.velocity.x / 10)
         }
     }
 
     pan(){
-        this.shouldPanCameraToTheLeft(this.canvas, this.player)
-        this.shouldPanCameraToTheRight(this.canvas, this.player)
+        if(keysPressed.get("ArrowRight")){
+        this.shouldPanCameraToTheLeft()
+        }
+        if(keysPressed.get("ArrowLeft")){
+        this.shouldPanCameraToTheRight()
+        }
     }
 }
