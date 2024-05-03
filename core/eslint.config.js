@@ -1,13 +1,10 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 
-
 export default [
   {languageOptions: { globals: globals.browser }},
   pluginJs.configs.recommended,
   {
-    extends: ["prettier"],
-    plugins: ["prettier"],
     rules: {
       "no-unused-vars": "warn",
       "eqeqeq": "warn",
@@ -20,7 +17,6 @@ export default [
       "no-multi-assign": "error",
       "no-var": "error",
       "no-duplicate-imports": "error",
-      "prettier/prettier": ["error"]
     },
   }
 ];

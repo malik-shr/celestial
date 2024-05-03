@@ -1,5 +1,7 @@
 import LevelList from "./level/levelList"
 import { level1 } from "./level/level1"
+import Player from "./element/player"
+import KeyboardListener from "./listener/keyboardListener"
 
 // Singleton class
 export default class Game {
@@ -16,7 +18,12 @@ export default class Game {
     elapsed
     now
     then
-    
+
+    player
+
+    camera
+    keyboardListener
+
     constructor() {
         this.canvas = window.document.getElementById("canvas")
         this.ctx = this.canvas.getContext("2d")
@@ -26,10 +33,27 @@ export default class Game {
 
         this.tickCounter = 0
         this.startTime = performance.now()
-        
+
+        this.player = this.getPlayer()
+
+        this.camera = {
+            position: {
+                x: 0,
+                y: 0,
+            },
+        }
+
+        this.keyboardListener = new KeyboardListener()
+
+        window.addEventListener("keydown", (event) =>
+            this.keyboardListener.handleKeyDown(event)
+        )
+        window.addEventListener("keyup", (event) =>
+            this.keyboardListener.handleKeyUp(event)
+        )
     }
 
-    start() {   
+    start() {
         this.then = this.startTime
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
     }
@@ -39,26 +63,43 @@ export default class Game {
     }
 
     tick() {
-
         this.now = performance.now()
 
-        this.elapsed = this.now-this.then
+        this.elapsed = this.now - this.then
 
         // caps to about 60 fps
-        if(this.elapsed>1000/60){
+        if (this.elapsed > 1000 / 60) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.save()
+            this.ctx.translate(this.camera.position.x, 0)
 
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.keyboardListener.handleKeys(
+                this.canvas,
+                this.player,
+                this.camera
+            )
 
-        this.level.elementList.action()
-        this.level.elementList.checkCollision()
-        this.level.elementList.draw(this.ctx)
+            this.level.elementList.action()
+            this.level.elementList.checkCollision()
+            this.level.elementList.draw(this.ctx)
 
-        this.tickCounter += 1
-    
-        this.then = this.now - (this.elapsed % 1000/60)
+            this.ctx.restore()
 
+            this.tickCounter += 1
+
+            this.then = this.now - (this.elapsed % 1000) / 60
         }
 
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
+    }
+
+    getPlayer() {
+        for (const element of this.level.elementList) {
+            if (element instanceof Player) {
+                return element
+            }
+        }
+
+        return null
     }
 }
