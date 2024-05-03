@@ -37,7 +37,7 @@ export default class Game {
 
         this.player = this.getPlayer()
 
-        this.camera = new Camera(0,0,this.canvas,this.player)
+        this.camera = new Camera(0, 0, this.canvas, this.player)
 
         this.keyboardListener = new KeyboardListener()
 
@@ -68,11 +68,9 @@ export default class Game {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.save()
 
-            this.player.applyVelocities()
-            this.camera.pan()
-            this.player.action()
+            this.level.elementList.action()
             this.level.elementList.checkCollision()
-
+            this.camera.pan()
 
             this.ctx.translate(this.camera.position.x, 0)
             this.level.elementList.draw(this.ctx)

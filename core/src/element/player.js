@@ -14,7 +14,7 @@ export default class Player extends Element {
     width = 32
     height = 32
 
-    constructor(x, y, level, camera) {
+    constructor(x, y, level) {
         super(x, y)
 
         this.velocity = {
@@ -25,8 +25,6 @@ export default class Player extends Element {
         this.level = level
         this.gravity = 0
 
-        this.camera = camera
-        console.log(this.camera)
         this.cameraBox = {
             position: {
                 x: 0,
@@ -38,7 +36,7 @@ export default class Player extends Element {
         }
     }
 
-    applyVelocities(){
+    changeVelocities(){
         
         this.gravity += this.level.gravity
 
@@ -58,8 +56,6 @@ export default class Player extends Element {
             if (this.velocity.x < 120) {
                 this.velocity.x += 8
             }
-
-            // doesnt work because doesnt pan right when player velocitity changed by non key press
         }
 
         if (keysPressed.get("ArrowLeft")) {
@@ -83,6 +79,7 @@ export default class Player extends Element {
         }
 
         this.isJumping = true
+
     }
 
     // Override
@@ -97,9 +94,12 @@ export default class Player extends Element {
 
             // damit in dieser funktion geänderte werte nicht auf folgende if anfragen einfluss haben    
             const previousVelocityX = Math.round(this.velocity.x / 10)
-            const previousVelocityY = Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)            
+            const previousVelocityY = Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)    
+            
+            // can get stuck if x and y are changed in the same frame (like upper right corner) then the ifs are true if you dont press a button and constantly reset the positions
+            // should be fixed now 
 
-            if (elementItem.constructor.name !== "Player" &&
+            if (elementItem.constructor.name === "SolidBlock" &&
                 this.position.y > elementItem.position.y - this.sizeY * 32 &&
                 this.position.y < elementItem.position.y + elementItem.sizeY * 32 &&
                 elementItem.position.x - this.sizeX * 32 < this.position.x &&
@@ -109,11 +109,15 @@ export default class Player extends Element {
                 {
                     this.position.x = elementItem.position.x - this.sizeX * 32
                     this.velocity.x = 0
+
+                    break
                 }
                 if (this.position.x - previousVelocityX >= elementItem.position.x + elementItem.sizeX * 32) 
                 {
                     this.position.x = elementItem.position.x + elementItem.sizeX * 32
                     this.velocity.x = 0
+
+                    break
                 }
                 if (this.position.y - previousVelocityY <= elementItem.position.y - this.sizeY * 32) 
                 {
@@ -135,11 +139,14 @@ export default class Player extends Element {
     // Override
     action() {
 
+        this.changeVelocities()
+
         // rounding for more fine grained velocity
         this.position.x += Math.round(this.velocity.x / 10)
         this.position.y +=
             Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)
 
+        //camera box can wiggle during collision because we dont have half pixels?
         this.cameraBox.position.x =
             this.position.x + this.width / 2 - this.cameraBox.width / 2
         this.cameraBox.position.y =
