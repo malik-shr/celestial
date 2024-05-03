@@ -1,5 +1,5 @@
 import Element from "./element"
-import { keysPressed } from "../store"
+import { keysPressed } from "../listener/store"
 
 export default class Player extends Element {
     velocity
@@ -30,7 +30,7 @@ export default class Player extends Element {
                 y: 0,
             },
 
-            width: 1200,
+            width: 600,
             height: 160,
         }
     }
@@ -39,8 +39,6 @@ export default class Player extends Element {
     checkCollision(element) {
         for (const elementItem of this.level.elementList) {
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
-
-            console.log(elementItem.position.x)
 
             // touching upper bound: this.position.y > elementItem.position.y-this.sizeY*32
             // touching lower bound: this.position.y < elementItem.position.y + elementItem.sizeY*32

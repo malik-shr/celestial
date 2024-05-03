@@ -3,6 +3,7 @@ import { level1 } from "./level/level1"
 import Player from "./element/player"
 import KeyboardListener from "./listener/keyboardListener"
 import Camera from  "./Camera/Camera"
+import { keysPressed } from "./listener/store"
 
 // Singleton class
 export default class Game {
@@ -67,11 +68,13 @@ export default class Game {
         if (this.elapsed > 1000 / 60) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.save()
-            this.ctx.translate(this.camera.position.x, 0)
 
             this.level.elementList.action()
             this.level.elementList.checkCollision()
             this.camera.pan()
+
+            this.ctx.translate(this.camera.position.x, 0)
+
             this.level.elementList.draw(this.ctx)
 
             this.ctx.restore()
