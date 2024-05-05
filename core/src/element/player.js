@@ -9,6 +9,13 @@ export default class Player extends Element {
     direction
     isJumping
     isGrounded
+    collidedDown
+    collidedUp
+    collidedLeft
+    collidedRight
+
+    yCollisionCounter
+
     level
     camera
     cameraBox
@@ -25,8 +32,11 @@ export default class Player extends Element {
         }
         this.isJumping = false
         this.isGrounded = false
+        this.collided = false
         this.level = level
         this.gravity = 0
+
+        this.yCollisionCounter = 0
 
         this.cameraBox = {
             position: {
@@ -82,12 +92,26 @@ export default class Player extends Element {
         }
     }
 
+    // make it so that if object hits something
+    // methode nochmal aufrufen
+
+    // wenn es 2 seiten hittet?
+
     // Override
     checkCollision() {
         this.isGrounded = false
 
-        const previousVelocityX = this.velocity.x
-        const previousVelocityY = this.velocity.y
+        this.yCollisionCounter = 0
+
+        this.collidedDown = false
+        this.collidedUp = false
+        this.collidedLeft = false
+        this.collidedRight = false
+
+        const prevPositionY = this.position.y
+        const prevCameraBoxY = this.cameraBox.position.y
+        const prevVelocityY = this.velocity.y
+        const prevGravity = this.gravity
 
         for (const elementItem of this.level.elementList) {
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
@@ -99,19 +123,9 @@ export default class Player extends Element {
 
             // damit in dieser funktion geänderte werte nicht auf folgende if anfragen einfluss haben
 
-            // debug
-            // schnittstelle herausfinden (kurvenschnittpunkt)
+            // Hauptproblem collisionAction soll Spieler nicht in einen anderen Block setzten sonst schlecht
 
-            // 1. Ein Block darf nicht die y koordinate verändern nachdem er die x koordinate verändert hat (nur keinen jump geben?)
-            // 2. Ein anderer Block darf es unter bestimmten Umständen auch nicht (welche?)
-
-            // soweit in die kommende richtung zurück bis es nicht mehr collided?
-
-            // oder nicht in den block reingehen?
-
-            // dann kann in diese richtung keine velocities hinzugefügt werden
-
-            // immernoch iwie wenn von einem block in den anderen gesetzt wird
+            // if it hits on the sides first it should update the sides first
 
             if (
                 elementItem instanceof SolidBlock &&
@@ -120,21 +134,20 @@ export default class Player extends Element {
                 elementItem.position.x - this.sizeX * 32 < this.position.x &&
                 this.position.x < elementItem.position.x + elementItem.sizeX * 32
             ) {
-                if (
-                    this.position.y - previousVelocityY <=
-                    elementItem.position.y - this.sizeY * 32
-                ) {
+                if (this.position.y - this.velocity.y <= elementItem.position.y - this.sizeY * 32) {
                     this.position.y = elementItem.position.y - this.sizeY * 32
 
                     this.cameraBox.position.y =
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
 
                     this.velocity.y = 0
-                    this.gravity = 0
+                    this.Gravity = 0
                     this.isGrounded = true
+                    this.collidedDown = true
                 }
+
                 if (
-                    this.position.y - previousVelocityY >=
+                    this.position.y - this.velocity.y >=
                     elementItem.position.y + elementItem.sizeY * 32
                 ) {
                     this.position.y = elementItem.position.y + elementItem.sizeY * 32
@@ -143,22 +156,32 @@ export default class Player extends Element {
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
 
                     this.velocity.y = 0
-                    this.gravity = 0
+                    this.Gravity = 0
+                    this.collidedUp = true
                 }
+            }
+        }
 
-                if (
-                    this.position.x - previousVelocityX <=
-                    elementItem.position.x - this.sizeX * 32
-                ) {
+        for (const elementItem of this.level.elementList) {
+            if (
+                elementItem instanceof SolidBlock &&
+                this.position.y > elementItem.position.y - this.sizeY * 32 &&
+                this.position.y < elementItem.position.y + elementItem.sizeY * 32 &&
+                elementItem.position.x - this.sizeX * 32 < this.position.x &&
+                this.position.x < elementItem.position.x + elementItem.sizeX * 32
+            ) {
+                if (this.position.x - this.velocity.x <= elementItem.position.x - this.sizeX * 32) {
                     this.position.x = elementItem.position.x - this.sizeX * 32
 
                     this.cameraBox.position.x =
                         this.position.x + this.width / 2 - this.cameraBox.width / 2
 
                     this.velocity.x = 0
+
+                    this.collidedRight = true
                 }
                 if (
-                    this.position.x - previousVelocityX >=
+                    this.position.x - this.velocity.x >=
                     elementItem.position.x + elementItem.sizeX * 32
                 ) {
                     this.position.x = elementItem.position.x + elementItem.sizeX * 32
@@ -167,8 +190,23 @@ export default class Player extends Element {
                         this.position.x + this.width / 2 - this.cameraBox.width / 2
 
                     this.velocity.x = 0
+                    this.collidedLeft = true
                 }
             }
+        }
+
+        // nochmal rekursiv aufrufen
+
+        if (
+            (this.collidedUp === true || this.collidedDown === true) &&
+            (this.collidedRight === true || this.collidedLeft === true)
+        ) {
+            this.position.y = prevPositionY
+            this.velocity.y = prevVelocityY
+            this.gravity = prevGravity
+            this.cameraBox.y = prevCameraBoxY
+            this.isGrounded = false
+            this.checkCollision()
         }
     }
 
