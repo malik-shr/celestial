@@ -8,6 +8,7 @@ export default class Player extends Element {
 
     direction
     isJumping
+    isGrounded
     level
     camera
     cameraBox
@@ -23,7 +24,7 @@ export default class Player extends Element {
             y: 0,
         }
         this.isJumping = false
-        this.canMove = 10
+        this.isGrounded = false
         this.level = level
         this.gravity = 0
 
@@ -41,6 +42,10 @@ export default class Player extends Element {
     changeVelocities() {
         // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
         // check with velocities not direction
+
+        this.velocity.y += this.level.gravity
+        this.gravity += this.level.gravity
+
         if (
             (!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft")) ||
             (keysPressed.get("ArrowRight") && this.velocity.x < 0) ||
@@ -63,33 +68,28 @@ export default class Player extends Element {
         }
 
         // second part means you can only jump if grounded
-        if (keysPressed.get(" ") && this.isJumping === false) {
+        if (keysPressed.get(" ") && this.isGrounded === true) {
             this.velocity.y = -15
             this.isJumping = true
         }
 
-        // TODO apply logic here
         if (
             !keysPressed.get(" ") &&
-            this.velocity.y < -this.gravity - 64 &&
+            this.velocity.y < -this.gravity - 6.4 &&
             this.isJumping === true
         ) {
-            this.velocity.y = -this.gravity - 64
+            this.velocity.y = -this.gravity - 6.4
         }
-    }
-
-    applyGravity() {
-        this.velocity.y += this.level.gravity
     }
 
     // Override
     checkCollision() {
+        this.isGrounded = false
+
         const previousVelocityX = this.velocity.x
         const previousVelocityY = this.velocity.y
 
         for (const elementItem of this.level.elementList) {
-            const collidedy = false
-
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
 
             // inside upper bound: this.position.y > elementItem.position.y-this.sizeY*32
@@ -102,11 +102,16 @@ export default class Player extends Element {
             // debug
             // schnittstelle herausfinden (kurvenschnittpunkt)
 
-            // 1. Ein Block darf nicht die y koordinate verändern nachdem er die x koordinate verändert hat
+            // 1. Ein Block darf nicht die y koordinate verändern nachdem er die x koordinate verändert hat (nur keinen jump geben?)
             // 2. Ein anderer Block darf es unter bestimmten Umständen auch nicht (welche?)
 
-            // soweit in die kommende richtung zurück bis es nicht mehr collided
-            // oder nicht in den block reingehen
+            // soweit in die kommende richtung zurück bis es nicht mehr collided?
+
+            // oder nicht in den block reingehen?
+
+            // dann kann in diese richtung keine velocities hinzugefügt werden
+
+            // immernoch iwie wenn von einem block in den anderen gesetzt wird
 
             if (
                 elementItem instanceof SolidBlock &&
@@ -126,9 +131,7 @@ export default class Player extends Element {
 
                     this.velocity.y = 0
                     this.gravity = 0
-                    this.isJumping = false
-
-                    // collidedy = true
+                    this.isGrounded = true
                 }
                 if (
                     this.position.y - previousVelocityY >=
@@ -141,14 +144,11 @@ export default class Player extends Element {
 
                     this.velocity.y = 0
                     this.gravity = 0
-
-                    // collidedy = true
                 }
 
                 if (
                     this.position.x - previousVelocityX <=
-                        elementItem.position.x - this.sizeX * 32 &&
-                    collidedy === false
+                    elementItem.position.x - this.sizeX * 32
                 ) {
                     this.position.x = elementItem.position.x - this.sizeX * 32
 
@@ -159,8 +159,7 @@ export default class Player extends Element {
                 }
                 if (
                     this.position.x - previousVelocityX >=
-                        elementItem.position.x + elementItem.sizeX * 32 &&
-                    collidedy === false
+                    elementItem.position.x + elementItem.sizeX * 32
                 ) {
                     this.position.x = elementItem.position.x + elementItem.sizeX * 32
 
@@ -176,9 +175,7 @@ export default class Player extends Element {
     // Override
     action() {
         this.changeVelocities()
-        this.applyGravity()
 
-        // rounding for more fine grained velocity
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 

@@ -64,6 +64,8 @@ export default class Game {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.save()
 
+            this.level.elementList.action()
+            this.level.elementList.checkCollision()
             this.camera.pan()
 
             // vielleicht in Camera class verschieben?
@@ -72,9 +74,6 @@ export default class Game {
             this.level.elementList.draw(this.ctx)
 
             this.ctx.restore()
-
-            this.level.elementList.action()
-            this.level.elementList.checkCollision()
 
             this.tickCounter += 1
 

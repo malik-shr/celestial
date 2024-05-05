@@ -5,5 +5,4 @@ export const keysPressed = new Map([
     ["ArrowDown", false],
     [" ", false],
     ["Shift", false],
-    ["ArrowDown", false],
 ])

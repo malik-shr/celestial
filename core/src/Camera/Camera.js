@@ -16,7 +16,7 @@ export default class Camera {
 
     shouldPanCameraToTheLeft() {
         const previousCameraBoxRightSide =
-            this.player.cameraBox.position.x - this.player.velocity.x + this.player.cameraBox.width
+            this.player.cameraBox.position.x + this.player.cameraBox.width - this.player.velocity.x
 
         // wird nur ausgeführt falls player velocity negativ
         if (
@@ -30,7 +30,7 @@ export default class Camera {
     shouldPanCameraToTheRight() {
         const previousCameraBoxLeftSide = this.player.cameraBox.position.x - this.player.velocity.x
 
-        if (previousCameraBoxLeftSide <= 0) return
+        if (this.player.cameraBox.position.x <= 0) return
 
         // wird nur ausgeführt falls player velocity positiv
         if (previousCameraBoxLeftSide <= Math.abs(this.position.x) && this.player.velocity.x < 0) {
