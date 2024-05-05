@@ -1,6 +1,7 @@
 import Element from "./element"
 import { keysPressed } from "../listener/store"
 import SolidBlock from "./solidBlock"
+import JumpPad from "./jumpPad"
 
 export default class Player extends Element {
     velocity
@@ -67,13 +68,13 @@ export default class Player extends Element {
         // beschleunigung wenn man die jeweilige taste drückt
         if (keysPressed.get("ArrowRight")) {
             if (this.velocity.x < 12) {
-                this.velocity.x += 1
+                this.velocity.x += 0.8
             }
         }
 
         if (keysPressed.get("ArrowLeft")) {
             if (this.velocity.x > -12) {
-                this.velocity.x -= 1
+                this.velocity.x -= 0.8
             }
         }
 
@@ -191,6 +192,13 @@ export default class Player extends Element {
 
                     this.velocity.x = 0
                     this.collidedLeft = true
+                }
+
+                if (elementItem instanceof JumpPad) {
+                    this.velocity.y = -20
+                    this.isJumping = false
+
+                    elementItem.isActive = true
                 }
             }
         }
