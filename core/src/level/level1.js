@@ -1,3 +1,4 @@
+import JumpPad from "../element/jumpPad"
 import Player from "../element/player"
 import SolidBlock from "../element/solidBlock"
 import Level from "./level"
@@ -21,6 +22,8 @@ level1.elementList.add(new SolidBlock(0, 388 - 32 * 3, 2, 1))
 level1.elementList.add(new SolidBlock(32 * 3, 388 - 32 * 6, 2, 2))
 
 level1.elementList.add(new SolidBlock(0, 416, 100, 1))
+
+level1.elementList.add(new JumpPad(256, 384, 1, 1))
 
 level1.elementList.add(new Player(32, 64, level1))
 level1.elementList.add(
