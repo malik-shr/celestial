@@ -14,6 +14,7 @@ export default class Player extends Element {
     collidedUp
     collidedLeft
     collidedRight
+    collisionCounter
 
     yCollisionCounter
 
@@ -33,7 +34,7 @@ export default class Player extends Element {
         }
         this.isJumping = false
         this.isGrounded = false
-        this.collided = false
+        this.collisionCounter = 0
         this.level = level
         this.gravity = 0
 
@@ -93,16 +94,9 @@ export default class Player extends Element {
         }
     }
 
-    // make it so that if object hits something
-    // methode nochmal aufrufen
-
-    // wenn es 2 seiten hittet?
-
     // Override
     checkCollision() {
         this.isGrounded = false
-
-        this.yCollisionCounter = 0
 
         this.collidedDown = false
         this.collidedUp = false
@@ -126,7 +120,7 @@ export default class Player extends Element {
 
             // Hauptproblem collisionAction soll Spieler nicht in einen anderen Block setzten sonst schlecht
 
-            // if it hits on the sides first it should update the sides first
+            // Jedes Mal nach CollisionHandling nochmal Collision Detection und ggf. reset des CollisionHandlings
 
             if (
                 elementItem instanceof SolidBlock &&
@@ -142,9 +136,10 @@ export default class Player extends Element {
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
 
                     this.velocity.y = 0
-                    this.Gravity = 0
+                    this.gravity = 0
                     this.isGrounded = true
                     this.collidedDown = true
+                    this.collisionCounter += 1
 
                     if (elementItem instanceof JumpPad) {
                         this.velocity.y = -20
@@ -164,8 +159,9 @@ export default class Player extends Element {
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
 
                     this.velocity.y = 0
-                    this.Gravity = 0
+                    this.gravity = 0
                     this.collidedUp = true
+                    this.collisionCounter += 1
                 }
             }
         }
@@ -187,6 +183,7 @@ export default class Player extends Element {
                     this.velocity.x = 0
 
                     this.collidedRight = true
+                    this.collisionCounter += 1
                 }
                 if (
                     this.position.x - this.velocity.x >=
@@ -199,6 +196,7 @@ export default class Player extends Element {
 
                     this.velocity.x = 0
                     this.collidedLeft = true
+                    this.collisionCounter += 1
                 }
             }
         }
@@ -221,6 +219,9 @@ export default class Player extends Element {
     // Override
     action() {
         this.changeVelocities()
+
+        console.log(this.collisionCounter)
+        this.collisionCounter = 0
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
