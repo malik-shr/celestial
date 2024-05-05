@@ -145,6 +145,13 @@ export default class Player extends Element {
                     this.Gravity = 0
                     this.isGrounded = true
                     this.collidedDown = true
+
+                    if (elementItem instanceof JumpPad) {
+                        this.velocity.y = -20
+                        this.isJumping = false
+
+                        elementItem.isActive = true
+                    }
                 }
 
                 if (
@@ -192,13 +199,6 @@ export default class Player extends Element {
 
                     this.velocity.x = 0
                     this.collidedLeft = true
-                }
-
-                if (elementItem instanceof JumpPad) {
-                    this.velocity.y = -20
-                    this.isJumping = false
-
-                    elementItem.isActive = true
                 }
             }
         }
