@@ -1,5 +1,6 @@
 import Element from "./element"
 import { keysPressed } from "../listener/store"
+import SolidBlock from "./solidBlock"
 
 export default class Player extends Element {
     velocity
@@ -38,8 +39,6 @@ export default class Player extends Element {
     }
 
     changeVelocities() {
-        this.gravity += this.level.gravity
-
         // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
         // check with velocities not direction
         if (
@@ -52,23 +51,24 @@ export default class Player extends Element {
 
         // beschleunigung wenn man die jeweilige taste drückt
         if (keysPressed.get("ArrowRight")) {
-            if (this.velocity.x < 120) {
-                this.velocity.x += 8
+            if (this.velocity.x < 12) {
+                this.velocity.x += 1
             }
         }
 
         if (keysPressed.get("ArrowLeft")) {
-            if (this.velocity.x > -120) {
-                this.velocity.x -= 8
+            if (this.velocity.x > -12) {
+                this.velocity.x -= 1
             }
         }
 
         // second part means you can only jump if grounded
         if (keysPressed.get(" ") && this.isJumping === false) {
-            this.velocity.y = -150
+            this.velocity.y = -15
             this.isJumping = true
         }
 
+        // TODO apply logic here
         if (
             !keysPressed.get(" ") &&
             this.velocity.y < -this.gravity - 64 &&
@@ -76,18 +76,19 @@ export default class Player extends Element {
         ) {
             this.velocity.y = -this.gravity - 64
         }
+    }
 
-        this.isJumping = true
+    applyGravity() {
+        this.velocity.y += this.level.gravity
     }
 
     // Override
     checkCollision() {
-        const previousVelocityX = Math.round(this.velocity.x / 10)
-        const previousVelocityY =
-            Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)
+        const previousVelocityX = this.velocity.x
+        const previousVelocityY = this.velocity.y
 
         for (const elementItem of this.level.elementList) {
-            let collidedy = false
+            const collidedy = false
 
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
 
@@ -108,13 +109,11 @@ export default class Player extends Element {
             // oder nicht in den block reingehen
 
             if (
-                elementItem.constructor.name === "SolidBlock" &&
+                elementItem instanceof SolidBlock &&
                 this.position.y > elementItem.position.y - this.sizeY * 32 &&
-                this.position.y <
-                    elementItem.position.y + elementItem.sizeY * 32 &&
+                this.position.y < elementItem.position.y + elementItem.sizeY * 32 &&
                 elementItem.position.x - this.sizeX * 32 < this.position.x &&
-                this.position.x <
-                    elementItem.position.x + elementItem.sizeX * 32
+                this.position.x < elementItem.position.x + elementItem.sizeX * 32
             ) {
                 if (
                     this.position.y - previousVelocityY <=
@@ -123,9 +122,7 @@ export default class Player extends Element {
                     this.position.y = elementItem.position.y - this.sizeY * 32
 
                     this.cameraBox.position.y =
-                        this.position.y +
-                        this.height / 2 -
-                        this.cameraBox.height / 2
+                        this.position.y + this.height / 2 - this.cameraBox.height / 2
 
                     this.velocity.y = 0
                     this.gravity = 0
@@ -137,13 +134,10 @@ export default class Player extends Element {
                     this.position.y - previousVelocityY >=
                     elementItem.position.y + elementItem.sizeY * 32
                 ) {
-                    this.position.y =
-                        elementItem.position.y + elementItem.sizeY * 32
+                    this.position.y = elementItem.position.y + elementItem.sizeY * 32
 
                     this.cameraBox.position.y =
-                        this.position.y +
-                        this.height / 2 -
-                        this.cameraBox.height / 2
+                        this.position.y + this.height / 2 - this.cameraBox.height / 2
 
                     this.velocity.y = 0
                     this.gravity = 0
@@ -159,9 +153,7 @@ export default class Player extends Element {
                     this.position.x = elementItem.position.x - this.sizeX * 32
 
                     this.cameraBox.position.x =
-                        this.position.x +
-                        this.width / 2 -
-                        this.cameraBox.width / 2
+                        this.position.x + this.width / 2 - this.cameraBox.width / 2
 
                     this.velocity.x = 0
                 }
@@ -170,13 +162,10 @@ export default class Player extends Element {
                         elementItem.position.x + elementItem.sizeX * 32 &&
                     collidedy === false
                 ) {
-                    this.position.x =
-                        elementItem.position.x + elementItem.sizeX * 32
+                    this.position.x = elementItem.position.x + elementItem.sizeX * 32
 
                     this.cameraBox.position.x =
-                        this.position.x +
-                        this.width / 2 -
-                        this.cameraBox.width / 2
+                        this.position.x + this.width / 2 - this.cameraBox.width / 2
 
                     this.velocity.x = 0
                 }
@@ -187,16 +176,14 @@ export default class Player extends Element {
     // Override
     action() {
         this.changeVelocities()
+        this.applyGravity()
 
         // rounding for more fine grained velocity
-        this.position.x += Math.round(this.velocity.x / 10)
-        this.position.y +=
-            Math.round(this.velocity.y / 10) + Math.round(this.gravity / 10)
+        this.position.x += this.velocity.x
+        this.position.y += this.velocity.y
 
-        this.cameraBox.position.x =
-            this.position.x + this.width / 2 - this.cameraBox.width / 2
-        this.cameraBox.position.y =
-            this.position.y + this.height / 2 - this.cameraBox.height / 2
+        this.cameraBox.position.x = this.position.x + this.width / 2 - this.cameraBox.width / 2
+        this.cameraBox.position.y = this.position.y + this.height / 2 - this.cameraBox.height / 2
     }
 
     // Override
@@ -214,12 +201,7 @@ export default class Player extends Element {
         ctx.closePath()
 
         ctx.beginPath()
-        ctx.rect(
-            this.position.x,
-            this.position.y,
-            this.sizeX * 32,
-            this.sizeY * 32
-        )
+        ctx.rect(this.position.x, this.position.y, this.sizeX * 32, this.sizeY * 32)
         ctx.fillStyle = "red"
         ctx.fill()
         ctx.closePath()

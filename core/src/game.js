@@ -41,12 +41,8 @@ export default class Game {
 
         this.keyboardListener = new KeyboardListener()
 
-        window.addEventListener("keydown", (event) =>
-            this.keyboardListener.handleKeyDown(event)
-        )
-        window.addEventListener("keyup", (event) =>
-            this.keyboardListener.handleKeyUp(event)
-        )
+        window.addEventListener("keydown", (event) => this.keyboardListener.handleKeyDown(event))
+        window.addEventListener("keyup", (event) => this.keyboardListener.handleKeyUp(event))
     }
 
     start() {
@@ -68,16 +64,17 @@ export default class Game {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.save()
 
-            this.level.elementList.action()
-            this.level.elementList.checkCollision()
             this.camera.pan()
 
             // vielleicht in Camera class verschieben?
-            this.ctx.translate(this.camera.position.x, 0)
+            this.ctx.translate(this.camera.position.x, this.camera.position.y)
 
             this.level.elementList.draw(this.ctx)
 
             this.ctx.restore()
+
+            this.level.elementList.action()
+            this.level.elementList.checkCollision()
 
             this.tickCounter += 1
 
