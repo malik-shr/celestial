@@ -14,6 +14,9 @@ export default class Player extends Element {
 
     isJumping
     isGrounded
+    isWallClimbing
+    canDash
+    goneUp
     collidedDown
     collidedUp
     collidedRight
@@ -50,16 +53,19 @@ export default class Player extends Element {
 
         this.isJumping = false
         this.isGrounded = false
+        this.isWallClimbing = false
         this.canDash = false
+        this.goneUp = false
+        this.WallclimbCounter = 0
         this.collisionCounter = 0
         this.gravity = 0
         this.DashCounter = 0
     }
 
     changeVelocities() {
-        // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
-        // check with velocities not direction
+        // andere Tasten für Movement würde ich sagen
 
+        // gravity
         this.velocity.y += this.level.gravity
         this.gravity += this.level.gravity
 
@@ -68,6 +74,7 @@ export default class Player extends Element {
         this.pressingRight = false
         this.pressingLeft = false
 
+        // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
         if (
             (!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft")) ||
             (keysPressed.get("ArrowRight") && this.velocity.x < 0) ||
@@ -82,6 +89,10 @@ export default class Player extends Element {
         }
 
         if (keysPressed.get("ArrowUp")) {
+            if (this.isWallClimbing === true) {
+                this.velocity.y = -2
+                this.goneUp = true
+            }
             this.pressingUp = true
         }
 
@@ -98,6 +109,22 @@ export default class Player extends Element {
             if (this.velocity.x > -8) {
                 this.velocity.x -= 0.8
             }
+        }
+
+        // wallclimb
+        if (
+            (this.collidedLeft === true || this.collidedRight === true) &&
+            (this.pressingLeft === true || this.pressingRight === true) &&
+            (this.velocity.y < -2 || this.velocity.y > 2 || this.isWallClimbing === true)
+        ) {
+            if ((!this.isWallClimbing || !this.goneUp) && this.WallclimbCounter < 100) {
+                this.velocity.y = 0
+            }
+            this.gravity = 0
+            if (!this.isWallClimbing) {
+                this.WallclimbCounter = 0
+            }
+            this.isWallClimbing = true
         }
 
         if (keysPressed.get(" ") && this.isGrounded === true) {
@@ -156,6 +183,9 @@ export default class Player extends Element {
         const currentIsJumping = this.isJumping
         const currentIsGrounded = this.isGrounded
         const currentCanDash = this.canDash
+        const currentIsWallClimbing = this.isWallClimbing
+        const currentGoneUp = this.goneUp
+        const currentWallClimbCounter = this.WallclimbCounter
 
         let activatedObjectsY = []
 
@@ -191,6 +221,8 @@ export default class Player extends Element {
                     this.isGrounded = true
                     this.collidedDown = true
                     this.canDash = true
+                    this.isWallClimbing = false
+                    this.goneUp = false
                     this.collisionCounter += 1
 
                     if (elementItem instanceof JumpPad) {
@@ -278,6 +310,8 @@ export default class Player extends Element {
             this.isJumping = currentIsJumping
             this.isGrounded = currentIsGrounded
             this.canDash = currentCanDash
+            this.isWallClimbing = currentIsWallClimbing
+            this.goneUp = currentGoneUp
             this.collidedDown = false
             this.collidedUp = false
 
@@ -319,6 +353,8 @@ export default class Player extends Element {
                     this.isGrounded = true
                     this.collidedDown = true
                     this.canDash = true
+                    this.isWallClimbing = false
+                    this.goneUp = false
                     this.collisionCounter += 1
 
                     if (elementItem instanceof JumpPad) {
@@ -352,6 +388,7 @@ export default class Player extends Element {
     action() {
         this.changeVelocities()
 
+        this.WallclimbCounter += 1
         this.DashCounter += 1
 
         // debug
