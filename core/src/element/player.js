@@ -16,7 +16,7 @@ export default class Player extends Element {
     isGrounded
     isWallClimbing
     canDash
-    goneUp
+
     collidedDown
     collidedUp
     collidedRight
@@ -55,7 +55,7 @@ export default class Player extends Element {
         this.isGrounded = false
         this.isWallClimbing = false
         this.canDash = false
-        this.goneUp = false
+
         this.WallclimbCounter = 0
         this.collisionCounter = 0
         this.gravity = 0
@@ -63,70 +63,83 @@ export default class Player extends Element {
     }
 
     changeVelocities() {
-        // andere Tasten für Movement würde ich sagen
-
         // gravity
         this.velocity.y += this.level.gravity
         this.gravity += this.level.gravity
 
-        this.pressingDown = false
-        this.pressingUp = false
-        this.pressingRight = false
-        this.pressingLeft = false
+        // entschleunigung wenn man weder nach rechts noch nach links drückt
+        if (!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft")) {
+            this.velocity.x -= this.velocity.x / 5
+        }
 
-        // entschleunigung wenn man die jeweilige taste nicht drückt oder man die richtung von links nach rechts oder von rechts nach links wechselt
+        // richtung ändern auf dem Boden ist instant
         if (
-            (!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft")) ||
-            (keysPressed.get("ArrowRight") && this.velocity.x < 0) ||
-            (keysPressed.get("ArrowLeft") && this.velocity.x > 0)
+            (keysPressed.get("ArrowRight") && this.velocity.x < 0 && this.isGrounded) ||
+            (keysPressed.get("ArrowLeft") && this.velocity.x > 0 && this.isGrounded)
         ) {
             this.velocity.x = 0
         }
 
-        // set flag if pressed
-        if (keysPressed.get("ArrowDown")) {
-            this.pressingDown = true
-        }
-
-        if (keysPressed.get("ArrowUp")) {
-            if (this.isWallClimbing === true) {
-                this.velocity.y = -2
-                this.goneUp = true
-            }
-            this.pressingUp = true
-        }
-
         // zusätzlich beschleunigung wenn man die jeweilige taste drückt
         if (keysPressed.get("ArrowRight")) {
-            this.pressingRight = true
             if (this.velocity.x < 8) {
                 this.velocity.x += 0.8
             }
         }
 
         if (keysPressed.get("ArrowLeft")) {
-            this.pressingLeft = true
             if (this.velocity.x > -8) {
                 this.velocity.x -= 0.8
             }
         }
 
-        // wallclimb mit "d"
-        if ((this.collidedLeft === true || this.collidedRight === true) && keysPressed.get("d")) {
-            if ((!this.isWallClimbing || !this.goneUp) && this.WallclimbCounter < 100) {
-                this.velocity.y = 0
-            }
+        // für einen wallclimb muss der Spieler mit der Wand collidieren und es muss d gedrückt sein und er darf nicht seit länger als 50 frames am wallclimben sein
+        if (
+            (this.collidedLeft === true || this.collidedRight === true) &&
+            keysPressed.get("d") &&
+            this.WallclimbCounter < 50
+        ) {
+            this.velocity.y = 0
             this.gravity = 0
-            if (!this.isWallClimbing) {
-                this.WallclimbCounter = 0
-            }
             this.isWallClimbing = true
-        } else this.isWallClimbing = false
+            this.WallclimbCounter += 1
+        } else {
+            this.isWallClimbing = false
+        }
 
+        // wenn man wallclimbed und nach oben drückt kletter der spieler langsam hoch
+        if (keysPressed.get("ArrowUp")) {
+            if (this.isWallClimbing === true) {
+                this.velocity.y = -2
+            }
+        }
+
+        // jump
         if (keysPressed.get(" ") && this.isGrounded === true) {
             this.velocity.y = -15
             this.isJumping = true
         }
+        // walljump
+        // momentan frame perfect input, buffer einfügen
+        // buffer für so einiges einfügen, auch für is Grounded
+        // deque?
+        // else {
+        //     if (
+        //         (this.collidedLeft === true || this.collidedRight === true) &&
+        //         keysPressed.get(" ") &&
+        //         !this.isGrounded
+        //     ) {
+        //         this.velocity.y = -7
+        //         if (this.collidedLeft) {
+        //             this.velocity.x = 7
+        //             this.WallJumpLeft = true
+        //         }
+        //         if (this.collidedRight) {
+        //             this.velocity.x = -7
+        //             this.WallJumpRight = true
+        //         }
+        //     }
+        // }
 
         // enables variable jump, makes it so you fall down quicker if you let go of spacebar mid jump
         if (
@@ -137,26 +150,26 @@ export default class Player extends Element {
             this.velocity.y = -this.gravity - 3.2
         }
 
-        // seit dem letzten Dash müssen 50 frames vergangen sein und einmal der Boden berührt wurden sein
-        if (keysPressed.get("Shift") && this.canDash === true && this.DashCounter > 50) {
-            if (this.pressingRight === true) {
+        // seit dem letzten Dash müssen 100 frames vergangen sein und einmal der Boden berührt wurden sein
+        if (keysPressed.get("Shift") && this.canDash === true && this.DashCounter > 100) {
+            if (keysPressed.get("ArrowRight")) {
                 this.velocity.x = 15
                 this.velocity.y = 0
                 this.DashCounter = 0
                 this.canDash = false
             }
-            if (this.pressingLeft === true) {
+            if (keysPressed.get("ArrowLeft")) {
                 this.velocity.x = -15
                 this.velocity.y = 0
                 this.DashCounter = 0
                 this.canDash = false
             }
-            if (this.pressingDown === true) {
+            if (keysPressed.get("ArrowDown")) {
                 this.velocity.y = 15
                 this.DashCounter = 0
                 this.canDash = false
             }
-            if (this.pressingUp === true) {
+            if (keysPressed.get("ArrowUp")) {
                 this.velocity.y = -15
                 this.DashCounter = 0
                 this.canDash = false
@@ -181,6 +194,7 @@ export default class Player extends Element {
         const currentIsJumping = this.isJumping
         const currentIsGrounded = this.isGrounded
         const currentCanDash = this.canDash
+        const currentWallClimbCounter = this.WallclimbCounter
 
         let activatedObjectsY = []
 
@@ -194,6 +208,7 @@ export default class Player extends Element {
             // inside lower bound: this.position.y < elementItem.position.y + elementItem.sizeY*32 &&
             // inside left  bound: elementItem.position.x-this.sizeX*32 < this.position.x &&
             // inside right bound: this.position.x < elementItem.position.x+elementItem.sizeX*32
+
             if (
                 elementItem instanceof SolidBlock &&
                 this.position.y > elementItem.position.y - this.sizeY * 32 &&
@@ -214,15 +229,14 @@ export default class Player extends Element {
                     this.velocity.y = 0
                     this.gravity = 0
                     this.isGrounded = true
+                    this.isJumping = false
                     this.collidedDown = true
                     this.canDash = true
-                    this.isWallClimbing = false
-                    this.goneUp = false
+                    this.WallclimbCounter = 0
                     this.collisionCounter += 1
 
                     if (elementItem instanceof JumpPad) {
                         this.velocity.y = -20
-                        this.isJumping = false
 
                         elementItem.isActive = true
 
@@ -244,6 +258,7 @@ export default class Player extends Element {
                     this.velocity.y = 0
                     this.gravity = 0
                     this.collidedUp = true
+                    this.isJumping = false
                     this.collisionCounter += 1
                 }
             }
@@ -307,6 +322,7 @@ export default class Player extends Element {
             this.canDash = currentCanDash
             this.collidedDown = false
             this.collidedUp = false
+            this.WallclimbCounter = currentWallClimbCounter
 
             // reset activated objects
             if (activatedObjectsY.length > 0) {
@@ -346,13 +362,12 @@ export default class Player extends Element {
                     this.isGrounded = true
                     this.collidedDown = true
                     this.canDash = true
-                    this.isWallClimbing = false
-                    this.goneUp = false
                     this.collisionCounter += 1
+                    this.WallclimbCounter = 0
+                    this.isJumping = false
 
                     if (elementItem instanceof JumpPad) {
                         this.velocity.y = -20
-                        this.isJumping = false
 
                         elementItem.isActive = true
                     }
@@ -371,6 +386,7 @@ export default class Player extends Element {
                     this.velocity.y = 0
                     this.gravity = 0
                     this.collidedUp = true
+                    this.isJumping = false
                     this.collisionCounter += 1
                 }
             }
@@ -381,7 +397,6 @@ export default class Player extends Element {
     action() {
         this.changeVelocities()
 
-        this.WallclimbCounter += 1
         this.DashCounter += 1
 
         // debug
