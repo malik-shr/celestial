@@ -111,12 +111,8 @@ export default class Player extends Element {
             }
         }
 
-        // wallclimb
-        if (
-            (this.collidedLeft === true || this.collidedRight === true) &&
-            (this.pressingLeft === true || this.pressingRight === true) &&
-            (this.velocity.y < -2 || this.velocity.y > 2 || this.isWallClimbing === true)
-        ) {
+        // wallclimb mit "d"
+        if ((this.collidedLeft === true || this.collidedRight === true) && keysPressed.get("d")) {
             if ((!this.isWallClimbing || !this.goneUp) && this.WallclimbCounter < 100) {
                 this.velocity.y = 0
             }
@@ -125,7 +121,7 @@ export default class Player extends Element {
                 this.WallclimbCounter = 0
             }
             this.isWallClimbing = true
-        }
+        } else this.isWallClimbing = false
 
         if (keysPressed.get(" ") && this.isGrounded === true) {
             this.velocity.y = -15
@@ -143,6 +139,18 @@ export default class Player extends Element {
 
         // seit dem letzten Dash müssen 50 frames vergangen sein und einmal der Boden berührt wurden sein
         if (keysPressed.get("Shift") && this.canDash === true && this.DashCounter > 50) {
+            if (this.pressingRight === true) {
+                this.velocity.x = 15
+                this.velocity.y = 0
+                this.DashCounter = 0
+                this.canDash = false
+            }
+            if (this.pressingLeft === true) {
+                this.velocity.x = -15
+                this.velocity.y = 0
+                this.DashCounter = 0
+                this.canDash = false
+            }
             if (this.pressingDown === true) {
                 this.velocity.y = 15
                 this.DashCounter = 0
@@ -150,16 +158,6 @@ export default class Player extends Element {
             }
             if (this.pressingUp === true) {
                 this.velocity.y = -15
-                this.DashCounter = 0
-                this.canDash = false
-            }
-            if (this.pressingRight === true) {
-                this.velocity.x = 12
-                this.DashCounter = 0
-                this.canDash = false
-            }
-            if (this.pressingLeft === true) {
-                this.velocity.x = -12
                 this.DashCounter = 0
                 this.canDash = false
             }
@@ -183,9 +181,6 @@ export default class Player extends Element {
         const currentIsJumping = this.isJumping
         const currentIsGrounded = this.isGrounded
         const currentCanDash = this.canDash
-        const currentIsWallClimbing = this.isWallClimbing
-        const currentGoneUp = this.goneUp
-        const currentWallClimbCounter = this.WallclimbCounter
 
         let activatedObjectsY = []
 
@@ -310,8 +305,6 @@ export default class Player extends Element {
             this.isJumping = currentIsJumping
             this.isGrounded = currentIsGrounded
             this.canDash = currentCanDash
-            this.isWallClimbing = currentIsWallClimbing
-            this.goneUp = currentGoneUp
             this.collidedDown = false
             this.collidedUp = false
 
