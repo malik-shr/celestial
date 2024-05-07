@@ -27,9 +27,6 @@ export default class Player extends Element {
     camera
     cameraBox
 
-    width = 32
-    height = 32
-
     constructor(x, y, level) {
         // position x,y size x,y
         super(x, y, 1, 1)
@@ -177,6 +174,18 @@ export default class Player extends Element {
         }
     }
 
+    /**
+     * @returns if there is a collision between element1 and element2
+     */
+    collision(element1, element2) {
+        return (
+            element1.position.y > element2.position.y - element1.height &&
+            element1.position.y < element2.position.y + element2.height &&
+            element2.position.x - element1.width < element1.position.x &&
+            element1.position.x < element2.position.x + element2.width
+        )
+    }
+
     // Override
     checkCollision() {
         this.isGrounded = false
@@ -196,7 +205,7 @@ export default class Player extends Element {
         const currentCanDash = this.canDash
         const currentWallClimbCounter = this.WallclimbCounter
 
-        let activatedObjectsY = []
+        const activatedObjectsY = []
 
         for (const elementItem of this.level.elementList) {
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
@@ -204,24 +213,17 @@ export default class Player extends Element {
             // Problematisch wenn ein Block den Spieler in einen anderen setzt
 
             // if inside an object:
-            // inside upper bound: this.position.y > elementItem.position.y-this.sizeY*32 &&
-            // inside lower bound: this.position.y < elementItem.position.y + elementItem.sizeY*32 &&
-            // inside left  bound: elementItem.position.x-this.sizeX*32 < this.position.x &&
-            // inside right bound: this.position.x < elementItem.position.x+elementItem.sizeX*32
+            // inside upper bound: this.position.y > elementItem.position.y-this.height*32 &&
+            // inside lower bound: this.position.y < elementItem.position.y + elementItem.height*32 &&
+            // inside left  bound: elementItem.position.x-this.width*32 < this.position.x &&
+            // inside right bound: this.position.x < elementItem.position.x+elementItem.width*32
 
-            if (
-                elementItem instanceof SolidBlock &&
-                this.position.y > elementItem.position.y - this.sizeY * 32 &&
-                this.position.y < elementItem.position.y + elementItem.sizeY * 32 &&
-                elementItem.position.x - this.sizeX * 32 < this.position.x &&
-                this.position.x < elementItem.position.x + elementItem.sizeX * 32
-            ) {
+            if (!(elementItem instanceof SolidBlock)) continue
+
+            if (this.collision(this, elementItem)) {
                 // if above that object last frame
-                if (
-                    currentPositionY - currentVelocityY <=
-                    elementItem.position.y - this.sizeY * 32
-                ) {
-                    this.position.y = elementItem.position.y - this.sizeY * 32
+                if (currentPositionY - currentVelocityY <= elementItem.position.y - this.height) {
+                    this.position.y = elementItem.position.y - this.height
 
                     this.cameraBox.position.y =
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
@@ -248,9 +250,9 @@ export default class Player extends Element {
                 // if below that object last frame
                 if (
                     currentPositionY - currentVelocityY >=
-                    elementItem.position.y + elementItem.sizeY * 32
+                    elementItem.position.y + elementItem.height
                 ) {
-                    this.position.y = elementItem.position.y + elementItem.sizeY * 32
+                    this.position.y = elementItem.position.y + elementItem.height
 
                     this.cameraBox.position.y =
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
@@ -268,19 +270,10 @@ export default class Player extends Element {
         const currentVelocityX = this.velocity.x
 
         for (const elementItem of this.level.elementList) {
-            if (
-                elementItem instanceof SolidBlock &&
-                this.position.y > elementItem.position.y - this.sizeY * 32 &&
-                this.position.y < elementItem.position.y + elementItem.sizeY * 32 &&
-                elementItem.position.x - this.sizeX * 32 < this.position.x &&
-                this.position.x < elementItem.position.x + elementItem.sizeX * 32
-            ) {
+            if (this.collision(this, elementItem)) {
                 // if left of that object last frame
-                if (
-                    currentPositionX - currentVelocityX <=
-                    elementItem.position.x - this.sizeX * 32
-                ) {
-                    this.position.x = elementItem.position.x - this.sizeX * 32
+                if (currentPositionX - currentVelocityX <= elementItem.position.x - this.width) {
+                    this.position.x = elementItem.position.x - this.width
 
                     this.cameraBox.position.x =
                         this.position.x + this.width / 2 - this.cameraBox.width / 2
@@ -293,9 +286,9 @@ export default class Player extends Element {
                 // if right of that object last frame
                 if (
                     currentPositionX - currentVelocityX >=
-                    elementItem.position.x + elementItem.sizeX * 32
+                    elementItem.position.x + elementItem.width
                 ) {
-                    this.position.x = elementItem.position.x + elementItem.sizeX * 32
+                    this.position.x = elementItem.position.x + elementItem.width
 
                     this.cameraBox.position.x =
                         this.position.x + this.width / 2 - this.cameraBox.width / 2
@@ -340,19 +333,12 @@ export default class Player extends Element {
         const currentVelocityY = this.velocity.y
 
         for (const elementItem of this.level.elementList) {
-            if (
-                elementItem instanceof SolidBlock &&
-                this.position.y > elementItem.position.y - this.sizeY * 32 &&
-                this.position.y < elementItem.position.y + elementItem.sizeY * 32 &&
-                elementItem.position.x - this.sizeX * 32 < this.position.x &&
-                this.position.x < elementItem.position.x + elementItem.sizeX * 32
-            ) {
+            if (!(elementItem instanceof SolidBlock)) continue
+
+            if (this.collision(this, elementItem)) {
                 // if above that object last frame
-                if (
-                    currentPositionY - currentVelocityY <=
-                    elementItem.position.y - this.sizeY * 32
-                ) {
-                    this.position.y = elementItem.position.y - this.sizeY * 32
+                if (currentPositionY - currentVelocityY <= elementItem.position.y - this.height) {
+                    this.position.y = elementItem.position.y - this.height
 
                     this.cameraBox.position.y =
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
@@ -376,9 +362,9 @@ export default class Player extends Element {
                 // if below that object last frame
                 if (
                     currentPositionY - currentVelocityY >=
-                    elementItem.position.y + elementItem.sizeY * 32
+                    elementItem.position.y + elementItem.height
                 ) {
-                    this.position.y = elementItem.position.y + elementItem.sizeY * 32
+                    this.position.y = elementItem.position.y + elementItem.height
 
                     this.cameraBox.position.y =
                         this.position.y + this.height / 2 - this.cameraBox.height / 2
@@ -425,7 +411,7 @@ export default class Player extends Element {
         ctx.closePath()
 
         ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.sizeX * 32, this.sizeY * 32)
+        ctx.rect(this.position.x, this.position.y, this.width, this.height)
         ctx.fillStyle = "red"
         ctx.fill()
         ctx.closePath()

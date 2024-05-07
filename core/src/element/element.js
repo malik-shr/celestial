@@ -1,16 +1,16 @@
 export default class Element {
     position
-    sizeX
-    sizeY
+    width
+    height
 
     // TODO extend element class
-    constructor(x, y, sizeX = 1, sizeY = 1) {
+    constructor(x, y, relativeWidth = 1, relativeHeight = 1) {
         this.position = {
             x: x,
             y: y,
         }
-        this.sizeX = sizeX
-        this.sizeY = sizeY
+        this.width = relativeWidth * 32
+        this.height = relativeHeight * 32
     }
 
     action() {}

@@ -21,7 +21,7 @@ export default class JumpPad extends SolidBlock {
 
     draw(ctx) {
         ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.sizeX * 32, this.sizeY * 32)
+        ctx.rect(this.position.x, this.position.y, this.width, this.height)
         ctx.fillStyle = this.isActive ? "yellow" : "purple"
         ctx.fill()
         ctx.closePath()
