@@ -1,8 +1,8 @@
 import Element from "./element"
 
 export default class SolidBlock extends Element {
-    constructor(x, y, sizeX = 1, sizeY = 1) {
-        super(x, y, sizeX, sizeY)
+    constructor(x, y, relativeWidth = 1, relativeHeight = 1) {
+        super(x, y, relativeWidth, relativeHeight)
     }
 
     action() {}
@@ -11,12 +11,7 @@ export default class SolidBlock extends Element {
 
     draw(ctx) {
         ctx.beginPath()
-        ctx.rect(
-            this.position.x,
-            this.position.y,
-            this.sizeX * 32,
-            this.sizeY * 32
-        )
+        ctx.rect(this.position.x, this.position.y, this.width, this.height)
         ctx.fillStyle = "green"
         ctx.fill()
         ctx.closePath()
