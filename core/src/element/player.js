@@ -176,18 +176,6 @@ export default class Player extends Element {
         }
     }
 
-    /**
-     * @returns if there is a collision between element1 and element2
-     */
-    collision(element1, element2) {
-        return (
-            element1.position.y > element2.position.y - element1.height &&
-            element1.position.y < element2.position.y + element2.height &&
-            element2.position.x - element1.width < element1.position.x &&
-            element1.position.x < element2.position.x + element2.width
-        )
-    }
-
     // Override
     checkCollision() {
         // reset collision state
@@ -200,11 +188,12 @@ export default class Player extends Element {
         this.collidedRight = false
         this.collidedLeft = false
 
-        // save Attributes at Time of Collision Check
+        // save Attributes before Y Collision Handling
         const currentPositionY = this.position.y
         const currentCameraBoxY = this.cameraBox.position.y
         const currentVelocityY = this.velocity.y
         const currentGravity = this.gravity
+
         const currentIsJumping = this.isJumping
         const currentIsGrounded = this.isGrounded
         const currentCanDash = this.canDash
@@ -214,43 +203,64 @@ export default class Player extends Element {
             //TODO change this
             if (!(elementItem instanceof SolidBlock)) continue
 
-            // checks if player is in an object
-            if (this.collision(this, elementItem)) {
-                // if collided, let the object handle the y collision
-                elementItem.handleCollisionY(
-                    this,
-                    currentPositionY,
-                    currentVelocityY,
-                    currentCameraBoxY,
-                    currentGravity,
-                    currentIsJumping,
-                    currentIsGrounded,
-                    currentCanDash,
-                    currentWallClimbCounter
-                )
+            // checks if player is in an object (with current position)
+            if (
+                //below top of element
+                this.position.y > elementItem.position.y - this.height &&
+                //above bottom of element
+                this.position.y < elementItem.position.y + elementItem.height &&
+                //right of left side of element
+                elementItem.position.x - this.width < this.position.x &&
+                //left of right side of element
+                this.position.x < elementItem.position.x + elementItem.width
+            ) {
+                // if collided, let the object handle the y collision (with the saved position)
+                elementItem.handleCollisionY(this, currentPositionY, currentVelocityY)
             }
         }
 
+        // save Attributes before X Collision Handling
         const currentPositionX = this.position.x
         const currentVelocityX = this.velocity.x
 
         for (const elementItem of this.level.elementList) {
             if (!(elementItem instanceof SolidBlock)) continue
 
-            // checks if player is in an object
-            if (this.collision(this, elementItem)) {
-                // if collided, let the object handle the x collision
+            // checks if player is in an object (with current position)
+            if (
+                //below top of element
+                this.position.y > elementItem.position.y - this.height &&
+                //above bottom of element
+                this.position.y < elementItem.position.y + elementItem.height &&
+                //right of left side of element
+                elementItem.position.x - this.width < this.position.x &&
+                //left of right side of element
+                this.position.x < elementItem.position.x + elementItem.width
+            ) {
+                // if collided, let the object handle the x collision (with the saved position)
                 elementItem.handleCollisionX(this, currentPositionX, currentVelocityX)
             }
         }
 
-        // if collided on the top or bottom and on the side with an object reset previous collision handling in the y direction and check it again
+        // if collided vertically AND horizontally, revert the vertical collision handling and check it again
         if (
             ((this.collidedUp === true || this.collidedDown === true) &&
                 this.collidedRight === true) ||
             this.collidedLeft === true
         ) {
             // revert Y collisions
+            this.position.y = currentPositionY
+            this.velocity.y = currentVelocityY
+            this.gravity = currentGravity
+            this.cameraBox.position.y = currentCameraBoxY
+            this.isJumping = currentIsJumping
+            this.isGrounded = currentIsGrounded
+            this.canDash = currentCanDash
+            this.WallclimbCounter = currentWallClimbCounter
+            this.collidedDown = false
+            this.collidedUp = false
+
+            // revert specific collision logic (like that of the jumppad)
             if (this.collidedObjects.length > 0) {
                 // von hinten nach vorne im array
                 for (let i = this.collidedObjects.length - 1; i >= 0; i--) {
@@ -270,7 +280,18 @@ export default class Player extends Element {
         for (const elementItem of this.level.elementList) {
             if (!(elementItem instanceof SolidBlock)) continue
 
-            if (this.collision(this, elementItem)) {
+            // checks if player is in an object (with current position)
+            if (
+                //below top of element
+                this.position.y > elementItem.position.y - this.height &&
+                //above bottom of element
+                this.position.y < elementItem.position.y + elementItem.height &&
+                //right of left side of element
+                elementItem.position.x - this.width < this.position.x &&
+                //left of right side of element
+                this.position.x < elementItem.position.x + elementItem.width
+            ) {
+                // if collided, let the object handle the y collision (with the saved position)
                 elementItem.handleCollisionY(this, currentPositionY, currentVelocityY)
             }
         }
@@ -281,10 +302,6 @@ export default class Player extends Element {
         this.changeVelocities()
 
         this.DashCounter += 1
-
-        // debug
-        // console.log(this.collisionCounter)
-        // this.collisionCounter = 0
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -309,6 +326,7 @@ export default class Player extends Element {
 
         ctx.beginPath()
         ctx.rect(this.position.x, this.position.y, this.width, this.height)
+        // if player is unable to dash color him pink
         if (this.canDash && this.DashCounter >= 100) {
             ctx.fillStyle = "red"
         } else {

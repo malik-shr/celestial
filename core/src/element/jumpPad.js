@@ -8,36 +8,19 @@ export default class JumpPad extends SolidBlock {
         super(x, y)
     }
 
-    handleCollisionY(
-        player,
-        currentPositionY,
-        currentVelocityY,
-        currentCameraBoxY = 0,
-        currentGravity = 0,
-        currentIsJumping = false,
-        currentIsGrounded = false,
-        currentCanDash = false,
-        currentWallClimbCounter = 0
-    ) {
-        super.handleCollisionY(
-            player,
-            currentPositionY,
-            currentVelocityY,
-            (currentCameraBoxY = 0),
-            (currentGravity = 0),
-            (currentIsJumping = false),
-            (currentIsGrounded = false),
-            (currentCanDash = false),
-            (currentWallClimbCounter = 0)
-        )
+    handleCollisionY(player, currentPositionY, currentVelocityY) {
+        super.handleCollisionY(player, currentPositionY, currentVelocityY)
 
-        // if above that object last frame
+        // if above top of element last frame
         if (currentPositionY - currentVelocityY <= this.position.y - player.height) {
             // do additional collision logic
             player.velocity.y = -20
 
             this.isActive = true
         }
+
+        // save the object reference in case of reset
+        player.collidedObjects.push(this)
     }
 
     handleCollisionX(player, currentPositionX, currentVelocityX) {
@@ -45,8 +28,6 @@ export default class JumpPad extends SolidBlock {
     }
 
     revertYCollision(player) {
-        super.revertYCollision(player)
-
         // do additional reversion logic
         this.isActive = false
     }

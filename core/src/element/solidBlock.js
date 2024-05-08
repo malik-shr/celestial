@@ -9,30 +9,10 @@ export default class SolidBlock extends Element {
 
     checkCollision(element) {}
 
-    handleCollisionY(
-        player,
-        currentPositionY,
-        currentVelocityY,
-        currentCameraBoxY = 0,
-        currentGravity = 0,
-        currentIsJumping = false,
-        currentIsGrounded = false,
-        currentCanDash = false,
-        currentWallClimbCounter = 0
-    ) {
-        // save current state in case of reversion
-        this.currentPositionY = currentPositionY
-        this.currentCameraBoxY = currentCameraBoxY
-        this.currentVelocityY = currentVelocityY
-        this.currentGravity = currentGravity
-        this.currentIsJumping = currentIsJumping
-        this.currentIsGrounded = currentIsGrounded
-        this.currentCanDash = currentCanDash
-        this.currentWallClimbCounter = currentWallClimbCounter
-
-        // if above that object last frame
+    handleCollisionY(player, currentPositionY, currentVelocityY) {
+        // if above top of element last frame
         if (currentPositionY - currentVelocityY <= this.position.y - player.height) {
-            // put the player at the right position and give them the right speed and set the right flags
+            // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
             player.position.y = this.position.y - player.height
 
             player.cameraBox.position.y =
@@ -45,15 +25,11 @@ export default class SolidBlock extends Element {
             player.collidedDown = true
             player.canDash = true
             player.WallclimbCounter = 0
-            player.collisionCounter += 1
-
-            // save the object reference in case of reset
-            player.collidedObjects.push(this)
         }
 
-        // if below that object last frame
+        // if below bottom of element last frame
         if (currentPositionY - currentVelocityY >= this.position.y + this.height) {
-            // put the player at the right position and give them the right speed and set the right flags
+            // set the player below this object, reset the velocities, relevant flags and relevant counters and set collidedUp to true
             player.position.y = this.position.y + this.height
 
             player.cameraBox.position.y =
@@ -63,17 +39,13 @@ export default class SolidBlock extends Element {
             player.gravity = 0
             player.collidedUp = true
             player.isJumping = false
-            player.collisionCounter += 1
-
-            // save the object reference in case of reset
-            player.collidedObjects.push(this)
         }
     }
 
     handleCollisionX(player, currentPositionX, currentVelocityX) {
-        // if left of that object last frame
+        // if left of left side of that object last frame
         if (currentPositionX - currentVelocityX <= this.position.x - player.width) {
-            // put the player at the right position and give them the right speed and set the right flags
+            // set the player left of this object, reset the velocities, relevant flags and relevant counters and set collidedRight to true
             player.position.x = this.position.x - player.width
 
             player.cameraBox.position.x =
@@ -84,9 +56,9 @@ export default class SolidBlock extends Element {
             player.collidedRight = true
             player.collisionCounter += 1
         }
-        // if right of that object last frame
+        // if right of right side of that object last frame
         if (currentPositionX - currentVelocityX >= this.position.x + this.width) {
-            // put the player at the right position and give them the right speed and set the right flags
+            // set the player right of this object, reset the velocities, relevant flags and relevant counters and set collidedLeft to true
             player.position.x = this.position.x + this.width
 
             player.cameraBox.position.x =
@@ -94,22 +66,7 @@ export default class SolidBlock extends Element {
 
             player.velocity.x = 0
             player.collidedLeft = true
-            player.collisionCounter += 1
         }
-    }
-
-    revertYCollision(player) {
-        // set attributes of player back to the previously cached state
-        player.position.y = this.currentPositionY
-        player.velocity.y = this.currentVelocityY
-        player.gravity = this.currentGravity
-        player.cameraBox.position.y = this.currentCameraBoxY
-        player.isJumping = this.currentIsJumping
-        player.isGrounded = this.currentIsGrounded
-        player.canDash = this.currentCanDash
-        player.collidedDown = false
-        player.collidedUp = false
-        player.WallclimbCounter = this.currentWallClimbCounter
     }
 
     draw(ctx) {

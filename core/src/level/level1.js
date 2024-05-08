@@ -74,131 +74,131 @@ level1.elementList.add(new JumpPad(256, 384, 1, 1))
 
 level1.elementList.add(new Player(32, 64, level1))
 
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 1500),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 1500),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 1500),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 1500),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
-// level1.elementList.add(
-//     new SolidBlock(
-//         getRandomInt(0, 700),
-//         getRandomInt(0, 384),
-//         getRandomInt(1, 5),
-//         getRandomInt(1, 5)
-//     )
-// )
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 1500),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 1500),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 1500),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 1500),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
+level1.elementList.add(
+    new SolidBlock(
+        getRandomInt(0, 700),
+        getRandomInt(0, 384),
+        getRandomInt(1, 5),
+        getRandomInt(1, 5)
+    )
+)
