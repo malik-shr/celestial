@@ -55,12 +55,12 @@ level1.elementList.add(new SolidBlock(0, 388 - 32 * 3, 2, 1))
 level1.elementList.add(new SolidBlock(32 * 5, 388 - 32 * 6, 2, 2))
 
 // erste Säule
-level1.elementList.add(new SolidBlock(32 * 10, 388 - 32 * 0, 1, 1))
-level1.elementList.add(new SolidBlock(32 * 10, 388 - 32 * 1, 1, 1))
-level1.elementList.add(new SolidBlock(32 * 10, 388 - 32 * 2, 1, 1))
-level1.elementList.add(new SolidBlock(32 * 10, 388 - 32 * 3, 1, 1))
-level1.elementList.add(new SolidBlock(32 * 10, 388 - 32 * 4, 1, 1))
-level1.elementList.add(new SolidBlock(32 * 10, 388 - 32 * 5, 1, 1))
+level1.elementList.add(new SolidBlock(32 * 8, 388 - 32 * 0, 1, 1))
+level1.elementList.add(new SolidBlock(32 * 8, 388 - 32 * 1, 1, 1))
+level1.elementList.add(new SolidBlock(32 * 8, 388 - 32 * 2, 1, 1))
+level1.elementList.add(new SolidBlock(32 * 8, 388 - 32 * 3, 1, 1))
+level1.elementList.add(new SolidBlock(32 * 8, 388 - 32 * 4, 1, 1))
+level1.elementList.add(new SolidBlock(32 * 8, 388 - 32 * 5, 1, 1))
 
 // zweite Säule
 level1.elementList.add(new SolidBlock(32 * 15, 388 - 32 * 0, 1, 1))

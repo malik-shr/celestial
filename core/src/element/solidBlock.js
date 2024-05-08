@@ -20,6 +20,7 @@ export default class SolidBlock extends Element {
         currentCanDash = false,
         currentWallClimbCounter = 0
     ) {
+        // save current state in case of reversion
         this.currentPositionY = currentPositionY
         this.currentCameraBoxY = currentCameraBoxY
         this.currentVelocityY = currentVelocityY
@@ -31,6 +32,7 @@ export default class SolidBlock extends Element {
 
         // if above that object last frame
         if (currentPositionY - currentVelocityY <= this.position.y - player.height) {
+            // put the player at the right position and give them the right speed and set the right flags
             player.position.y = this.position.y - player.height
 
             player.cameraBox.position.y =
@@ -51,6 +53,7 @@ export default class SolidBlock extends Element {
 
         // if below that object last frame
         if (currentPositionY - currentVelocityY >= this.position.y + this.height) {
+            // put the player at the right position and give them the right speed and set the right flags
             player.position.y = this.position.y + this.height
 
             player.cameraBox.position.y =
@@ -70,6 +73,7 @@ export default class SolidBlock extends Element {
     handleCollisionX(player, currentPositionX, currentVelocityX) {
         // if left of that object last frame
         if (currentPositionX - currentVelocityX <= this.position.x - player.width) {
+            // put the player at the right position and give them the right speed and set the right flags
             player.position.x = this.position.x - player.width
 
             player.cameraBox.position.x =
@@ -82,6 +86,7 @@ export default class SolidBlock extends Element {
         }
         // if right of that object last frame
         if (currentPositionX - currentVelocityX >= this.position.x + this.width) {
+            // put the player at the right position and give them the right speed and set the right flags
             player.position.x = this.position.x + this.width
 
             player.cameraBox.position.x =
@@ -94,6 +99,7 @@ export default class SolidBlock extends Element {
     }
 
     revertYCollision(player) {
+        // set attributes of player back to the previously cached state
         player.position.y = this.currentPositionY
         player.velocity.y = this.currentVelocityY
         player.gravity = this.currentGravity

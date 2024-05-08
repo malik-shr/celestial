@@ -190,6 +190,7 @@ export default class Player extends Element {
 
     // Override
     checkCollision() {
+        // reset collision state
         this.collidedObjects = []
 
         this.isGrounded = false
@@ -210,11 +211,12 @@ export default class Player extends Element {
         const currentWallClimbCounter = this.WallclimbCounter
 
         for (const elementItem of this.level.elementList) {
-            // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
-
+            //TODO change this
             if (!(elementItem instanceof SolidBlock)) continue
 
+            // checks if player is in an object
             if (this.collision(this, elementItem)) {
+                // if collided, let the object handle the y collision
                 elementItem.handleCollisionY(
                     this,
                     currentPositionY,
@@ -235,7 +237,9 @@ export default class Player extends Element {
         for (const elementItem of this.level.elementList) {
             if (!(elementItem instanceof SolidBlock)) continue
 
+            // checks if player is in an object
             if (this.collision(this, elementItem)) {
+                // if collided, let the object handle the x collision
                 elementItem.handleCollisionX(this, currentPositionX, currentVelocityX)
             }
         }
@@ -254,6 +258,7 @@ export default class Player extends Element {
                 }
             }
 
+            // check it again
             this.checkYCollision()
         }
     }
@@ -266,10 +271,7 @@ export default class Player extends Element {
             if (!(elementItem instanceof SolidBlock)) continue
 
             if (this.collision(this, elementItem)) {
-                // if above that object last frame
-                if (currentPositionY - currentVelocityY <= elementItem.position.y - this.height) {
-                    elementItem.handleCollisionY(this, currentPositionY, currentVelocityY)
-                }
+                elementItem.handleCollisionY(this, currentPositionY, currentVelocityY)
             }
         }
     }
@@ -307,7 +309,11 @@ export default class Player extends Element {
 
         ctx.beginPath()
         ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        ctx.fillStyle = "red"
+        if (this.canDash && this.DashCounter >= 100) {
+            ctx.fillStyle = "red"
+        } else {
+            ctx.fillStyle = "pink"
+        }
         ctx.fill()
         ctx.closePath()
     }
