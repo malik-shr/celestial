@@ -21,6 +21,7 @@ export default class Player extends Element {
     collidedUp
     collidedRight
     collidedLeft
+    collidedObjects
     collisionCounter
 
     level
@@ -52,6 +53,7 @@ export default class Player extends Element {
         this.isGrounded = false
         this.isWallClimbing = false
         this.canDash = false
+        this.collidedObjects = []
 
         this.WallclimbCounter = 0
         this.collisionCounter = 0
@@ -188,6 +190,8 @@ export default class Player extends Element {
 
     // Override
     checkCollision() {
+        this.collidedObjects = []
+
         this.isGrounded = false
 
         this.collidedDown = false
@@ -205,64 +209,23 @@ export default class Player extends Element {
         const currentCanDash = this.canDash
         const currentWallClimbCounter = this.WallclimbCounter
 
-        const activatedObjectsY = []
-
         for (const elementItem of this.level.elementList) {
             // checks if player is in an object and depending on its previous position (current position - current velocities) it stops the player at the right position
-
-            // Problematisch wenn ein Block den Spieler in einen anderen setzt
-
-            // if inside an object:
-            // inside upper bound: this.position.y > elementItem.position.y-this.height*32 &&
-            // inside lower bound: this.position.y < elementItem.position.y + elementItem.height*32 &&
-            // inside left  bound: elementItem.position.x-this.width*32 < this.position.x &&
-            // inside right bound: this.position.x < elementItem.position.x+elementItem.width*32
 
             if (!(elementItem instanceof SolidBlock)) continue
 
             if (this.collision(this, elementItem)) {
-                // if above that object last frame
-                if (currentPositionY - currentVelocityY <= elementItem.position.y - this.height) {
-                    this.position.y = elementItem.position.y - this.height
-
-                    this.cameraBox.position.y =
-                        this.position.y + this.height / 2 - this.cameraBox.height / 2
-
-                    this.velocity.y = 0
-                    this.gravity = 0
-                    this.isGrounded = true
-                    this.isJumping = false
-                    this.collidedDown = true
-                    this.canDash = true
-                    this.WallclimbCounter = 0
-                    this.collisionCounter += 1
-
-                    if (elementItem instanceof JumpPad) {
-                        this.velocity.y = -20
-
-                        elementItem.isActive = true
-
-                        // save the object reference in case of reset
-                        activatedObjectsY.push(elementItem)
-                    }
-                }
-
-                // if below that object last frame
-                if (
-                    currentPositionY - currentVelocityY >=
-                    elementItem.position.y + elementItem.height
-                ) {
-                    this.position.y = elementItem.position.y + elementItem.height
-
-                    this.cameraBox.position.y =
-                        this.position.y + this.height / 2 - this.cameraBox.height / 2
-
-                    this.velocity.y = 0
-                    this.gravity = 0
-                    this.collidedUp = true
-                    this.isJumping = false
-                    this.collisionCounter += 1
-                }
+                elementItem.handleCollisionY(
+                    this,
+                    currentPositionY,
+                    currentVelocityY,
+                    currentCameraBoxY,
+                    currentGravity,
+                    currentIsJumping,
+                    currentIsGrounded,
+                    currentCanDash,
+                    currentWallClimbCounter
+                )
             }
         }
 
@@ -270,33 +233,10 @@ export default class Player extends Element {
         const currentVelocityX = this.velocity.x
 
         for (const elementItem of this.level.elementList) {
+            if (!(elementItem instanceof SolidBlock)) continue
+
             if (this.collision(this, elementItem)) {
-                // if left of that object last frame
-                if (currentPositionX - currentVelocityX <= elementItem.position.x - this.width) {
-                    this.position.x = elementItem.position.x - this.width
-
-                    this.cameraBox.position.x =
-                        this.position.x + this.width / 2 - this.cameraBox.width / 2
-
-                    this.velocity.x = 0
-
-                    this.collidedRight = true
-                    this.collisionCounter += 1
-                }
-                // if right of that object last frame
-                if (
-                    currentPositionX - currentVelocityX >=
-                    elementItem.position.x + elementItem.width
-                ) {
-                    this.position.x = elementItem.position.x + elementItem.width
-
-                    this.cameraBox.position.x =
-                        this.position.x + this.width / 2 - this.cameraBox.width / 2
-
-                    this.velocity.x = 0
-                    this.collidedLeft = true
-                    this.collisionCounter += 1
-                }
+                elementItem.handleCollisionX(this, currentPositionX, currentVelocityX)
             }
         }
 
@@ -306,21 +246,11 @@ export default class Player extends Element {
                 this.collidedRight === true) ||
             this.collidedLeft === true
         ) {
-            this.position.y = currentPositionY
-            this.velocity.y = currentVelocityY
-            this.gravity = currentGravity
-            this.cameraBox.position.y = currentCameraBoxY
-            this.isJumping = currentIsJumping
-            this.isGrounded = currentIsGrounded
-            this.canDash = currentCanDash
-            this.collidedDown = false
-            this.collidedUp = false
-            this.WallclimbCounter = currentWallClimbCounter
-
-            // reset activated objects
-            if (activatedObjectsY.length > 0) {
-                for (let i = 0; i < activatedObjectsY.length; i++) {
-                    activatedObjectsY[i].isActive = false
+            // revert Y collisions
+            if (this.collidedObjects.length > 0) {
+                // von hinten nach vorne im array
+                for (let i = this.collidedObjects.length - 1; i >= 0; i--) {
+                    this.collidedObjects[i].revertYCollision(this)
                 }
             }
 
@@ -338,42 +268,7 @@ export default class Player extends Element {
             if (this.collision(this, elementItem)) {
                 // if above that object last frame
                 if (currentPositionY - currentVelocityY <= elementItem.position.y - this.height) {
-                    this.position.y = elementItem.position.y - this.height
-
-                    this.cameraBox.position.y =
-                        this.position.y + this.height / 2 - this.cameraBox.height / 2
-
-                    this.velocity.y = 0
-                    this.gravity = 0
-                    this.isGrounded = true
-                    this.collidedDown = true
-                    this.canDash = true
-                    this.collisionCounter += 1
-                    this.WallclimbCounter = 0
-                    this.isJumping = false
-
-                    if (elementItem instanceof JumpPad) {
-                        this.velocity.y = -20
-
-                        elementItem.isActive = true
-                    }
-                }
-
-                // if below that object last frame
-                if (
-                    currentPositionY - currentVelocityY >=
-                    elementItem.position.y + elementItem.height
-                ) {
-                    this.position.y = elementItem.position.y + elementItem.height
-
-                    this.cameraBox.position.y =
-                        this.position.y + this.height / 2 - this.cameraBox.height / 2
-
-                    this.velocity.y = 0
-                    this.gravity = 0
-                    this.collidedUp = true
-                    this.isJumping = false
-                    this.collisionCounter += 1
+                    elementItem.handleCollisionY(this, currentPositionY, currentVelocityY)
                 }
             }
         }
