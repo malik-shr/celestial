@@ -11,8 +11,11 @@ export default class JumpPad extends SolidBlock {
     handleCollisionY(player, currentPositionY, currentVelocityY) {
         super.handleCollisionY(player, currentPositionY, currentVelocityY)
 
-        // if above top of element last frame
-        if (currentPositionY - currentVelocityY <= this.position.y - player.height) {
+        // if player landed on Jumppad
+        if (
+            player.previous.position.y - player.previous.velocity.y <=
+            this.position.y - player.height
+        ) {
             // do additional collision logic
             player.velocity.y = -20
 
@@ -29,6 +32,7 @@ export default class JumpPad extends SolidBlock {
 
     revertYCollision(player) {
         // do additional reversion logic
+        this.activeFrames = 0
         this.isActive = false
     }
 

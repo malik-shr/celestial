@@ -9,9 +9,12 @@ export default class SolidBlock extends Element {
 
     checkCollision(element) {}
 
-    handleCollisionY(player, currentPositionY, currentVelocityY) {
+    handleCollisionY(player) {
         // if above top of element last frame
-        if (currentPositionY - currentVelocityY <= this.position.y - player.height) {
+        if (
+            player.previous.position.y - player.previous.velocity.y <=
+            this.position.y - player.height
+        ) {
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
             player.position.y = this.position.y - player.height
 
@@ -28,7 +31,10 @@ export default class SolidBlock extends Element {
         }
 
         // if below bottom of element last frame
-        if (currentPositionY - currentVelocityY >= this.position.y + this.height) {
+        if (
+            player.previous.position.y - player.previous.velocity.y >=
+            this.position.y + this.height
+        ) {
             // set the player below this object, reset the velocities, relevant flags and relevant counters and set collidedUp to true
             player.position.y = this.position.y + this.height
 
@@ -42,9 +48,12 @@ export default class SolidBlock extends Element {
         }
     }
 
-    handleCollisionX(player, currentPositionX, currentVelocityX) {
+    handleCollisionX(player) {
         // if left of left side of that object last frame
-        if (currentPositionX - currentVelocityX <= this.position.x - player.width) {
+        if (
+            player.previous.position.x - player.previous.velocity.x <=
+            this.position.x - player.width
+        ) {
             // set the player left of this object, reset the velocities, relevant flags and relevant counters and set collidedRight to true
             player.position.x = this.position.x - player.width
 
@@ -57,7 +66,10 @@ export default class SolidBlock extends Element {
             player.collisionCounter += 1
         }
         // if right of right side of that object last frame
-        if (currentPositionX - currentVelocityX >= this.position.x + this.width) {
+        if (
+            player.previous.position.x - player.previous.velocity.x >=
+            this.position.x + this.width
+        ) {
             // set the player right of this object, reset the velocities, relevant flags and relevant counters and set collidedLeft to true
             player.position.x = this.position.x + this.width
 

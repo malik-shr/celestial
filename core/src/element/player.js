@@ -4,6 +4,8 @@ import SolidBlock from "./solidBlock"
 import JumpPad from "./jumpPad"
 
 export default class Player extends Element {
+    previous
+
     velocity
     gravity
 
@@ -16,6 +18,7 @@ export default class Player extends Element {
     isGrounded
     isWallClimbing
     canDash
+    standingOnMovingPlatform
 
     collidedDown
     collidedUp
@@ -53,6 +56,8 @@ export default class Player extends Element {
         this.isGrounded = false
         this.isWallClimbing = false
         this.canDash = false
+        this.standingOnMovingPlatform = false
+        this.PlatformVelocity = 0
         this.collidedObjects = []
 
         this.WallclimbCounter = 0
@@ -61,14 +66,66 @@ export default class Player extends Element {
         this.DashCounter = 0
     }
 
+    // Override
+    action() {
+        this.changeVelocities()
+
+        this.DashCounter += 1
+
+        this.position.x += this.velocity.x
+        this.position.y += this.velocity.y
+
+        this.cameraBox.position.x = this.position.x + this.width / 2 - this.cameraBox.width / 2
+        this.cameraBox.position.y = this.position.y + this.height / 2 - this.cameraBox.height / 2
+    }
+
+    // Override
+    draw(ctx) {
+        // Draw cameraBox
+        ctx.beginPath()
+        ctx.rect(
+            this.cameraBox.position.x,
+            this.cameraBox.position.y,
+            this.cameraBox.width,
+            this.cameraBox.height
+        )
+        ctx.fillStyle = `rgba(255, 255, 255, 0.2)`
+        ctx.fill()
+        ctx.closePath()
+
+        ctx.beginPath()
+        ctx.rect(this.position.x, this.position.y, this.width, this.height)
+        // if player is unable to dash color him pink
+        if (this.canDash && this.DashCounter >= 100) {
+            ctx.fillStyle = "red"
+        } else {
+            ctx.fillStyle = "pink"
+        }
+        ctx.fill()
+        ctx.closePath()
+    }
+
     changeVelocities() {
         // gravity
         this.velocity.y += this.level.gravity
         this.gravity += this.level.gravity
 
         // entschleunigung wenn man weder nach rechts noch nach links drückt
-        if (!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft")) {
-            this.velocity.x -= this.velocity.x / 5
+        if (
+            !keysPressed.get("ArrowRight") &&
+            !keysPressed.get("ArrowLeft") &&
+            !this.standingOnMovingPlatform
+        ) {
+            this.velocity.x = 0
+        }
+
+        // entschleunigung auf die platform velocity falls der Spieler auf einer steht
+        if (
+            !keysPressed.get("ArrowRight") &&
+            !keysPressed.get("ArrowLeft") &&
+            this.standingOnMovingPlatform
+        ) {
+            this.velocity.x = this.PlatformVelocity
         }
 
         // richtung ändern auf dem Boden ist instant
@@ -118,6 +175,7 @@ export default class Player extends Element {
             this.velocity.y = -15
             this.isJumping = true
         }
+
         // walljump
         // momentan frame perfect input, buffer einfügen
         // buffer für so einiges einfügen, auch für is Grounded
@@ -182,63 +240,33 @@ export default class Player extends Element {
         this.collidedObjects = []
 
         this.isGrounded = false
+        this.standingOnMovingPlatform = false
 
         this.collidedDown = false
         this.collidedUp = false
         this.collidedRight = false
         this.collidedLeft = false
 
-        // save Attributes before Y Collision Handling
-        const currentPositionY = this.position.y
-        const currentCameraBoxY = this.cameraBox.position.y
-        const currentVelocityY = this.velocity.y
-        const currentGravity = this.gravity
-
-        const currentIsJumping = this.isJumping
-        const currentIsGrounded = this.isGrounded
-        const currentCanDash = this.canDash
-        const currentWallClimbCounter = this.WallclimbCounter
+        // save attributes at time of function call
+        this.previous = this.clone()
 
         for (const elementItem of this.level.elementList) {
-            //TODO change this
-            if (!(elementItem instanceof SolidBlock)) continue
+            if (elementItem instanceof Player) continue
 
             // checks if player is in an object (with current position)
-            if (
-                //below top of element
-                this.position.y > elementItem.position.y - this.height &&
-                //above bottom of element
-                this.position.y < elementItem.position.y + elementItem.height &&
-                //right of left side of element
-                elementItem.position.x - this.width < this.position.x &&
-                //left of right side of element
-                this.position.x < elementItem.position.x + elementItem.width
-            ) {
+            if (this.isColliding(this, elementItem)) {
                 // if collided, let the object handle the y collision (with the saved position)
-                elementItem.handleCollisionY(this, currentPositionY, currentVelocityY)
+                elementItem.handleCollisionY(this)
             }
         }
 
-        // save Attributes before X Collision Handling
-        const currentPositionX = this.position.x
-        const currentVelocityX = this.velocity.x
-
         for (const elementItem of this.level.elementList) {
-            if (!(elementItem instanceof SolidBlock)) continue
+            if (elementItem instanceof Player) continue
 
             // checks if player is in an object (with current position)
-            if (
-                //below top of element
-                this.position.y > elementItem.position.y - this.height &&
-                //above bottom of element
-                this.position.y < elementItem.position.y + elementItem.height &&
-                //right of left side of element
-                elementItem.position.x - this.width < this.position.x &&
-                //left of right side of element
-                this.position.x < elementItem.position.x + elementItem.width
-            ) {
+            if (this.isColliding(this, elementItem)) {
                 // if collided, let the object handle the x collision (with the saved position)
-                elementItem.handleCollisionX(this, currentPositionX, currentVelocityX)
+                elementItem.handleCollisionX(this)
             }
         }
 
@@ -248,17 +276,7 @@ export default class Player extends Element {
                 this.collidedRight === true) ||
             this.collidedLeft === true
         ) {
-            // revert Y collisions
-            this.position.y = currentPositionY
-            this.velocity.y = currentVelocityY
-            this.gravity = currentGravity
-            this.cameraBox.position.y = currentCameraBoxY
-            this.isJumping = currentIsJumping
-            this.isGrounded = currentIsGrounded
-            this.canDash = currentCanDash
-            this.WallclimbCounter = currentWallClimbCounter
-            this.collidedDown = false
-            this.collidedUp = false
+            this.revertYCollision()
 
             // revert specific collision logic (like that of the jumppad)
             if (this.collidedObjects.length > 0) {
@@ -274,65 +292,60 @@ export default class Player extends Element {
     }
 
     checkYCollision() {
-        const currentPositionY = this.position.y
-        const currentVelocityY = this.velocity.y
+        this.previous = this.clone()
 
         for (const elementItem of this.level.elementList) {
-            if (!(elementItem instanceof SolidBlock)) continue
+            if (elementItem instanceof Player) continue
 
             // checks if player is in an object (with current position)
-            if (
-                //below top of element
-                this.position.y > elementItem.position.y - this.height &&
-                //above bottom of element
-                this.position.y < elementItem.position.y + elementItem.height &&
-                //right of left side of element
-                elementItem.position.x - this.width < this.position.x &&
-                //left of right side of element
-                this.position.x < elementItem.position.x + elementItem.width
-            ) {
+            if (this.isColliding(this, elementItem)) {
                 // if collided, let the object handle the y collision (with the saved position)
-                elementItem.handleCollisionY(this, currentPositionY, currentVelocityY)
+                elementItem.handleCollisionY(this)
             }
         }
     }
 
-    // Override
-    action() {
-        this.changeVelocities()
-
-        this.DashCounter += 1
-
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
-
-        this.cameraBox.position.x = this.position.x + this.width / 2 - this.cameraBox.width / 2
-        this.cameraBox.position.y = this.position.y + this.height / 2 - this.cameraBox.height / 2
+    revertYCollision() {
+        this.position.y = this.previous.position.y
+        this.velocity.y = this.previous.velocity.y
+        this.gravity = this.previous.gravity
+        this.cameraBox.position.y = this.previous.cameraBox.position.y
+        this.isJumping = this.previous.isJumping
+        this.isGrounded = this.previous.isGrounded
+        this.canDash = this.previous.canDash
+        this.wallclimbCounter = this.previous.wallclimbCounter
+        this.collidedDown = false
+        this.collidedUp = false
     }
 
-    // Override
-    draw(ctx) {
-        // Draw cameraBox
-        ctx.beginPath()
-        ctx.rect(
-            this.cameraBox.position.x,
-            this.cameraBox.position.y,
-            this.cameraBox.width,
-            this.cameraBox.height
+    isColliding(element1, element2) {
+        return (
+            //below top of element
+            element1.position.y > element2.position.y - element1.height &&
+            //above bottom of element
+            element1.position.y < element2.position.y + element2.height &&
+            //right of left side of element
+            element2.position.x - element1.width < element1.position.x &&
+            //left of right side of element
+            element1.position.x < element2.position.x + element2.width
         )
-        ctx.fillStyle = `rgba(255, 255, 255, 0.2)`
-        ctx.fill()
-        ctx.closePath()
+    }
 
-        ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        // if player is unable to dash color him pink
-        if (this.canDash && this.DashCounter >= 100) {
-            ctx.fillStyle = "red"
-        } else {
-            ctx.fillStyle = "pink"
+    clone() {
+        return {
+            position: structuredClone(this.position),
+            velocity: structuredClone(this.velocity),
+            cameraBox: {
+                position: { ...this.cameraBox.position },
+                width: this.cameraBox.width,
+                height: this.cameraBox.height,
+            },
+            gravity: this.gravity,
+
+            isJumping: this.isJumping,
+            isGrounded: this.isGrounded,
+            canDash: this.canDash,
+            wallclimbCounter: this.wallclimbCounter,
         }
-        ctx.fill()
-        ctx.closePath()
     }
 }
