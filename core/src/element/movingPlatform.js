@@ -21,7 +21,7 @@ export default class MovingPlatform extends Element {
     handleCollisionY(player) {
         // if above top of element last frame
         if (
-            player.previous.position.y - player.previous.velocity.y <=
+            player.previous.position.y - player.previous.velocity.y + this.velocity.y <=
             this.position.y - player.height
         ) {
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
@@ -126,9 +126,11 @@ export default class MovingPlatform extends Element {
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
-        if (this.isActive < 0) {
+        if (this.isActive < -1) {
             this.steppedOn = false
         }
+
+        console.log(this.steppedOn)
     }
 
     draw(ctx) {
