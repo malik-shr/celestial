@@ -23,7 +23,7 @@ export default class JumpPad extends SolidBlock {
         }
 
         // save the object reference in case of reset
-        player.collidedObjects.push(this)
+        player.collidedSpecialObjects.push(this)
     }
 
     handleCollisionX(player, currentPositionX, currentVelocityX) {

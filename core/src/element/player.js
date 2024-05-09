@@ -24,7 +24,7 @@ export default class Player extends Element {
     collidedUp
     collidedRight
     collidedLeft
-    collidedObjects
+    collidedSpecialObjects
     collisionCounter
 
     level
@@ -58,7 +58,7 @@ export default class Player extends Element {
         this.canDash = false
         this.standingOnMovingPlatform = false
         this.PlatformVelocity = 0
-        this.collidedObjects = []
+        this.collidedSpecialObjects = []
 
         this.WallclimbCounter = 0
         this.collisionCounter = 0
@@ -237,7 +237,7 @@ export default class Player extends Element {
     // Override
     checkCollision() {
         // reset collision state
-        this.collidedObjects = []
+        this.collidedSpecialObjects = []
 
         this.isGrounded = false
         this.standingOnMovingPlatform = false
@@ -279,10 +279,10 @@ export default class Player extends Element {
             this.revertYCollision()
 
             // revert specific collision logic (like that of the jumppad)
-            if (this.collidedObjects.length > 0) {
+            if (this.collidedSpecialObjects.length > 0) {
                 // von hinten nach vorne im array
-                for (let i = this.collidedObjects.length - 1; i >= 0; i--) {
-                    this.collidedObjects[i].revertYCollision(this)
+                for (let i = this.collidedSpecialObjects.length - 1; i >= 0; i--) {
+                    this.collidedSpecialObjects[i].revertYCollision(this)
                 }
             }
 
