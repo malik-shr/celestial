@@ -74,6 +74,7 @@ level1.elementList.add(new SolidBlock(32 * 15, 388 - 32 * 5, 1, 1))
 level1.elementList.add(new JumpPad(256, 384, 1, 1))
 
 // pos x,y size x,y speed x,y
+<<<<<<< HEAD
 level1.elementList.add(new MovingPlatform(200, 388 - 32 * 6, 3, 1, 5, 0))
 
 level1.elementList.add(new Player(32, 64, level1))
@@ -206,3 +207,137 @@ level1.elementList.add(
         getRandomInt(1, 5)
     )
 )
+=======
+level1.elementList.add(new MovingPlatform(200, 388 - 32 * 6, 3, 1, 1, 0))
+
+level1.elementList.add(new Player(32, 64, level1))
+
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 1500),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 1500),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 1500),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 1500),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+// level1.elementList.add(
+//     new SolidBlock(
+//         getRandomInt(0, 700),
+//         getRandomInt(0, 384),
+//         getRandomInt(1, 5),
+//         getRandomInt(1, 5)
+//     )
+// )
+>>>>>>> 1670e2c77a4c8fc16f12ce0c01130df1f200919e
