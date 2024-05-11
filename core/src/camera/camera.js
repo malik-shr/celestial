@@ -16,7 +16,7 @@ export default class Camera {
 
     shouldPanCameraToTheLeft() {
         const previousCameraBoxRightSide =
-            this.player.cameraBox.position.x + this.player.cameraBox.width - this.player.velocity.x
+            this.player.camerabox.position.x + this.player.camerabox.width - this.player.velocity.x
 
         // wird nur ausgeführt falls player velocity negativ
         if (
@@ -28,9 +28,9 @@ export default class Camera {
     }
 
     shouldPanCameraToTheRight() {
-        const previousCameraBoxLeftSide = this.player.cameraBox.position.x - this.player.velocity.x
+        const previousCameraBoxLeftSide = this.player.camerabox.position.x - this.player.velocity.x
 
-        if (this.player.cameraBox.position.x <= 0) return
+        if (this.player.camerabox.position.x <= 0) return
 
         // wird nur ausgeführt falls player velocity positiv
         if (previousCameraBoxLeftSide <= Math.abs(this.position.x) && this.player.velocity.x < 0) {
@@ -38,8 +38,37 @@ export default class Camera {
         }
     }
 
+    shouldPanCameraDown() {
+        const previousCameraUp = this.player.camerabox.position.y - this.player.velocity.y
+
+        // wird nur ausgeführt falls player velocity positiv
+        if (previousCameraUp <= -Math.abs(this.position.y) && this.player.velocity.y < 0) {
+            this.position.y -= this.player.velocity.y
+        }
+    }
+
+    shouldPanCameraUp() {
+        const previousCameraDown =
+            this.player.camerabox.position.y + this.player.camerabox.height - this.player.velocity.y
+
+        if (this.position.y - this.player.velocity.y <= 0) {
+            this.position.y = 0
+            return
+        }
+
+        if (
+            previousCameraDown >= this.canvas.height + -Math.abs(this.position.y) &&
+            this.player.velocity.y > 0
+        ) {
+            // wird nur ausgeführt falls player velocity negativ
+            this.position.y -= this.player.velocity.y
+        }
+    }
+
     pan() {
         this.shouldPanCameraToTheLeft()
         this.shouldPanCameraToTheRight()
+        this.shouldPanCameraDown()
+        this.shouldPanCameraUp()
     }
 }

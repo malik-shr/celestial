@@ -66,7 +66,7 @@ export default class Game {
 
             this.level.elementList.action()
 
-            this.level.elementList.checkCollision()
+            this.player.checkCollision()
 
             this.camera.pan()
 

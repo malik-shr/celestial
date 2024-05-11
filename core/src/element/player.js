@@ -1,7 +1,5 @@
 import Element from "./element"
 import { keysPressed } from "../listener/store"
-import SolidBlock from "./solidBlock"
-import JumpPad from "./jumpPad"
 
 export default class Player extends Element {
     previous
@@ -29,10 +27,9 @@ export default class Player extends Element {
 
     level
     camera
-    cameraBox
+    camerabox
 
     constructor(x, y, level) {
-        // position x,y size x,y
         super(x, y, 1, 1)
 
         this.level = level
@@ -42,7 +39,7 @@ export default class Player extends Element {
             y: 0,
         }
 
-        this.cameraBox = {
+        this.camerabox = {
             position: {
                 x: 0,
                 y: 0,
@@ -57,37 +54,35 @@ export default class Player extends Element {
         this.isWallClimbing = false
         this.canDash = false
         this.standingOnMovingPlatform = false
-        this.PlatformVelocity = 0
+        this.platformVelocity = 0
         this.collidedSpecialObjects = []
 
-        this.WallclimbCounter = 0
+        this.wallclimbCounter = 0
         this.collisionCounter = 0
         this.gravity = 0
-        this.DashCounter = 0
+        this.dashCounter = 0
     }
 
-    // Override
     action() {
         this.changeVelocities()
 
-        this.DashCounter += 1
+        this.dashCounter += 1
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
-        this.cameraBox.position.x = this.position.x + this.width / 2 - this.cameraBox.width / 2
-        this.cameraBox.position.y = this.position.y + this.height / 2 - this.cameraBox.height / 2
+        this.camerabox.position.x = this.position.x + this.width / 2 - this.camerabox.width / 2
+        this.camerabox.position.y = this.position.y + this.height / 2 - this.camerabox.height / 2
     }
 
-    // Override
     draw(ctx) {
-        // Draw cameraBox
+        // Draw camerabox
         ctx.beginPath()
         ctx.rect(
-            this.cameraBox.position.x,
-            this.cameraBox.position.y,
-            this.cameraBox.width,
-            this.cameraBox.height
+            this.camerabox.position.x,
+            this.camerabox.position.y,
+            this.camerabox.width,
+            this.camerabox.height
         )
         ctx.fillStyle = `rgba(255, 255, 255, 0.2)`
         ctx.fill()
@@ -96,7 +91,7 @@ export default class Player extends Element {
         ctx.beginPath()
         ctx.rect(this.position.x, this.position.y, this.width, this.height)
         // if player is unable to dash color him pink
-        if (this.canDash && this.DashCounter >= 100) {
+        if (this.canDash && this.dashCounter >= 100) {
             ctx.fillStyle = "red"
         } else {
             ctx.fillStyle = "pink"
@@ -106,6 +101,8 @@ export default class Player extends Element {
     }
 
     changeVelocities() {
+        const maxSpeedX = 8
+
         // gravity
         this.velocity.y += this.level.gravity
         this.gravity += this.level.gravity
@@ -125,7 +122,7 @@ export default class Player extends Element {
             !keysPressed.get("ArrowLeft") &&
             this.standingOnMovingPlatform
         ) {
-            this.velocity.x = this.PlatformVelocity
+            this.velocity.x = this.platformVelocity
         }
 
         // richtung ändern auf dem Boden ist instant
@@ -138,13 +135,13 @@ export default class Player extends Element {
 
         // zusätzlich beschleunigung wenn man die jeweilige taste drückt
         if (keysPressed.get("ArrowRight")) {
-            if (this.velocity.x < 8) {
+            if (this.velocity.x < maxSpeedX) {
                 this.velocity.x += 0.8
             }
         }
 
         if (keysPressed.get("ArrowLeft")) {
-            if (this.velocity.x > -8) {
+            if (this.velocity.x > -maxSpeedX) {
                 this.velocity.x -= 0.8
             }
         }
@@ -153,12 +150,12 @@ export default class Player extends Element {
         if (
             (this.collidedLeft === true || this.collidedRight === true) &&
             keysPressed.get("d") &&
-            this.WallclimbCounter < 50
+            this.wallclimbCounter < 50
         ) {
             this.velocity.y = 0
             this.gravity = 0
             this.isWallClimbing = true
-            this.WallclimbCounter += 1
+            this.wallclimbCounter += 1
         } else {
             this.isWallClimbing = false
         }
@@ -208,27 +205,27 @@ export default class Player extends Element {
         }
 
         // seit dem letzten Dash müssen 100 frames vergangen sein und einmal der Boden berührt wurden sein
-        if (keysPressed.get("Shift") && this.canDash === true && this.DashCounter > 100) {
+        if (keysPressed.get("Shift") && this.canDash === true && this.dashCounter > 100) {
             if (keysPressed.get("ArrowRight")) {
                 this.velocity.x = 15
                 this.velocity.y = 0
-                this.DashCounter = 0
+                this.dashCounter = 0
                 this.canDash = false
             }
             if (keysPressed.get("ArrowLeft")) {
                 this.velocity.x = -15
                 this.velocity.y = 0
-                this.DashCounter = 0
+                this.dashCounter = 0
                 this.canDash = false
             }
             if (keysPressed.get("ArrowDown")) {
                 this.velocity.y = 15
-                this.DashCounter = 0
+                this.dashCounter = 0
                 this.canDash = false
             }
             if (keysPressed.get("ArrowUp")) {
                 this.velocity.y = -15
-                this.DashCounter = 0
+                this.dashCounter = 0
                 this.canDash = false
             }
         }
@@ -297,7 +294,6 @@ export default class Player extends Element {
         for (const elementItem of this.level.elementList) {
             if (elementItem instanceof Player) continue
 
-            // checks if player is in an object (with current position)
             if (this.isColliding(this, elementItem)) {
                 // if collided, let the object handle the y collision (with the saved position)
                 elementItem.handleCollisionY(this)
@@ -309,7 +305,7 @@ export default class Player extends Element {
         this.position.y = this.previous.position.y
         this.velocity.y = this.previous.velocity.y
         this.gravity = this.previous.gravity
-        this.cameraBox.position.y = this.previous.cameraBox.position.y
+        this.camerabox.position.y = this.previous.camerabox.position.y
         this.isJumping = this.previous.isJumping
         this.isGrounded = this.previous.isGrounded
         this.canDash = this.previous.canDash
@@ -318,28 +314,21 @@ export default class Player extends Element {
         this.collidedUp = false
     }
 
+    /** @returns if player is in an element */
     isColliding(element1, element2) {
-        return (
-            //below top of element
-            element1.position.y > element2.position.y - element1.height &&
-            //above bottom of element
-            element1.position.y < element2.position.y + element2.height &&
-            //right of left side of element
-            element2.position.x - element1.width < element1.position.x &&
-            //left of right side of element
-            element1.position.x < element2.position.x + element2.width
-        )
+        const belowTop = element1.position.y > element2.position.y - element1.height
+        const aboveBottom = element1.position.y < element2.position.y + element2.height
+        const rightOrLeft = element2.position.x - element1.width < element1.position.x
+        const leftOrRight = element1.position.x < element2.position.x + element2.width
+
+        return belowTop && aboveBottom && rightOrLeft && leftOrRight
     }
 
     clone() {
         return {
             position: structuredClone(this.position),
             velocity: structuredClone(this.velocity),
-            cameraBox: {
-                position: { ...this.cameraBox.position },
-                width: this.cameraBox.width,
-                height: this.cameraBox.height,
-            },
+            camerabox: structuredClone(this.camerabox),
             gravity: this.gravity,
 
             isJumping: this.isJumping,
