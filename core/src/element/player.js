@@ -46,7 +46,7 @@ export default class Player extends Element {
             },
 
             width: 600,
-            height: 160,
+            height: 300,
         }
 
         this.isJumping = false
@@ -248,9 +248,6 @@ export default class Player extends Element {
         this.previous = this.clone()
 
         for (const elementItem of this.level.elementList) {
-            if (elementItem instanceof Player) continue
-
-            // checks if player is in an object (with current position)
             if (this.isColliding(this, elementItem)) {
                 // if collided, let the object handle the y collision (with the saved position)
                 elementItem.handleCollisionY(this)
@@ -258,9 +255,6 @@ export default class Player extends Element {
         }
 
         for (const elementItem of this.level.elementList) {
-            if (elementItem instanceof Player) continue
-
-            // checks if player is in an object (with current position)
             if (this.isColliding(this, elementItem)) {
                 // if collided, let the object handle the x collision (with the saved position)
                 elementItem.handleCollisionX(this)
@@ -292,8 +286,6 @@ export default class Player extends Element {
         this.previous = this.clone()
 
         for (const elementItem of this.level.elementList) {
-            if (elementItem instanceof Player) continue
-
             if (this.isColliding(this, elementItem)) {
                 // if collided, let the object handle the y collision (with the saved position)
                 elementItem.handleCollisionY(this)
@@ -321,7 +313,7 @@ export default class Player extends Element {
         const rightOrLeft = element2.position.x - element1.width < element1.position.x
         const leftOrRight = element1.position.x < element2.position.x + element2.width
 
-        return belowTop && aboveBottom && rightOrLeft && leftOrRight
+        return belowTop && aboveBottom && rightOrLeft && leftOrRight && element1 !== element2
     }
 
     clone() {

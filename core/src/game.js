@@ -1,10 +1,8 @@
 import LevelList from "./level/levelList"
 import { level1 } from "./level/level1"
 import Player from "./element/player"
-import KeyboardListener from "./listener/keyboardListener"
 import Camera from "./camera/camera"
 
-// Singleton class
 export default class Game {
     levelList
     level
@@ -26,7 +24,10 @@ export default class Game {
     keyboardListener
 
     constructor() {
-        this.canvas = window.document.getElementById("canvas")
+        this.canvas = window.document.querySelector("canvas")
+        this.canvas.width = 800
+        this.canvas.height = 448
+
         this.ctx = this.canvas.getContext("2d")
 
         this.levelList = new LevelList()
@@ -38,11 +39,6 @@ export default class Game {
         this.player = this.getPlayer()
 
         this.camera = new Camera(0, 0, this.canvas, this.player)
-
-        this.keyboardListener = new KeyboardListener()
-
-        window.addEventListener("keydown", (event) => this.keyboardListener.handleKeyDown(event))
-        window.addEventListener("keyup", (event) => this.keyboardListener.handleKeyUp(event))
     }
 
     start() {
