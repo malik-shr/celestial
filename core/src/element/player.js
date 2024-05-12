@@ -2,38 +2,13 @@ import Element from "./element"
 import { keysPressed } from "../listener/store"
 
 export default class Player extends Element {
-    previous
-
-    velocity
-    gravity
-
-    pressingDown
-    pressingUp
-    pressingRight
-    pressingLeft
-
-    isJumping
-    isGrounded
-    isWallClimbing
-    canDash
-    standingOnMovingPlatform
-
-    collidedDown
-    collidedUp
-    collidedRight
-    collidedLeft
-    collidedSpecialObjects
-    collisionCounter
-
-    level
-    camera
-    camerabox
-
     constructor(x, y, level) {
         super(x, y, 1, 1)
 
         this.level = level
+        this.previous = null
 
+        this.gravity = 0
         this.velocity = {
             x: 0,
             y: 0,
@@ -53,13 +28,19 @@ export default class Player extends Element {
         this.isGrounded = false
         this.isWallClimbing = false
         this.canDash = false
-        this.standingOnMovingPlatform = false
+
         this.platformVelocity = 0
+
+        this.standingOnMovingPlatform = false
+        this.collidedDown = false
+        this.collidedUp = false
+        this.collidedRight = false
+        this.collidedLeft = false
         this.collidedSpecialObjects = []
 
         this.wallclimbCounter = 0
         this.collisionCounter = 0
-        this.gravity = 0
+
         this.dashCounter = 0
     }
 
@@ -233,30 +214,18 @@ export default class Player extends Element {
 
     // Override
     checkCollision() {
-        // reset collision state
-        this.collidedSpecialObjects = []
+        this.resetCollisionState()
 
-        this.isGrounded = false
-        this.standingOnMovingPlatform = false
-
-        this.collidedDown = false
-        this.collidedUp = false
-        this.collidedRight = false
-        this.collidedLeft = false
-
-        // save attributes at time of function call
         this.previous = this.clone()
 
         for (const elementItem of this.level.elementList) {
             if (this.isColliding(this, elementItem)) {
-                // if collided, let the object handle the y collision (with the saved position)
                 elementItem.handleCollisionY(this)
             }
         }
 
         for (const elementItem of this.level.elementList) {
             if (this.isColliding(this, elementItem)) {
-                // if collided, let the object handle the x collision (with the saved position)
                 elementItem.handleCollisionX(this)
             }
         }
@@ -287,10 +256,21 @@ export default class Player extends Element {
 
         for (const elementItem of this.level.elementList) {
             if (this.isColliding(this, elementItem)) {
-                // if collided, let the object handle the y collision (with the saved position)
                 elementItem.handleCollisionY(this)
             }
         }
+    }
+
+    resetCollisionState() {
+        this.collidedSpecialObjects = []
+
+        this.isGrounded = false
+        this.standingOnMovingPlatform = false
+
+        this.collidedDown = false
+        this.collidedUp = false
+        this.collidedRight = false
+        this.collidedLeft = false
     }
 
     revertYCollision() {
@@ -316,6 +296,7 @@ export default class Player extends Element {
         return belowTop && aboveBottom && rightOrLeft && leftOrRight && element1 !== element2
     }
 
+    /** @returns players state at the time of function call */
     clone() {
         return {
             position: structuredClone(this.position),

@@ -6,12 +6,11 @@ const TokenTypes = Object.freeze({
 })
 
 export default class LevelParser {
-    tokens = []
-    position = 0
-
     constructor(input) {
         this.input = input
         this.createTokens()
+        this.tokens = []
+        this.position = 0
     }
 
     createTokens() {
@@ -53,23 +52,5 @@ export default class LevelParser {
 
     createToken(type, x, y) {
         this.tokens.push({ type, x, y })
-    }
-
-    loadLevel() {
-        let levelTemp = this.level
-        let linesY = levelTemp.split("#br")
-        let blockX = linesY.split["#"]
-        let numLines = levelTemp.length
-        let levelMap = []
-        for (let i = 0; i < 16; i++) {
-            levelMap.push(
-                posX,
-                i,
-                [] //air token hinzufügen
-            )
-            if (i < 16 - numLines) {
-            } else {
-            }
-        }
     }
 }

@@ -1,17 +1,15 @@
 import Element from "./element"
 
 export default class MovingPlatform extends Element {
-    activeFrames = 0
-    isActive = 0
-    velocity
-    steppedOn
-
     constructor(x, y, relativeWidth = 1, relativeHeight = 1, velocityX = 0, velocityY = 0) {
         super(x, y, relativeWidth, relativeHeight)
         this.velocity = {
             x: velocityX,
             y: velocityY,
         }
+
+        this.activeFrames = 0
+        this.isActive = 0
         this.steppedOn = false
     }
 

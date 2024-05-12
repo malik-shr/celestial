@@ -4,25 +4,6 @@ import Player from "./element/player"
 import Camera from "./camera/camera"
 
 export default class Game {
-    levelList
-    level
-
-    raf
-
-    canvas
-    ctx
-
-    tickCounter
-    startTime
-    elapsed
-    now
-    then
-
-    player
-
-    camera
-    keyboardListener
-
     constructor() {
         this.canvas = window.document.querySelector("canvas")
         this.canvas.width = 800
@@ -30,11 +11,14 @@ export default class Game {
 
         this.ctx = this.canvas.getContext("2d")
 
+        this.raf = null
+
         this.levelList = new LevelList()
         this.level = level1 // Set to Level 1 as default level
 
         this.tickCounter = 0
         this.startTime = performance.now()
+        this.then = 0
 
         this.player = this.getPlayer()
 
@@ -51,12 +35,12 @@ export default class Game {
     }
 
     tick() {
-        this.now = performance.now()
+        const now = performance.now()
 
-        this.elapsed = this.now - this.then
+        const elapsed = now - this.then
 
         // caps to about 60 fps
-        if (this.elapsed > 1000 / 60) {
+        if (elapsed > 1000 / 60) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.save()
 
@@ -75,7 +59,7 @@ export default class Game {
 
             this.tickCounter += 1
 
-            this.then = this.now - (this.elapsed % 1000) / 60
+            this.then = now - (elapsed % 1000) / 60
         }
 
         this.raf = window.requestAnimationFrame(this.tick.bind(this))

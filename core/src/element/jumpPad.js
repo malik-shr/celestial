@@ -1,11 +1,11 @@
 import SolidBlock from "./solidBlock"
 
 export default class JumpPad extends SolidBlock {
-    activeFrames = 0
-    isActive = false
-
     constructor(x, y) {
         super(x, y)
+
+        this.activeFrames = 0
+        this.isActive = false
     }
 
     handleCollisionY(player, currentPositionY, currentVelocityY) {

@@ -1,10 +1,4 @@
 export default class Camera {
-    x
-    y
-    position
-    canvas
-    player
-
     constructor(x, y, canvas, player) {
         this.position = {
             x: x,
