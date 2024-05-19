@@ -6,25 +6,24 @@ export default class Camera {
         }
         this.canvas = canvas
         this.player = player
+
+        this.relativeRightBound = this.canvas.width * 0.5
+        this.relativeLeftBound = this.canvas.width * 0.2
+        this.relativeVerticalBound = this.canvas.height * 0.4
     }
 
     shouldPanCameraToTheLeft() {
-        // wird nur ausgeführt falls player velocity negativ
-        if (
-            this.player.position.x >= this.canvas.width * 0.4 + Math.abs(this.position.x) &&
-            this.player.velocity.x > 0
-        ) {
+        const rightBound = this.relativeRightBound + Math.abs(this.position.x) - this.player.width
+
+        if (this.player.position.x >= rightBound && this.player.velocity.x > 0) {
             this.position.x -= this.player.velocity.x
         }
     }
 
     shouldPanCameraToTheRight() {
-        // wird nur ausgeführt falls player velocity positiv
-        console.log(this.canvas.width * 0.1 + Math.abs(this.position.x))
-        if (
-            this.player.position.x <= this.canvas.width * 0.1 + Math.abs(this.position.x) &&
-            this.player.velocity.x < 0
-        ) {
+        const leftBound = this.relativeLeftBound + Math.abs(this.position.x)
+
+        if (this.player.position.x <= leftBound && this.player.velocity.x < 0) {
             if (this.position.x - this.player.velocity.x >= 0) {
                 this.position.x = 0
                 return
@@ -34,19 +33,17 @@ export default class Camera {
     }
 
     shouldPanCameraDown() {
-        if (
-            this.player.position.y <= this.canvas.height * 0.4 - Math.abs(this.position.y) &&
-            this.player.velocity.y < 0
-        ) {
+        const verticalBound = this.relativeVerticalBound - Math.abs(this.position.y)
+
+        if (this.player.position.y <= verticalBound && this.player.velocity.y < 0) {
             this.position.y -= this.player.velocity.y
         }
     }
 
     shouldPanCameraUp() {
-        if (
-            this.player.position.y >= this.canvas.height * 0.4 - Math.abs(this.position.y) &&
-            this.player.velocity.y > 0
-        ) {
+        const verticalBound = this.relativeVerticalBound - Math.abs(this.position.y)
+
+        if (this.player.position.y >= verticalBound && this.player.velocity.y > 0) {
             if (this.position.y - this.player.velocity.y <= 0) {
                 this.position.y = 0
                 return
@@ -55,7 +52,7 @@ export default class Camera {
         }
     }
 
-    pan() {
+    action() {
         this.shouldPanCameraToTheLeft()
         this.shouldPanCameraToTheRight()
         this.shouldPanCameraDown()
@@ -67,10 +64,25 @@ export default class Camera {
 
         ctx.fillStyle = "yellow"
 
-        ctx.fillRect(this.canvas.width * 0.4, 0, 1, this.canvas.height)
-        ctx.fillRect(this.canvas.width * 0.1, 0, 1, this.canvas.height)
+        ctx.fillRect(
+            this.relativeLeftBound + Math.abs(this.position.x),
+            -Math.abs(this.position.y),
+            1,
+            this.canvas.height
+        )
+        ctx.fillRect(
+            this.relativeRightBound + Math.abs(this.position.x),
+            -Math.abs(this.position.y),
+            1,
+            this.canvas.height
+        )
 
-        ctx.fillRect(0, this.canvas.height * 0.4, this.canvas.width, 1)
+        ctx.fillRect(
+            Math.abs(this.position.x),
+            this.relativeVerticalBound - Math.abs(this.position.y),
+            this.canvas.width,
+            1
+        )
 
         ctx.closePath()
     }

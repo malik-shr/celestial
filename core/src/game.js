@@ -45,17 +45,16 @@ export default class Game {
             this.ctx.save()
 
             this.level.elementList.action()
+            this.camera.action()
 
             this.player.checkCollision()
-
-            this.camera.pan()
-            // DEBUG
-            this.camera.draw(this.ctx)
 
             // vielleicht in Camera class verschieben?
             this.ctx.translate(this.camera.position.x, this.camera.position.y)
 
             this.level.elementList.draw(this.ctx)
+            // DEBUG
+            this.camera.draw(this.ctx)
 
             this.ctx.restore()
 

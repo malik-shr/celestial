@@ -25,9 +25,6 @@ export default class MovingPlatform extends Element {
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
             player.position.y = this.position.y - player.height + this.velocity.y
 
-            player.camerabox.position.y =
-                player.position.y + player.height / 2 - player.camerabox.height / 2
-
             player.velocity.y = 0
             player.gravity = 0
             player.isGrounded = true
@@ -65,9 +62,6 @@ export default class MovingPlatform extends Element {
             // set the player below this object, reset the velocities, relevant flags and relevant counters and set collidedUp to true
             player.position.y = this.position.y + this.height + this.velocity.y
 
-            player.camerabox.position.y =
-                player.position.y + player.height / 2 - player.camerabox.height / 2
-
             player.velocity.y = 0
             player.gravity = 0
             player.collidedUp = true
@@ -84,9 +78,6 @@ export default class MovingPlatform extends Element {
             // set the player left of this object, reset the velocities, relevant flags and relevant counters and set collidedRight to true
             player.position.x = this.position.x - player.width + this.velocity.x
 
-            player.camerabox.position.x =
-                player.position.x + player.width / 2 - player.camerabox.width / 2
-
             player.velocity.x = 0
 
             player.collidedRight = true
@@ -99,9 +90,6 @@ export default class MovingPlatform extends Element {
         ) {
             // set the player right of this object, reset the velocities, relevant flags and relevant counters and set collidedLeft to true
             player.position.x = this.position.x + this.width + this.velocity.x
-
-            player.camerabox.position.x =
-                player.position.x + player.width / 2 - player.camerabox.width / 2
 
             player.velocity.x = 0
             player.collidedLeft = true
