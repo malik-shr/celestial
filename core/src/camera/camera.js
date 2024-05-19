@@ -9,12 +9,9 @@ export default class Camera {
     }
 
     shouldPanCameraToTheLeft() {
-        const previousCameraBoxRightSide =
-            this.player.camerabox.position.x + this.player.camerabox.width - this.player.velocity.x
-
         // wird nur ausgeführt falls player velocity negativ
         if (
-            previousCameraBoxRightSide >= this.canvas.width + Math.abs(this.position.x) &&
+            this.player.position.x >= this.canvas.width * 0.4 + Math.abs(this.position.x) &&
             this.player.velocity.x > 0
         ) {
             this.position.x -= this.player.velocity.x
@@ -22,39 +19,38 @@ export default class Camera {
     }
 
     shouldPanCameraToTheRight() {
-        const previousCameraBoxLeftSide = this.player.camerabox.position.x - this.player.velocity.x
-
-        if (this.player.camerabox.position.x <= 0) return
-
         // wird nur ausgeführt falls player velocity positiv
-        if (previousCameraBoxLeftSide <= Math.abs(this.position.x) && this.player.velocity.x < 0) {
+        console.log(this.canvas.width * 0.1 + Math.abs(this.position.x))
+        if (
+            this.player.position.x <= this.canvas.width * 0.1 + Math.abs(this.position.x) &&
+            this.player.velocity.x < 0
+        ) {
+            if (this.position.x - this.player.velocity.x >= 0) {
+                this.position.x = 0
+                return
+            }
             this.position.x -= this.player.velocity.x
         }
     }
 
     shouldPanCameraDown() {
-        const previousCameraUp = this.player.camerabox.position.y - this.player.velocity.y
-
-        // wird nur ausgeführt falls player velocity positiv
-        if (previousCameraUp <= -Math.abs(this.position.y) && this.player.velocity.y < 0) {
+        if (
+            this.player.position.y <= this.canvas.height * 0.4 - Math.abs(this.position.y) &&
+            this.player.velocity.y < 0
+        ) {
             this.position.y -= this.player.velocity.y
         }
     }
 
     shouldPanCameraUp() {
-        const previousCameraDown =
-            this.player.camerabox.position.y + this.player.camerabox.height - this.player.velocity.y
-
-        if (this.position.y - this.player.velocity.y <= 0) {
-            this.position.y = 0
-            return
-        }
-
         if (
-            previousCameraDown >= this.canvas.height + -Math.abs(this.position.y) &&
+            this.player.position.y >= this.canvas.height * 0.4 - Math.abs(this.position.y) &&
             this.player.velocity.y > 0
         ) {
-            // wird nur ausgeführt falls player velocity negativ
+            if (this.position.y - this.player.velocity.y <= 0) {
+                this.position.y = 0
+                return
+            }
             this.position.y -= this.player.velocity.y
         }
     }
@@ -64,5 +60,18 @@ export default class Camera {
         this.shouldPanCameraToTheRight()
         this.shouldPanCameraDown()
         this.shouldPanCameraUp()
+    }
+
+    draw(ctx) {
+        ctx.beginPath()
+
+        ctx.fillStyle = "yellow"
+
+        ctx.fillRect(this.canvas.width * 0.4, 0, 1, this.canvas.height)
+        ctx.fillRect(this.canvas.width * 0.1, 0, 1, this.canvas.height)
+
+        ctx.fillRect(0, this.canvas.height * 0.4, this.canvas.width, 1)
+
+        ctx.closePath()
     }
 }

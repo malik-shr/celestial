@@ -49,6 +49,8 @@ export default class Game {
             this.player.checkCollision()
 
             this.camera.pan()
+            // DEBUG
+            this.camera.draw(this.ctx)
 
             // vielleicht in Camera class verschieben?
             this.ctx.translate(this.camera.position.x, this.camera.position.y)
