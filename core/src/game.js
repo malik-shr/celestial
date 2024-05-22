@@ -3,6 +3,9 @@ import { level1 } from "./level/level1"
 import Player from "./element/player"
 import Camera from "./camera/camera"
 
+// import pixilart_sprite from "D:UniProjektseminarcorepublicpixilart_sprite.png"
+// import pixilart_spriteleft from "../public/pixilart_spriteleft.png"
+
 export default class Game {
     constructor() {
         this.canvas = window.document.querySelector("canvas")
