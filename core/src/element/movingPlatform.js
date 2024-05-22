@@ -13,8 +13,6 @@ export default class MovingPlatform extends Element {
         this.steppedOn = false
     }
 
-    checkCollision(element) {}
-
     // TODO zerquetschlogik einfügen
     handleCollisionY(player) {
         // if above top of element last frame
@@ -45,7 +43,7 @@ export default class MovingPlatform extends Element {
             }
 
             player.standingOnMovingPlatform = true
-            player.PlatformVelocity = this.velocity.x
+            player.platformVelocity = this.velocity.x
             this.steppedOn = true
 
             this.isActive = 1

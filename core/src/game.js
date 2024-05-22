@@ -1,6 +1,5 @@
 import LevelList from "./level/levelList"
 import { level1 } from "./level/level1"
-import Player from "./element/player"
 import Camera from "./camera/camera"
 
 export default class Game {
@@ -20,7 +19,7 @@ export default class Game {
         this.startTime = performance.now()
         this.then = 0
 
-        this.player = this.getPlayer()
+        this.player = this.level.getPlayer()
 
         this.camera = new Camera(0, 0, this.canvas, this.player)
     }
@@ -64,15 +63,5 @@ export default class Game {
         }
 
         this.raf = window.requestAnimationFrame(this.tick.bind(this))
-    }
-
-    getPlayer() {
-        for (const element of this.level.elementList) {
-            if (element instanceof Player) {
-                return element
-            }
-        }
-
-        return null
     }
 }

@@ -7,8 +7,6 @@ export default class SolidBlock extends Element {
 
     action() {}
 
-    checkCollision(element) {}
-
     handleCollisionY(player) {
         // if above top of element last frame
         if (
