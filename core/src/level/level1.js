@@ -11,7 +11,7 @@ function getRandomInt(min, max) {
 }
 
 // first argument is name, second is gravity constant
-export const level1 = new Level("1", 0.7)
+export const level1 = new Level("1", 0.8)
 
 // Boden
 level1.elementList.add(new SolidBlock(32 * 0, 416, 1, 1))
