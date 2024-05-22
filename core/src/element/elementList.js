@@ -1,3 +1,5 @@
+import Player from "./player"
+
 export default class ElementList extends Array {
     constructor() {
         super()
@@ -17,7 +19,11 @@ export default class ElementList extends Array {
 
     checkCollision(element) {
         for (const elementItem of this) {
-            elementItem.checkCollision(element)
+            // Replace Player with Entity later
+            if (this.elementItem instanceof Player) {
+                elementItem.checkCollision(element)
+                break
+            }
         }
     }
 
