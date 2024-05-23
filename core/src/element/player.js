@@ -11,6 +11,9 @@ export default class Player extends Element {
         this.level = level
         this.previous = null
 
+        this.width = 32
+        this.height = 35
+
         this.gravity = 0
         this.velocity = {
             x: 0,
@@ -37,7 +40,6 @@ export default class Player extends Element {
 
         // ------Variables for sprite
         this.isMovingRight = true
-        this.loaded = false
         this.playerImage = new Sprite("pixilartSprite.png", 70, 70)
         this.standRight = new Sprite("standingRight.png", 70, 70)
         this.standLeft = new Sprite("StandingLeft.png", 70, 70)
@@ -48,21 +50,6 @@ export default class Player extends Element {
         this.airTimeUp = new Sprite("airTimeUp.png", 70, 70)
         this.jumpUpLeft = new Sprite("jumpUpLeft.png", 70, 70)
         this.airTimeLeft = new Sprite("airTimeLeft.png", 70, 70)
-
-        // this.playerImage.img.src = "pixilartSprite.png"
-        // this.runRight.img.src = "pixilartSprite.png"
-        // this.runLeft.img.src = "pixilartSpriteLeft.png"
-        // this.standRight.img.src = "standingRight.png"
-        // this.standLeft.img.src = "StandingLeft.png"
-        // this.jumpRight.img.src = "jumpRight.img.png"
-        // this.jumpUp.img.src = "jumpUp.img.png"
-        // this.airTimeUp.img.src = "airTimeUp.img.png"
-        // this.jumpUpLeft.img.src = "jumpUpLeft.img.png"
-        // this.airTimeLeft.img.src = "airTimeLeft.img.png"
-
-        this.playerImage.img.onload = () => {
-            this.loaded = true
-        }
 
         this.frameRate = 8
         this.currentFrame = 0

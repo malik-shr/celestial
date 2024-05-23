@@ -6,7 +6,6 @@ export default class Level {
         this.name = name
         this.elementList = new ElementList()
         this.gravity = gravity
-        this.groundPosition = 448
     }
 
     getPlayer() {
