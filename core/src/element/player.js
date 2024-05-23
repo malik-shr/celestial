@@ -40,16 +40,16 @@ export default class Player extends Element {
 
         // ------Variables for sprite
         this.isMovingRight = true
-        this.playerImage = new Sprite("pixilartSprite.png", 70, 70)
-        this.standRight = new Sprite("standingRight.png", 70, 70)
-        this.standLeft = new Sprite("StandingLeft.png", 70, 70)
-        this.runRight = new Sprite("pixilartSprite.png", 70, 70)
-        this.runLeft = new Sprite("pixilartSpriteLeft.png", 70, 70)
-        this.jumpRight = new Sprite("jumpRight.png", 70, 70)
-        this.jumpUp = new Sprite("jumpUp.png", 70, 70)
-        this.airTimeUp = new Sprite("airTimeUp.png", 70, 70)
-        this.jumpUpLeft = new Sprite("jumpUpLeft.png", 70, 70)
-        this.airTimeLeft = new Sprite("airTimeLeft.png", 70, 70)
+        this.playerImage = new Sprite("pixilartSprite.png", this.width, this.height, 70, 70)
+        this.standRight = new Sprite("standingRight.png", this.width, this.height, 70, 70)
+        this.standLeft = new Sprite("StandingLeft.png", this.width, this.height, 70, 70)
+        this.runRight = new Sprite("pixilartSprite.png", this.width, this.height, 70, 70)
+        this.runLeft = new Sprite("pixilartSpriteLeft.png", this.width, this.height, 70, 70)
+        this.jumpRight = new Sprite("jumpRight.png", this.width, this.height, 70, 70)
+        this.jumpUp = new Sprite("jumpUp.png", this.width, this.height, 70, 70)
+        this.airTimeUp = new Sprite("airTimeUp.png", this.width, this.height, 70, 70)
+        this.jumpUpLeft = new Sprite("jumpUpLeft.png", this.width, this.height, 70, 70)
+        this.airTimeLeft = new Sprite("airTimeLeft.png", this.width, this.height, 70, 70)
 
         this.frameRate = 8
         this.currentFrame = 0
@@ -88,7 +88,9 @@ export default class Player extends Element {
             },
         }
 
+        /**@type {Sprite} */
         this.currentSprite = this.sprites.stand.right
+
         this.currentSpriteFrames = this.sprites.stand.frames
         this.currentCropHeight = this.sprites.stand.cropHeight
         this.currentFrameBuffer = this.sprites.stand.buffer
@@ -108,7 +110,7 @@ export default class Player extends Element {
 
         if (!this.currentSprite.loaded) return
 
-        this.currentSprite.draw(ctx, this.currentFrame, this.position, this.width, this.height)
+        this.currentSprite.draw(ctx, this.currentFrame, this.position)
 
         this.updateFrames()
 
@@ -241,7 +243,9 @@ export default class Player extends Element {
         if (this.velocity.y <= 0 && !this.isGrounded) {
             if (this.isMovingRight) {
                 this.currentSprite = this.sprites.jump.right
-            } else this.currentSprite = this.sprites.jump.left
+            } else {
+                this.currentSprite = this.sprites.jump.left
+            }
 
             this.currentSpriteFrames = this.sprites.jump.frames
             this.currentCropHeight = this.sprites.jump.cropHeight

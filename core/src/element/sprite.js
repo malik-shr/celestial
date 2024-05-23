@@ -1,5 +1,5 @@
 export default class Sprite {
-    constructor(src, cropWidth, cropHeight) {
+    constructor(src, width, height, cropWidth, cropHeight) {
         this.loaded = false
 
         this.img = new Image()
@@ -8,11 +8,14 @@ export default class Sprite {
         }
         this.img.src = src
 
+        this.width = width
+        this.height = height
+
         this.cropWidth = cropWidth
         this.cropHeight = cropHeight
     }
 
-    draw(ctx, currentFrame, position, width, height) {
+    draw(ctx, currentFrame, position) {
         if (!this.loaded) return
 
         ctx.drawImage(
@@ -23,8 +26,8 @@ export default class Sprite {
             this.cropHeight,
             position.x,
             position.y,
-            width,
-            height
+            this.width,
+            this.height
         )
     }
 }
