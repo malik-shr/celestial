@@ -62,7 +62,7 @@ export default class Camera {
     draw(ctx) {
         ctx.beginPath()
 
-        ctx.fillStyle = "yellow"
+        ctx.fillStyle = "rgba(255,255,0,0.5)"
 
         ctx.fillRect(
             this.relativeLeftBound + Math.abs(this.position.x),
