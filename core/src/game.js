@@ -8,8 +8,8 @@ import Camera from "./camera/camera"
 export default class Game {
     constructor() {
         this.canvas = window.document.querySelector("canvas")
-        this.canvas.width = 800
-        this.canvas.height = 448
+        this.canvas.width = 1024
+        this.canvas.height = 576
 
         this.ctx = this.canvas.getContext("2d")
 
@@ -45,6 +45,7 @@ export default class Game {
         if (elapsed > 1000 / 60) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.save()
+            this.ctx.scale(2, 2)
 
             this.level.elementList.action()
             this.camera.action()
