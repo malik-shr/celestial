@@ -10,3 +10,15 @@ export const keysPressed = new Map([
     [" ", false],
     ["Shift", false],
 ])
+
+export const Screen = {
+    Menu: Symbol("menu"),
+    Game: Symbol("game"),
+}
+
+//
+export let currentScreen = Screen.Game
+
+export function setCurrentScreen(screen) {
+    currentScreen = screen
+}
