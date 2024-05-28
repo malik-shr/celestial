@@ -14,9 +14,9 @@ export default class UILayer {
         const elapsed = (now - this.startTime) / 1000
 
         ctx.fillStyle = "white"
-        ctx.font = "14px sans-serif"
+        ctx.font = "14px Montserrat"
 
         ctx.fillText(this.game.level.name, 250, 20)
-        ctx.fillText(elapsed.toFixed(2), 400, 20)
+        ctx.fillText(elapsed.toFixed(2), 450, 20)
     }
 }

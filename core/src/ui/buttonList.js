@@ -35,11 +35,9 @@ export default class ButtonList {
 
             if (this.isInside(mousePos, button.rect)) {
                 button.hover = true
-
-                break
+            } else {
+                button.hover = false
             }
-
-            button.hover = false
         }
     }
 

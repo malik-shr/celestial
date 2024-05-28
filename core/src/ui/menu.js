@@ -8,14 +8,14 @@ export default class Menu {
         this.ctx = ctx
         this.game = game
 
-        this.menuActive = true
+        this.isActive = false
 
         this.buttonList = new ButtonList(canvas)
-        this.buttonList.isActive = true
+        this.buttonList.isActive = false
 
         this.startGame = this.startGame.bind(this)
 
-        const startButton = new MenuButton(this.startGame, this.canvas.width / 2, 20, "Start")
+        const startButton = new MenuButton(this.startGame, 20, 20, 150, 50, "Start")
 
         this.buttonList.add(startButton)
     }
@@ -24,8 +24,18 @@ export default class Menu {
         this.buttonList.draw(this.ctx)
     }
 
+    openMenu() {
+        this.buttonList.isActive = true
+        this.isActive = true
+    }
+
+    closeMenu() {
+        this.buttonList.isActive = false
+        this.isActive = false
+    }
+
     startGame() {
         setCurrentScreen(Screen.Game)
-        this.buttonList.isActive = false
+        this.closeMenu()
     }
 }

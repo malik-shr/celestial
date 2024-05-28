@@ -1,3 +1,4 @@
+import { Screen, currentScreen, setCurrentScreen } from "../listener/store"
 import { PauseButton } from "./button"
 import ButtonList from "./buttonList"
 
@@ -8,13 +9,16 @@ export default class Pause {
 
         this.scale = 0
 
-        this.isActive = true
-
         this.resumeGame = this.resumeGame.bind(this)
         this.exitGame = this.exitGame.bind(this)
 
         this.width = 250
         this.height = 250
+
+        this.isActive = false
+
+        this.buttonList = new ButtonList(canvas)
+        this.buttonList.isActive = false
 
         this.box = {
             position: {
@@ -24,19 +28,18 @@ export default class Pause {
         }
 
         window.addEventListener("keyup", (event) => {
+            if (currentScreen !== Screen.Game) return
+
             if (event.key === "Escape") {
                 if (!this.isActive) {
-                    this.isActive = true
+                    this.openPause()
                     return
                 }
 
+                this.closePause()
                 this.resumeGame()
             }
         })
-
-        this.buttonList = new ButtonList(canvas)
-        this.buttonList.isActive = true
-
         const positionY = this.box.position.y + this.height / 2 - 40
 
         this.resumeBtn = new PauseButton(
@@ -49,12 +52,12 @@ export default class Pause {
         )
 
         this.exitBtn = new PauseButton(
-            this.resumeGame,
+            this.exitGame,
             this.box.position.x,
             positionY + 55,
             this.width,
             50,
-            "Exit"
+            "Exit Game"
         )
 
         this.buttonList.add(this.resumeBtn)
@@ -62,14 +65,28 @@ export default class Pause {
     }
 
     resumeGame() {
-        this.isActive = false
+        this.closePause()
     }
 
     exitGame() {
-        console.log("Exit")
+        this.closePause()
+        this.game.menu.openMenu()
+
+        setCurrentScreen(Screen.Menu)
+    }
+
+    openPause() {
+        this.isActive = true
+        this.buttonList.isActive = true
+    }
+
+    closePause() {
+        this.isActive = false
+        this.buttonList.isActive = false
     }
 
     draw(ctx) {
+        ctx.beginPath()
         ctx.save()
 
         if (this.isActive && this.scale < 1) {
@@ -95,12 +112,12 @@ export default class Pause {
             (-(this.scale - 1) * this.canvas.height) / 2
         )
 
-        ctx.fillStyle = "rgba(0,0,0,0.7)"
-        ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [10])
+        ctx.fillStyle = "rgba(0,0,0,0.8)"
+        ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
 
         ctx.fillStyle = "white"
-        ctx.font = "bold 26px sans-serif"
+        ctx.font = "800 26px Montserrat"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 
@@ -109,5 +126,6 @@ export default class Pause {
         this.buttonList.draw(ctx)
 
         ctx.restore()
+        ctx.closePath()
     }
 }

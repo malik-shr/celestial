@@ -78,14 +78,15 @@ export default class Game {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
             if (currentScreen === Screen.Menu) {
+                this.menu.openMenu() // TEMPORARY
                 this.menu.draw()
             }
 
             if (currentScreen === Screen.Game) {
                 this.runLevel()
-
-                this.pause.draw(this.ctx)
             }
+
+            this.pause.draw(this.ctx)
 
             this.then = now - (elapsed % 1000) / 60
         }
