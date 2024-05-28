@@ -17,8 +17,6 @@ export default class Game {
 
         this.menu = new Menu(this.canvas, this.ctx, this)
 
-        this.isPaused = false
-
         this.startTime = performance.now()
 
         this.pause = new Pause(this, canvas)
@@ -50,7 +48,7 @@ export default class Game {
 
         this.ctx.scale(2, 2)
 
-        if (!this.isPaused) {
+        if (!this.pause.isActive) {
             this.level.elementList.action()
             this.camera.action()
 
@@ -86,9 +84,7 @@ export default class Game {
             if (currentScreen === Screen.Game) {
                 this.runLevel()
 
-                if (this.isPaused) {
-                    this.pause.draw(this.ctx)
-                }
+                this.pause.draw(this.ctx)
             }
 
             this.then = now - (elapsed % 1000) / 60

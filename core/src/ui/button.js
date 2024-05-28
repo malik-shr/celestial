@@ -45,11 +45,11 @@ export class PauseButton extends Button {
     }
 
     draw(ctx) {
-        ctx.fillStyle = this.hover ? "gray" : "white"
+        ctx.fillStyle = this.hover ? "rgba(100,100,100,0.4)" : "rgba(0,0,0,0)"
 
         ctx.fillRect(this.rect.position.x, this.rect.position.y, this.rect.width, this.rect.height)
 
-        ctx.fillStyle = "black"
+        ctx.fillStyle = "white"
         ctx.font = "18px sans-serif"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
