@@ -128,7 +128,7 @@ export default class MovingPlatform extends Element {
             this.steppedOn = false
         }
 
-        console.log(this.steppedOn)
+        // console.log(this.steppedOn)
     }
 
     draw(ctx) {

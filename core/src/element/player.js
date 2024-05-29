@@ -31,6 +31,7 @@ export default class Player extends Element {
         this.isGrounded = false
         this.isWallClimbing = false
         this.canDash = false
+        this.isDashing = false
 
         this.platformVelocity = 0
 
@@ -59,6 +60,10 @@ export default class Player extends Element {
         this.jumpUpLeft = new Sprite("jumpUpLeft.png", 70, 70)
         this.airTimeLeft = new Sprite("airTimeLeft.png", 70, 70)
 
+        this.dashJumpUpRight = new Sprite("dashJumpUpRight.png", 70, 70)
+        this.dashJumpUpLeft = new Sprite("dashJumpUpLeft.png", 70, 70)
+        this.airTimeDashLeft = new Sprite("airTimeDashLeft.png", 70, 70)
+        this.airTimeDashRight = new Sprite("airTimeDashRight.png", 70, 70)
         // this.playerImage.img.src = "pixilartSprite.png"
         // this.runRight.img.src = "pixilartSprite.png"
         // this.runLeft.img.src = "pixilartSpriteLeft.png"
@@ -78,42 +83,42 @@ export default class Player extends Element {
         this.currentFrame = 0
         this.elapsedFrames = 0
         this.frameBuffer = 4
-        this.cropHeight = 70
 
         this.sprites = {
             stand: {
                 right: this.standRight,
                 left: this.standLeft,
                 frames: (this.frameRate = 8),
-                cropHeight: (this.cropHeight = 70),
                 buffer: (this.frameBuffer = 1),
             },
             run: {
                 right: this.runRight,
                 left: this.runLeft,
                 frames: (this.frameRate = 8),
-                cropHeight: (this.cropHeight = 70),
                 buffer: (this.frameBuffer = 3),
             },
             jump: {
                 right: this.jumpUp,
                 up: this.jumpUp,
+                dashRight: this.dashJumpUpRight,
+                dashLeft: this.dashJumpUpLeft,
                 left: this.jumpUpLeft,
                 frames: (this.frameRate = 8),
-                cropHeight: (this.cropHeight = 70),
                 buffer: (this.frameBuffer = 2),
             },
             fall: {
                 right: this.airTimeUp,
                 left: this.airTimeLeft,
+                dashRight: this.airTimeDashRight,
+                dashLeft: this.airTimeDashLeft,
                 frames: (this.frameRate = 8),
                 buffer: (this.frameBuffer = 5),
             },
         }
 
         this.currentSprite = this.sprites.stand.right
+        this.previousSprite = this.sprites.stand.right
         this.currentSpriteFrames = this.sprites.stand.frames
-        this.currentCropHeight = this.sprites.stand.cropHeight
         this.currentFrameBuffer = this.sprites.stand.buffer
     }
 
@@ -150,15 +155,18 @@ export default class Player extends Element {
 
         this.updateFrames()
 
-        console.log("velocity " + this.velocity.y)
-        console.log(this.currentSprite)
-        console.log("frame: " + this.isGrounded)
+        console.log("velocity x: " + this.velocity.x)
+        console.log("velocity y: " + this.velocity.y)
+        console.log(this.currentSprite.img)
+        console.log("grounded: " + this.isGrounded)
+        console.log("falling: " + this.falling)
+        console.log("Dash: " + this.isDashing)
 
         // if player is unable to dash color him pink
-        if (this.canDash && this.dashCounter >= 100) {
+        if (this.canDash && this.dashCounter >= 5) {
             ctx.fillStyle = "red"
         } else {
-            ctx.fillStyle = "pink"
+            this.currentSprite = this.sprites.jump.right
         }
         ctx.fill()
         ctx.closePath()
@@ -193,18 +201,15 @@ export default class Player extends Element {
             !this.standingOnMovingPlatform
         ) {
             this.velocity.x = 0
-            this.currentSprite = this.sprites.stand.right
-            this.currentSpriteFrames = this.sprites.stand.frames
-            this.currentCropHeight = this.sprites.stand.cropHeight
-            this.currentFrameBuffer = this.sprites.stand.buffer
         }
 
-        if (this.velocity.x === 0 && this.isGrounded && this.isMovingRight) {
-            this.currentSprite = this.sprites.stand.right
-        }
-
-        if (this.velocity.x === 0 && this.isGrounded && this.isMovingRight === false) {
-            this.currentSprite = this.sprites.stand.left
+        // Sprite animation for standing still
+        if (this.velocity.x === 0 && this.isGrounded) {
+            if (this.isMovingRight) {
+                this.currentSprite = this.sprites.stand.right
+            } else {
+                this.currentSprite = this.sprites.stand.left
+            }
         }
 
         // entschleunigung auf die platform velocity falls der Spieler auf einer steht
@@ -229,31 +234,98 @@ export default class Player extends Element {
             if (this.velocity.x < maxSpeedX) {
                 this.velocity.x += 0.4
                 this.isMovingRight = true
-                this.currentSprite = this.sprites.run.right
-                this.currentSpriteFrames = this.sprites.run.frames
-                this.currentCropHeight = this.sprites.run.cropHeight
-                this.currentFrameBuffer = this.sprites.run.buffer
             }
         }
-
+        // sprite animation for moving right on the ground when pressing the right key
+        if (
+            keysPressed.get("ArrowRight") &&
+            this.isGrounded &&
+            this.falling === false &&
+            !this.standingOnMovingPlatform
+        ) {
+            this.currentSprite = this.sprites.run.right
+            this.currentSpriteFrames = this.sprites.run.frames
+            this.currentFrameBuffer = this.sprites.run.buffer
+        }
         // Left Movement
         if (keysPressed.get("ArrowLeft")) {
             if (this.velocity.x > -maxSpeedX) {
                 this.velocity.x -= 0.4
                 this.isMovingRight = false
-                this.currentSprite = this.sprites.run.left
-                this.currentSpriteFrames = this.sprites.run.frames
-                this.currentCropHeight = this.sprites.run.cropHeight
-                this.currentFrameBuffer = this.sprites.run.buffer
             }
         }
+        // sprite animation for moving left on the ground when pressing the left key
+        if (
+            keysPressed.get("ArrowLeft") &&
+            this.isGrounded &&
+            this.falling === false &&
+            !this.standingOnMovingPlatform
+        ) {
+            this.currentSprite = this.sprites.run.left
+            this.currentSpriteFrames = this.sprites.run.frames
+            this.currentFrameBuffer = this.sprites.run.buffer
+        }
 
-        // für einen wallclimb muss der Spieler mit der Wand collidieren und es muss d gedrückt sein und er darf nicht seit länger als 50 currentFrame am wallclimben sein
+        // jump
+        if (keysPressed.get(" ") && this.isGrounded === true) {
+            this.velocity.y -= 15
+            this.isJumping = true
+            this.jummping = true
+        }
+
+        // Check if the player is falling
+        if (this.isGrounded === false && this.velocity.y > 0) this.falling = true
+        else this.falling = false
+
+        //jummping Animation
+        if (this.velocity.y <= 0 && !this.isGrounded) {
+            if (this.isMovingRight) {
+                if (this.isDashing) {
+                    this.currentSprite = this.sprites.jump.dashRight
+                } else this.currentSprite = this.sprites.jump.right
+            } else if (this.isDashing) {
+                this.currentSprite = this.sprites.jump.dashLeft
+            } else this.currentSprite = this.sprites.jump.left
+
+            this.currentSpriteFrames = this.sprites.jump.frames
+            this.currentFrameBuffer = this.sprites.jump.buffer
+            this.jummping = true
+        }
+
+        //falling animation
+        if (this.falling) {
+            if (this.isMovingRight) {
+                if (this.isDashing) {
+                    this.currentSprite = this.sprites.fall.dashRight
+                } else this.currentSprite = this.sprites.fall.right
+            } else if (this.isDashing) {
+                this.currentSprite = this.sprites.fall.dashLeft
+            } else this.currentSprite = this.sprites.fall.left
+            this.currentFrameBuffer = this.sprites.fall.buffer
+            this.jummping = false
+        }
+
+        // player stands still when both left and right key are pressed
+        if (keysPressed.get("ArrowLeft") && keysPressed.get("ArrowRight")) {
+            if (this.jummping) {
+                this.currentSprite = this.sprites.jump.right
+                this.currentSpriteFrames = this.sprites.jump.frames
+                this.currentFrameBuffer = this.sprites.jump.buffer
+            } else if (this.falling) {
+                this.currentSprite = this.sprites.fall.right
+                this.currentFrameBuffer = this.sprites.fall.buffer
+            } else this.currentSprite = this.sprites.stand.right
+        }
+
+        if (this.isGrounded && this.dashCounter > 40) {
+            this.isDashing = false
+        }
         if (
             (this.collidedLeft === true || this.collidedRight === true) &&
             keysPressed.get("d") &&
             this.wallclimbCounter < 50
         ) {
+            // für einen wallclimb muss der Spieler mit der Wand collidieren und es muss d gedrückt sein und er darf nicht seit länger als 50 currentFrame am wallclimben sein
             this.velocity.y = 0
             this.gravity = 0
             this.isWallClimbing = true
@@ -269,41 +341,8 @@ export default class Player extends Element {
             }
         }
 
-        // jump
-        if (keysPressed.get(" ") && this.isGrounded === true) {
-            this.velocity.y = -15
-            this.isJumping = true
-            this.jummping = true
-        }
-        //jummping Animation
-        if (this.velocity.y <= 0 && !this.isGrounded) {
-            if (this.isMovingRight) {
-                this.currentSprite = this.sprites.jump.right
-            } else this.currentSprite = this.sprites.jump.left
-
-            this.currentSpriteFrames = this.sprites.jump.frames
-            this.currentCropHeight = this.sprites.jump.cropHeight
-            this.currentFrameBuffer = this.sprites.jump.buffer
-            this.jummping = true
-        }
-        //falling animation
-        if (this.velocity.y > 0 && !this.isGrounded) {
-            if (this.isMovingRight) this.currentSprite = this.sprites.fall.right
-            else this.currentSprite = this.sprites.fall.left
-            this.currentFrameBuffer = this.sprites.fall.buffer
-            this.jummping = false
-        }
-
-        // player standing animation
-        if (this.velocity.y === 0 && this.isGrounded) {
-            if (this.isMovingRight) {
-                this.currentSprite = this.sprites.stand.right
-            } else this.currentSprite = this.sprites.stand.left
-
-            this.currentSpriteFrames = this.sprites.stand.frames
-            this.currentCropHeight = this.sprites.stand.cropHeight
-            this.currentFrameBuffer = this.sprites.stand.buffer
-        }
+        //Acceleration stops after not pressing keys, it should continue and gradually stop
+        // dashing diagonaly has is like dashing up and dashing right
 
         // walljump
         // momentan frame perfect input, buffer einfügen
@@ -337,28 +376,32 @@ export default class Player extends Element {
         }
 
         // seit dem letzten Dash müssen 100 currentFrame vergangen sein und einmal der Boden berührt wurden sein
-        if (keysPressed.get("Shift") && this.canDash === true && this.dashCounter > 100) {
+        if (keysPressed.get("Shift") && this.canDash === true && this.dashCounter > 40) {
             if (keysPressed.get("ArrowRight")) {
                 this.velocity.x = 15
                 this.velocity.y = 0
                 this.dashCounter = 0
                 this.canDash = false
+                this.isDashing = true
             }
             if (keysPressed.get("ArrowLeft")) {
                 this.velocity.x = -15
                 this.velocity.y = 0
                 this.dashCounter = 0
                 this.canDash = false
+                this.isDashing = true
             }
             if (keysPressed.get("ArrowDown")) {
                 this.velocity.y = 15
                 this.dashCounter = 0
                 this.canDash = false
+                this.isDashing = true
             }
             if (keysPressed.get("ArrowUp")) {
                 this.velocity.y = -15
                 this.dashCounter = 0
                 this.canDash = false
+                this.isDashing = true
             }
         }
     }
