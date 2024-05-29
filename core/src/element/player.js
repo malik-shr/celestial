@@ -20,6 +20,10 @@ export default class Player extends Element {
             y: 0,
         }
 
+        this.respawnPoint = structuredClone(this.position)
+
+        this.startingPosition = structuredClone(this.position)
+
         this.isJumping = false
         this.isGrounded = false
         this.isWallClimbing = false
@@ -103,6 +107,10 @@ export default class Player extends Element {
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
+
+        if (this.position.y > 512) {
+            this.die()
+        }
     }
 
     draw(ctx) {
@@ -113,10 +121,6 @@ export default class Player extends Element {
         this.currentSprite.draw(ctx, this.currentFrame, this.position)
 
         this.updateFrames()
-
-        console.log("velocity " + this.velocity.y)
-        console.log(this.currentSprite)
-        console.log("frame: " + this.isGrounded)
 
         // if player is unable to dash color him pink
         if (this.canDash && this.dashCounter >= 100) {
@@ -410,6 +414,10 @@ export default class Player extends Element {
         const leftOrRight = element1.position.x < element2.position.x + element2.width
 
         return belowTop && aboveBottom && rightOrLeft && leftOrRight && element1 !== element2
+    }
+
+    die() {
+        this.position = structuredClone(this.respawnPoint)
     }
 
     /** @returns players state at the time of function call */

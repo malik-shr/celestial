@@ -4,8 +4,9 @@ import Player from "../element/player"
 export default class Level {
     constructor(name, gravity) {
         this.name = name
-        this.elementList = new ElementList()
         this.gravity = gravity
+
+        this.elementList = new ElementList()
     }
 
     getPlayer() {

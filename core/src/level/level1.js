@@ -11,7 +11,7 @@ function getRandomInt(min, max) {
 }
 
 // first argument is name, second is gravity constant
-export const level1 = new Level("1", 0.8)
+export const level1 = new Level("Level 1", 0.8)
 
 level1.elementList.add(new Player(0, 0, level1))
 level1.elementList.add(new SolidBlock(0, 256, 100, 1))

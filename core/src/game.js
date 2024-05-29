@@ -1,71 +1,90 @@
 import LevelList from "./level/levelList"
 import { level1 } from "./level/level1"
 import Camera from "./camera/camera"
-
-// import pixilart_sprite from "D:UniProjektseminarcorepublicpixilart_sprite.png"
-// import pixilart_spriteleft from "../public/pixilart_spriteleft.png"
+import UILayer from "./ui/uiLayer"
+import { Screen, currentScreen } from "./listener/store"
+import Menu from "./ui/menu"
+import Pause from "./ui/pause"
 
 export default class Game {
-    constructor() {
-        this.canvas = window.document.querySelector("canvas")
-        this.canvas.width = 1024
-        this.canvas.height = 576
-
-        this.ctx = this.canvas.getContext("2d")
+    constructor(canvas, ctx) {
+        this.canvas = canvas
+        this.ctx = ctx
 
         this.raf = null
 
         this.levelList = new LevelList()
-        this.level = level1 // Set to Level 1 as default level
 
-        this.tickCounter = 0
-        this.startTime = performance.now()
-        this.then = 0
+        this.menu = new Menu(this.canvas, this.ctx, this)
 
-        this.player = this.level.getPlayer()
-
-        this.camera = new Camera(0, 0, this.canvas, this.player)
+        this.pause = new Pause(this, canvas)
     }
 
     start() {
         this.then = this.startTime
-        this.raf = window.requestAnimationFrame(this.tick.bind(this))
+        this.raf = window.requestAnimationFrame(this.draw.bind(this))
+
+        this.level = level1
+
+        this.player = this.level.getPlayer()
+
+        this.camera = new Camera(0, 0, this.canvas, this.player)
+
+        this.uiLayer = new UILayer(this)
+
+        this.loop = this.loop.bind(this)
+
+        this.startTime = performance.now()
+
+        this.time = 0
+
+        window.setInterval(this.loop, 1000 / 40)
     }
 
     stop() {
         window.cancelAnimationFrame(this.raf)
     }
 
-    tick() {
-        const now = performance.now()
+    loop() {
+        if (this.pause.isActive) return
 
-        const elapsed = now - this.then
+        this.time = performance.now() - this.startTime - this.pause.time
 
-        // caps to about 60 fps
-        if (elapsed > 1000 / 60) {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.level.elementList.action()
+        this.camera.action()
+
+        this.player.checkCollision()
+    }
+
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+
+        if (currentScreen === Screen.Menu) {
+            this.menu.openMenu() // TEMPORARY
+            this.menu.draw()
+        }
+
+        if (currentScreen === Screen.Game) {
             this.ctx.save()
+
             this.ctx.scale(2, 2)
 
-            this.level.elementList.action()
-            this.camera.action()
-
-            this.player.checkCollision()
+            this.uiLayer.drawLayer(this.ctx)
 
             // vielleicht in Camera class verschieben?
             this.ctx.translate(this.camera.position.x, this.camera.position.y)
 
             this.level.elementList.draw(this.ctx)
             // DEBUG
-            this.camera.draw(this.ctx)
+            //this.camera.draw(this.ctx)
 
             this.ctx.restore()
 
             this.tickCounter += 1
-
-            this.then = now - (elapsed % 1000) / 60
         }
 
-        this.raf = window.requestAnimationFrame(this.tick.bind(this))
+        this.pause.draw(this.ctx)
+
+        this.raf = window.requestAnimationFrame(this.draw.bind(this))
     }
 }
