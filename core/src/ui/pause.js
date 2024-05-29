@@ -20,6 +20,10 @@ export default class Pause {
         this.buttonList = new ButtonList(canvas)
         this.buttonList.isActive = false
 
+        this.openTime = 0
+        this.time = 0
+        this.closeTime = 0
+
         this.box = {
             position: {
                 x: this.canvas.width / 2 - this.width / 2,
@@ -36,7 +40,6 @@ export default class Pause {
                     return
                 }
 
-                this.closePause()
                 this.resumeGame()
             }
         })
@@ -76,12 +79,20 @@ export default class Pause {
     }
 
     openPause() {
+        this.startTime = performance.now()
+
+        this.alreadyOpened = true
+
         this.isActive = true
+        this.openTime = performance.now()
         this.buttonList.isActive = true
     }
 
     closePause() {
+        this.time += performance.now() - this.startTime
         this.isActive = false
+
+        this.closeTime = performance.now()
         this.buttonList.isActive = false
     }
 

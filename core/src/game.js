@@ -17,80 +17,74 @@ export default class Game {
 
         this.menu = new Menu(this.canvas, this.ctx, this)
 
-        this.startTime = performance.now()
-
         this.pause = new Pause(this, canvas)
     }
 
     start() {
         this.then = this.startTime
-        this.raf = window.requestAnimationFrame(this.tick.bind(this))
+        this.raf = window.requestAnimationFrame(this.draw.bind(this))
 
         this.level = level1
-
-        this.tickCounter = 0
-
-        this.then = 0
 
         this.player = this.level.getPlayer()
 
         this.camera = new Camera(0, 0, this.canvas, this.player)
 
         this.uiLayer = new UILayer(this)
+
+        this.loop = this.loop.bind(this)
+
+        this.startTime = performance.now()
+
+        this.time = 0
+
+        window.setInterval(this.loop, 1000 / 40)
     }
 
     stop() {
         window.cancelAnimationFrame(this.raf)
     }
 
-    runLevel() {
-        this.ctx.save()
+    loop() {
+        if (this.pause.isActive) return
 
-        this.ctx.scale(2, 2)
+        this.time = performance.now() - this.startTime - this.pause.time
 
-        if (!this.pause.isActive) {
-            this.level.elementList.action()
-            this.camera.action()
+        this.level.elementList.action()
+        this.camera.action()
 
-            this.player.checkCollision()
-        }
-
-        this.uiLayer.drawLayer(this.ctx)
-
-        // vielleicht in Camera class verschieben?
-        this.ctx.translate(this.camera.position.x, this.camera.position.y)
-
-        this.level.elementList.draw(this.ctx)
-        // DEBUG
-        //this.camera.draw(this.ctx)
-
-        this.ctx.restore()
-
-        this.tickCounter += 1
+        this.player.checkCollision()
     }
 
-    tick() {
-        const now = performance.now()
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-        const elapsed = now - this.then
-
-        if (elapsed > 1000 / 60) {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-
-            if (currentScreen === Screen.Menu) {
-                this.menu.openMenu() // TEMPORARY
-                this.menu.draw()
-            }
-
-            if (currentScreen === Screen.Game) {
-                this.runLevel()
-            }
-
-            this.pause.draw(this.ctx)
-
-            this.then = now - (elapsed % 1000) / 60
+        if (currentScreen === Screen.Menu) {
+            this.menu.openMenu() // TEMPORARY
+            this.menu.draw()
         }
 
-        this.raf = window.requestAnimationFrame(this.tick.bind(this))
+        if (currentScreen === Screen.Game) {
+            this.ctx.save()
+
+            this.ctx.scale(2, 2)
+
+            this.uiLayer.drawLayer(this.ctx)
+
+            // vielleicht in Camera class verschieben?
+            this.ctx.translate(this.camera.position.x, this.camera.position.y)
+
+            this.level.elementList.draw(this.ctx)
+            // DEBUG
+            //this.camera.draw(this.ctx)
+
+            this.ctx.restore()
+
+            this.tickCounter += 1
+        }
+
+        this.pause.draw(this.ctx)
+
+        this.raf = window.requestAnimationFrame(this.draw.bind(this))
     }
 }

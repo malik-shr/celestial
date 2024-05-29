@@ -9,14 +9,10 @@ export default class UILayer {
     }
 
     drawLayer(ctx) {
-        const now = performance.now()
-
-        const elapsed = (now - this.startTime) / 1000
-
         ctx.fillStyle = "white"
         ctx.font = "14px Montserrat"
 
         ctx.fillText(this.game.level.name, 250, 20)
-        ctx.fillText(elapsed.toFixed(2), 450, 20)
+        ctx.fillText((this.game.time / 1000).toFixed(2), 450, 20)
     }
 }
