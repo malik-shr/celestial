@@ -7,9 +7,9 @@ export default class Camera {
         this.canvas = canvas
         this.player = player
 
-        this.relativeRightBound = this.canvas.width * 0.5
-        this.relativeLeftBound = this.canvas.width * 0.2
-        this.relativeVerticalBound = this.canvas.height * 0.4
+        this.relativeRightBound = (this.canvas.width / 2) * 0.5
+        this.relativeLeftBound = (this.canvas.width / 2) * 0.2
+        this.relativeVerticalBound = (this.canvas.height / 2) * 0.4
     }
 
     shouldPanCameraToTheLeft() {
@@ -62,7 +62,7 @@ export default class Camera {
     draw(ctx) {
         ctx.beginPath()
 
-        ctx.fillStyle = "rgba(255,255,0,0.5)"
+        ctx.fillStyle = "rgba(255,255,0,0.3)"
 
         ctx.fillRect(
             this.relativeLeftBound + Math.abs(this.position.x),
