@@ -56,10 +56,10 @@ export default class Player extends Element {
         this.jumpUpLeft = new Sprite("jumpUpLeft.png", this.width, this.height, 70, 70)
         this.airTimeLeft = new Sprite("airTimeLeft.png", this.width, this.height, 70, 70)
 
-        this.dashJumpUpRight = new Sprite("dashJumpUpRight.png", 70, 70)
-        this.dashJumpUpLeft = new Sprite("dashJumpUpLeft.png", 70, 70)
-        this.airTimeDashLeft = new Sprite("airTimeDashLeft.png", 70, 70)
-        this.airTimeDashRight = new Sprite("airTimeDashRight.png", 70, 70)
+        this.dashJumpUpRight = new Sprite("dashJumpUpRight.png", this.width, this.height, 70, 70)
+        this.dashJumpUpLeft = new Sprite("dashJumpUpLeft.png", this.width, this.height, 70, 70)
+        this.airTimeDashLeft = new Sprite("airTimeDashLeft.png", this.width, this.height, 70, 70)
+        this.airTimeDashRight = new Sprite("airTimeDashRight.png", this.width, this.height, 70, 70)
         // this.playerImage.img.src = "pixilartSprite.png"
         // this.runRight.img.src = "pixilartSprite.png"
         // this.runLeft.img.src = "pixilartSpriteLeft.png"
@@ -91,7 +91,7 @@ export default class Player extends Element {
                 right: this.runRight,
                 left: this.runLeft,
                 frames: (this.frameRate = 8),
-                buffer: (this.frameBuffer = 3),
+                buffer: (this.frameBuffer = 2),
             },
             jump: {
                 right: this.jumpUp,
@@ -100,7 +100,7 @@ export default class Player extends Element {
                 dashLeft: this.dashJumpUpLeft,
                 left: this.jumpUpLeft,
                 frames: (this.frameRate = 8),
-                buffer: (this.frameBuffer = 2),
+                buffer: (this.frameBuffer = 4),
             },
             fall: {
                 right: this.airTimeUp,
@@ -117,13 +117,12 @@ export default class Player extends Element {
 
         this.previousSprite = this.sprites.stand.right
 
-
-
         this.currentSpriteFrames = this.sprites.stand.frames
         this.currentFrameBuffer = this.sprites.stand.buffer
     }
 
     action() {
+        this.updateFrames()
         this.changeVelocities()
 
         this.dashCounter += 1
@@ -143,22 +142,21 @@ export default class Player extends Element {
 
         this.currentSprite.draw(ctx, this.currentFrame, this.position)
 
-        this.updateFrames()
-
+        // this.updateFrames()
 
         console.log("velocity x: " + this.velocity.x)
         console.log("velocity y: " + this.velocity.y)
         console.log(this.currentSprite.img)
-        console.log("grounded: " + this.isGrounded)
+        // console.log("grounded: " + this.isGrounded)
         console.log("falling: " + this.falling)
         console.log("Dash: " + this.isDashing)
-
+        console.log("Movingplatform: " + this.standingOnMovingPlatform)
 
         // if player is unable to dash color him pink
         if (this.canDash && this.dashCounter >= 5) {
             ctx.fillStyle = "red"
         } else {
-            this.currentSprite = this.sprites.jump.right
+            ctx.fillStyle = "pink"
         }
         ctx.fill()
         ctx.closePath()
@@ -211,6 +209,8 @@ export default class Player extends Element {
             this.standingOnMovingPlatform
         ) {
             this.velocity.x = this.platformVelocity
+            if (this.isMovingRight) this.currentSprite = this.sprites.stand.right
+            else this.currentSprite = this.sprites.stand.left
         }
 
         // richtung ändern auf dem Boden ist instant
@@ -263,28 +263,25 @@ export default class Player extends Element {
             this.velocity.y -= 15
             this.isJumping = true
             this.jummping = true
+            this.currentFrame = 0
         }
 
         // Check if the player is falling
-        if (this.isGrounded === false && this.velocity.y > 0) this.falling = true
+        if (this.isGrounded === false && this.velocity.y > 0 && !this.standingOnMovingPlatform)
+            this.falling = true
         else this.falling = false
 
-        //jummping Animation
+        // jummping Animation
         if (this.velocity.y <= 0 && !this.isGrounded) {
             if (this.isMovingRight) {
-
                 if (this.isDashing) {
                     this.currentSprite = this.sprites.jump.dashRight
-                } else this.currentSprite = this.sprites.jump.right
+                } else {
+                    this.currentSprite = this.sprites.jump.right
+                }
             } else if (this.isDashing) {
                 this.currentSprite = this.sprites.jump.dashLeft
             } else this.currentSprite = this.sprites.jump.left
-
-                this.currentSprite = this.sprites.jump.right
-            } else {
-                this.currentSprite = this.sprites.jump.left
-            }
-
 
             this.currentSpriteFrames = this.sprites.jump.frames
             this.currentFrameBuffer = this.sprites.jump.buffer
@@ -342,6 +339,8 @@ export default class Player extends Element {
 
         //Acceleration stops after not pressing keys, it should continue and gradually stop
         // dashing diagonaly has is like dashing up and dashing right
+        // when jumping on jump-pad and holding space you jump twice as high
+        // when moving to the right or left and meanwhile dashing the player holds the dash speed (15) even after the dash
 
         // walljump
         // momentan frame perfect input, buffer einfügen
