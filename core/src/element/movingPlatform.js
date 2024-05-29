@@ -30,7 +30,7 @@ export default class MovingPlatform extends Element {
             player.collidedDown = true
             player.canDash = true
             player.WallclimbCounter = 0
-
+            // player.falling = false
             // save current player velocities
             this.previousVelocityX = player.velocity.x
 
@@ -113,7 +113,6 @@ export default class MovingPlatform extends Element {
         if (this.isActive < -1) {
             this.steppedOn = false
         }
-
     }
 
     draw(ctx) {

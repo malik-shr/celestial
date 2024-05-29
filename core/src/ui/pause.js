@@ -101,11 +101,11 @@ export default class Pause {
         ctx.save()
 
         if (this.isActive && this.scale < 1) {
-            this.scale += 1 / 5
+            this.scale += 1 / 20
         }
 
         if (!this.isActive && this.scale > 0) {
-            this.scale -= 1 / 5
+            this.scale -= 1 / 20
 
             // Rounding Point
             if (this.scale < 0) {
