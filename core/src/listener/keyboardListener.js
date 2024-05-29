@@ -1,6 +1,11 @@
 import { keysPressed } from "./store"
 
 export default class KeyboardListener {
+    constructor() {
+        window.addEventListener("keydown", (event) => this.handleKeyDown(event))
+        window.addEventListener("keyup", (event) => this.handleKeyUp(event))
+    }
+
     handleKeyDown(event) {
         if (!keysPressed.has(event.key)) return
 

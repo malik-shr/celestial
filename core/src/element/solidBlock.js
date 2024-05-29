@@ -7,8 +7,6 @@ export default class SolidBlock extends Element {
 
     action() {}
 
-    checkCollision(element) {}
-
     handleCollisionY(player) {
         // if above top of element last frame
         if (
@@ -17,9 +15,6 @@ export default class SolidBlock extends Element {
         ) {
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
             player.position.y = this.position.y - player.height
-
-            player.camerabox.position.y =
-                player.position.y + player.height / 2 - player.camerabox.height / 2
 
             player.velocity.y = 0
             player.gravity = 0
@@ -38,9 +33,6 @@ export default class SolidBlock extends Element {
             // set the player below this object, reset the velocities, relevant flags and relevant counters and set collidedUp to true
             player.position.y = this.position.y + this.height
 
-            player.camerabox.position.y =
-                player.position.y + player.height / 2 - player.camerabox.height / 2
-
             player.velocity.y = 0
             player.gravity = 0
             player.collidedUp = true
@@ -57,9 +49,6 @@ export default class SolidBlock extends Element {
             // set the player left of this object, reset the velocities, relevant flags and relevant counters and set collidedRight to true
             player.position.x = this.position.x - player.width
 
-            player.camerabox.position.x =
-                player.position.x + player.width / 2 - player.camerabox.width / 2
-
             player.velocity.x = 0
 
             player.collidedRight = true
@@ -72,9 +61,6 @@ export default class SolidBlock extends Element {
         ) {
             // set the player right of this object, reset the velocities, relevant flags and relevant counters and set collidedLeft to true
             player.position.x = this.position.x + this.width
-
-            player.camerabox.position.x =
-                player.position.x + player.width / 2 - player.camerabox.width / 2
 
             player.velocity.x = 0
             player.collidedLeft = true

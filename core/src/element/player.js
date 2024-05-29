@@ -11,20 +11,13 @@ export default class Player extends Element {
         this.level = level
         this.previous = null
 
+        this.width = 32
+        this.height = 35
+
         this.gravity = 0
         this.velocity = {
             x: 0,
             y: 0,
-        }
-
-        this.camerabox = {
-            position: {
-                x: 0,
-                y: 0,
-            },
-
-            width: 600,
-            height: 300,
         }
 
         this.isJumping = false
@@ -48,7 +41,6 @@ export default class Player extends Element {
 
         // ------Variables for sprite
         this.isMovingRight = true
-        this.loaded = false
         this.playerImage = new Sprite("pixilartSprite.png", 70, 70)
         this.standRight = new Sprite("standingRight.png", 70, 70)
         this.standLeft = new Sprite("StandingLeft.png", 70, 70)
@@ -129,24 +121,9 @@ export default class Player extends Element {
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
-
-        this.camerabox.position.x = this.position.x + this.width / 2 - this.camerabox.width / 2
-        this.camerabox.position.y = this.position.y + this.height / 2 - this.camerabox.height / 2
     }
 
     draw(ctx) {
-        // Draw camerabox
-        ctx.beginPath()
-        ctx.rect(
-            this.camerabox.position.x,
-            this.camerabox.position.y,
-            this.camerabox.width,
-            this.camerabox.height
-        )
-        ctx.fillStyle = `rgba(255, 255, 255, 0.2)`
-        ctx.fill()
-        ctx.closePath()
-
         ctx.beginPath()
 
         if (!this.currentSprite.loaded) return
@@ -471,7 +448,6 @@ export default class Player extends Element {
         this.position.y = this.previous.position.y
         this.velocity.y = this.previous.velocity.y
         this.gravity = this.previous.gravity
-        this.camerabox.position.y = this.previous.camerabox.position.y
         this.isJumping = this.previous.isJumping
         this.isGrounded = this.previous.isGrounded
         this.canDash = this.previous.canDash
@@ -495,7 +471,6 @@ export default class Player extends Element {
         return {
             position: structuredClone(this.position),
             velocity: structuredClone(this.velocity),
-            camerabox: structuredClone(this.camerabox),
             gravity: this.gravity,
 
             isJumping: this.isJumping,

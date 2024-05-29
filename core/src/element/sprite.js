@@ -24,7 +24,7 @@ export default class Sprite {
             position.x,
             position.y,
             width,
-            height + 3
+            height
         )
     }
 }
