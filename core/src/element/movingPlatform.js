@@ -113,6 +113,7 @@ export default class MovingPlatform extends Element {
         if (this.isActive < -1) {
             this.steppedOn = false
         }
+
     }
 
     draw(ctx) {
