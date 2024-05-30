@@ -12,7 +12,7 @@ export default class Player extends Element {
         this.previous = null
 
         this.width = 32
-        this.height = 35
+        this.height = 38
 
         this.gravity = 0
         this.velocity = {
@@ -45,31 +45,45 @@ export default class Player extends Element {
 
         // ------Variables for sprite
         this.isMovingRight = true
-        this.playerImage = new Sprite("pixilartSprite.png", this.width, this.height, 70, 70)
-        this.standRight = new Sprite("standingRight.png", this.width, this.height, 70, 70)
-        this.standLeft = new Sprite("StandingLeft.png", this.width, this.height, 70, 70)
-        this.runRight = new Sprite("pixilartSprite.png", this.width, this.height, 70, 70)
-        this.runLeft = new Sprite("pixilartSpriteLeft.png", this.width, this.height, 70, 70)
-        this.jumpRight = new Sprite("jumpRight.png", this.width, this.height, 70, 70)
-        this.jumpUp = new Sprite("jumpUp.png", this.width, this.height, 70, 70)
-        this.airTimeUp = new Sprite("airTimeUp.png", this.width, this.height, 70, 70)
-        this.jumpUpLeft = new Sprite("jumpUpLeft.png", this.width, this.height, 70, 70)
-        this.airTimeLeft = new Sprite("airTimeLeft.png", this.width, this.height, 70, 70)
+        this.playerImage = new Sprite("player/pixilartSprite.png", this.width, this.height, 70, 70)
+        this.standRight = new Sprite("player/standingRight.png", this.width, this.height, 70, 70)
+        this.standLeft = new Sprite("player/StandingLeft.png", this.width, this.height, 70, 70)
+        this.runRight = new Sprite("player/pixilartSprite.png", this.width, this.height, 70, 70)
+        this.runLeft = new Sprite("player/pixilartSpriteLeft.png", this.width, this.height, 70, 70)
+        this.jumpRight = new Sprite("player/jumpRight.png", this.width, this.height, 70, 70)
+        this.jumpUp = new Sprite("player/jumpUp.png", this.width, this.height, 70, 70)
+        this.airTimeUp = new Sprite("player/airTimeUp.png", this.width, this.height, 70, 70)
+        this.jumpUpLeft = new Sprite("player/jumpUpLeft.png", this.width, this.height, 70, 70)
+        this.airTimeLeft = new Sprite("player/airTimeLeft.png", this.width, this.height, 70, 70)
 
-        this.dashJumpUpRight = new Sprite("dashJumpUpRight.png", this.width, this.height, 70, 70)
-        this.dashJumpUpLeft = new Sprite("dashJumpUpLeft.png", this.width, this.height, 70, 70)
-        this.airTimeDashLeft = new Sprite("airTimeDashLeft.png", this.width, this.height, 70, 70)
-        this.airTimeDashRight = new Sprite("airTimeDashRight.png", this.width, this.height, 70, 70)
-        // this.playerImage.img.src = "pixilartSprite.png"
-        // this.runRight.img.src = "pixilartSprite.png"
-        // this.runLeft.img.src = "pixilartSpriteLeft.png"
-        // this.standRight.img.src = "standingRight.png"
-        // this.standLeft.img.src = "StandingLeft.png"
-        // this.jumpRight.img.src = "jumpRight.img.png"
-        // this.jumpUp.img.src = "jumpUp.img.png"
-        // this.airTimeUp.img.src = "airTimeUp.img.png"
-        // this.jumpUpLeft.img.src = "jumpUpLeft.img.png"
-        // this.airTimeLeft.img.src = "airTimeLeft.img.png"
+        this.dashJumpUpRight = new Sprite(
+            "player/dashJumpUpRight.png",
+            this.width,
+            this.height,
+            70,
+            70
+        )
+        this.dashJumpUpLeft = new Sprite(
+            "player/dashJumpUpLeft.png",
+            this.width,
+            this.height,
+            70,
+            70
+        )
+        this.airTimeDashLeft = new Sprite(
+            "player/airTimeDashLeft.png",
+            this.width,
+            this.height,
+            70,
+            70
+        )
+        this.airTimeDashRight = new Sprite(
+            "player/airTimeDashRight.png",
+            this.width,
+            this.height,
+            70,
+            70
+        )
 
         this.playerImage.img.onload = () => {
             this.loaded = true
@@ -91,7 +105,7 @@ export default class Player extends Element {
                 right: this.runRight,
                 left: this.runLeft,
                 frames: (this.frameRate = 8),
-                buffer: (this.frameBuffer = 2),
+                buffer: (this.frameBuffer = 3),
             },
             jump: {
                 right: this.jumpUp,
@@ -100,7 +114,7 @@ export default class Player extends Element {
                 dashLeft: this.dashJumpUpLeft,
                 left: this.jumpUpLeft,
                 frames: (this.frameRate = 8),
-                buffer: (this.frameBuffer = 4),
+                buffer: (this.frameBuffer = 2),
             },
             fall: {
                 right: this.airTimeUp,
@@ -140,7 +154,7 @@ export default class Player extends Element {
 
         if (!this.currentSprite.loaded) return
 
-        this.currentSprite.draw(ctx, this.currentFrame, this.position)
+        this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
 
         // this.updateFrames()
 
@@ -229,12 +243,7 @@ export default class Player extends Element {
             }
         }
         // sprite animation for moving right on the ground when pressing the right key
-        if (
-            keysPressed.get("ArrowRight") &&
-            this.isGrounded &&
-            this.falling === false &&
-            !this.standingOnMovingPlatform
-        ) {
+        if (keysPressed.get("ArrowRight") && this.isGrounded && this.falling === false) {
             this.currentSprite = this.sprites.run.right
             this.currentSpriteFrames = this.sprites.run.frames
             this.currentFrameBuffer = this.sprites.run.buffer
@@ -247,12 +256,7 @@ export default class Player extends Element {
             }
         }
         // sprite animation for moving left on the ground when pressing the left key
-        if (
-            keysPressed.get("ArrowLeft") &&
-            this.isGrounded &&
-            this.falling === false &&
-            !this.standingOnMovingPlatform
-        ) {
+        if (keysPressed.get("ArrowLeft") && this.isGrounded && this.falling === false) {
             this.currentSprite = this.sprites.run.left
             this.currentSpriteFrames = this.sprites.run.frames
             this.currentFrameBuffer = this.sprites.run.buffer
