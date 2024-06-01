@@ -29,7 +29,7 @@ export default class Sprite {
             position.x,
             position.y,
             this.width,
-            this.height + 3
+            this.height
         )
     }
 }

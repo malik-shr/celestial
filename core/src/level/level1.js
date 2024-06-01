@@ -1,7 +1,9 @@
+import Checkpoint from "../element/checkpoint"
 import JumpPad from "../element/jumpPad"
 import MovingPlatform from "../element/movingPlatform"
 import Player from "../element/player"
 import SolidBlock from "../element/solidBlock"
+import TemporaryBlock from "../element/temporaryBlock"
 import Level from "./level"
 
 // TODO add some elements to level1 and determine element logic
@@ -17,6 +19,8 @@ level1.elementList.add(new Player(0, 0, level1))
 level1.elementList.add(new SolidBlock(0, 256, 100, 1))
 
 level1.elementList.add(new JumpPad(200, 224, 1, 1))
+level1.elementList.add(new TemporaryBlock(232, 224, 1, 1))
+level1.elementList.add(new Checkpoint(264, 224, 1, 1))
 
 level1.elementList.add(new SolidBlock(364, 128, 10, 1))
 level1.elementList.add(new SolidBlock(32, 96, 3, 1))
