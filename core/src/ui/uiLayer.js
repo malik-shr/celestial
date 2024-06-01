@@ -13,7 +13,15 @@ export default class UILayer {
         ctx.font = "14px Montserrat"
         ctx.textAlign = "center"
 
-        ctx.fillText(this.game.level.name, 250, 20)
-        ctx.fillText((this.game.time / 1000).toFixed(2), 450, 20)
+        ctx.fillText(
+            this.game.level.name,
+            250 + Math.abs(this.game.camera.position.x),
+            20 - Math.abs(this.game.camera.position.y)
+        )
+        ctx.fillText(
+            (this.game.time / 1000).toFixed(2),
+            450 + Math.abs(this.game.camera.position.x),
+            20 - Math.abs(this.game.camera.position.y)
+        )
     }
 }

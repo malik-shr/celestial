@@ -5,6 +5,7 @@ import UILayer from "./ui/uiLayer"
 import { Screen, currentScreen } from "./listener/store"
 import Menu from "./ui/menu"
 import Pause from "./ui/pause"
+import Sprite from "./element/sprite"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -30,6 +31,8 @@ export default class Game {
 
         this.camera = new Camera(0, 0, this.canvas, this.player)
 
+        this.testTick = 0
+
         this.uiLayer = new UILayer(this)
 
         this.loop = this.loop.bind(this)
@@ -38,6 +41,13 @@ export default class Game {
 
         this.time = 0
 
+        //this.shootingStar = new Sprite("shooting-star.png", 32, 64, 32, 64)
+        this.bg1 = new Sprite("bg/bg.png", 512, 288, 512, 288)
+        this.bg2 = new Sprite("bg/bg_layer_top.png", 512, 288, 512, 288)
+
+        this.starTick = 0
+
+        //this.camera.shaking = true
         window.setInterval(this.loop, 1000 / 40)
     }
 
@@ -51,12 +61,14 @@ export default class Game {
         this.time = performance.now() - this.startTime - this.pause.time
 
         this.level.elementList.action()
-        this.camera.action()
+        this.camera.pan()
+        this.camera.shakeCamera()
 
         this.player.checkCollision()
     }
 
     draw() {
+        ++this.testTick
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         if (currentScreen === Screen.Menu) {
@@ -69,12 +81,46 @@ export default class Game {
 
             this.ctx.scale(2, 2)
 
-            this.uiLayer.drawLayer(this.ctx)
-
             // vielleicht in Camera class verschieben?
             this.ctx.translate(this.camera.position.x, this.camera.position.y)
 
+            // JUST TESTING!
+            this.bg1.draw(this.ctx, 0, 0, {
+                x: Math.abs(this.camera.position.x),
+                y: -Math.abs(this.camera.position.y),
+            })
+
+            for (let i = 0; i < 6; i++) {
+                this.bg2.draw(
+                    this.ctx,
+                    0,
+                    0,
+                    {
+                        x: Math.abs(this.camera.bgLayerpos.x) + 512 * i,
+                        y: -Math.abs(this.camera.position.y),
+                    },
+                    5
+                )
+            }
+
             this.level.elementList.draw(this.ctx)
+
+            const position = {
+                x: 200,
+                y: 100,
+            }
+
+            this.shootingStar.draw(this.ctx, this.starTick, 0, position)
+
+            if (this.testTick % 15 === 0) {
+                ++this.starTick
+            }
+
+            if (this.starTick === 5) {
+                this.starTick = 0
+            }
+
+            this.uiLayer.drawLayer(this.ctx)
             // DEBUG
             //this.camera.draw(this.ctx)
 
