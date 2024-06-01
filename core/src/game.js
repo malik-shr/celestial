@@ -5,6 +5,7 @@ import { Screen, currentScreen } from "./listener/store"
 import Menu from "./ui/menu"
 import Pause from "./ui/pause"
 import Sprite from "./element/sprite"
+import Particles from "./ui/particle"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -46,6 +47,8 @@ export default class Game {
         this.bg2 = new Sprite("bg/bg_layer_top.png", 512, 288, 512, 288)
 
         this.starTick = 0
+
+        this.particles = new Particles(100, 100)
 
         //this.camera.shaking = true
         window.setInterval(this.loop, 1000 / 40)
@@ -122,7 +125,10 @@ export default class Game {
 
             this.uiLayer.drawLayer(this.ctx)
 
-            this.camera.draw(this.ctx)
+
+            this.particles.animate(this.ctx)
+            // DEBUG
+            //this.camera.draw(this.ctx)
 
             this.ctx.restore()
 
