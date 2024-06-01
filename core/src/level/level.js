@@ -18,7 +18,7 @@ export default class Level {
     initLevel(name, gravity) {
         this.name = name
         //Todo initialise Level with Levelparser
-        this.elementList.add(new Player(0, 0, this))
+        this.elementList.add(new Player(0, 0, this.game, this))
         this.elementList.add(new SolidBlock(0, 256, 100, 1))
 
         this.elementList.add(new JumpPad(200, 224, 1, 1))
@@ -33,7 +33,7 @@ export default class Level {
         this.elementList.add(new SolidBlock(600, 32, 10, 1))
         this.elementList.add(new SolidBlock(600, 0, 10, 1))
 
-        this.elementList.add(new MovingPlatform(0, 140, 3, 1, 5, 0))
+        this.elementList.add(new MovingPlatform(0, 224, 3, 1, 0, -2))
     }
 
     getPlayer() {

@@ -121,8 +121,8 @@ export default class Game {
             }
 
             this.uiLayer.drawLayer(this.ctx)
-            // DEBUG
-            //this.camera.draw(this.ctx)
+
+            this.camera.draw(this.ctx)
 
             this.ctx.restore()
 
