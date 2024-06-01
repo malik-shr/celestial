@@ -5,7 +5,6 @@ import { Screen, currentScreen } from "./listener/store"
 import Menu from "./ui/menu"
 import Pause from "./ui/pause"
 import Sprite from "./element/sprite"
-import Particles from "./ui/particle"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -32,8 +31,6 @@ export default class Game {
 
         this.camera = new Camera(0, 0, this.canvas, this.player)
 
-        this.testTick = 0
-
         this.uiLayer = new UILayer(this)
 
         this.loop = this.loop.bind(this)
@@ -46,9 +43,7 @@ export default class Game {
         this.bg1 = new Sprite("bg/bg.png", 512, 288, 512, 288)
         this.bg2 = new Sprite("bg/bg_layer_top.png", 512, 288, 512, 288)
 
-        this.starTick = 0
-
-        this.particles = new Particles(100, 100)
+        this.particles = null
 
         //this.camera.shaking = true
         window.setInterval(this.loop, 1000 / 40)
@@ -65,13 +60,12 @@ export default class Game {
 
         this.level.elementList.action()
         this.camera.pan()
-        this.camera.shakeCamera()
+        this.camera.checkShaking()
 
         this.player.checkCollision()
     }
 
     draw() {
-        ++this.testTick
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         if (currentScreen === Screen.Menu) {
@@ -99,7 +93,7 @@ export default class Game {
                     0,
                     0,
                     {
-                        x: Math.abs(this.camera.bgLayerpos.x) + 512 * i,
+                        x: Math.abs(this.camera.bgLayer.position.x) + 512 * i,
                         y: -Math.abs(this.camera.position.y),
                     },
                     5
@@ -108,31 +102,15 @@ export default class Game {
 
             this.level.elementList.draw(this.ctx)
 
-            const position = {
-                x: 200,
-                y: 100,
-            }
-
-            //this.shootingStar.draw(this.ctx, this.starTick, 0, position)
-
-            if (this.testTick % 15 === 0) {
-                ++this.starTick
-            }
-
-            if (this.starTick === 5) {
-                this.starTick = 0
-            }
-
             this.uiLayer.drawLayer(this.ctx)
 
-
-            this.particles.animate(this.ctx)
+            if (this.particles !== null) {
+                this.particles.animate(this.ctx)
+            }
             // DEBUG
-            //this.camera.draw(this.ctx)
+            this.camera.draw(this.ctx)
 
             this.ctx.restore()
-
-            this.tickCounter += 1
         }
 
         this.pause.draw(this.ctx)

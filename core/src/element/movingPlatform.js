@@ -12,8 +12,6 @@ export default class MovingPlatform extends Element {
         this.steppedOn = false
     }
 
-    action() {}
-
     checkCollision(element) {}
 
     // TODO zerquetschlogik einfügen
@@ -39,7 +37,7 @@ export default class MovingPlatform extends Element {
             // save current player velocities
             this.playerPreviousVelocityX = player.velocity.x
 
-            if (player.collidedY === true) {
+            if (player.collidedY === true && !player.isDead) {
                 player.die()
             }
 
@@ -75,7 +73,7 @@ export default class MovingPlatform extends Element {
 
             // do additional collision logic
 
-            if (player.collidedY === true) {
+            if (player.collidedY === true && !player.isDead) {
                 player.die()
             }
             player.collidingWithPlatform = true
@@ -96,7 +94,7 @@ export default class MovingPlatform extends Element {
 
             // do additional collision logic
 
-            if (player.collidedX === true) {
+            if (player.collidedX === true && !player.isDead) {
                 player.die()
             }
 
@@ -114,7 +112,7 @@ export default class MovingPlatform extends Element {
 
             // do additional collision logic
 
-            if (player.collidedX === true) {
+            if (player.collidedX === true && !player.isDead) {
                 player.die()
             }
 

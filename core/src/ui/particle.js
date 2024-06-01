@@ -1,13 +1,13 @@
 export class Particle {
-    constructor(x, y) {
+    constructor(x, y, color) {
         this.position = {
             x: x,
             y: y,
         }
-        this.size = Math.random() * 2 + 0.5 // Smaller particles
-        this.speedX = Math.random() * 3 - 1.5
-        this.speedY = Math.random() * 3 - 1.5
-        this.color = "rgba(255, 255, 255, 0.8)"
+        this.size = 5
+        this.speedX = Math.random() * 1.5 - 0.75
+        this.speedY = Math.random() * 1.5 - 0.75
+        this.color = color
     }
     update() {
         this.position.x += this.speedX
@@ -17,18 +17,20 @@ export class Particle {
     draw(ctx) {
         ctx.fillStyle = this.color
         ctx.beginPath()
-        ctx.arc(this.position.x, this.position.y, this.size, 0, Math.PI * 2)
+        ctx.rect(this.position.x, this.position.y, this.size, this.size)
         ctx.closePath()
         ctx.fill()
     }
 }
 
 export default class Particles {
-    constructor(x, y) {
+    constructor(x, y, colors) {
         this.particles = []
         this.particleFrame = 0
         this.isActive = true
         this.particleCounter = 0
+
+        this.colors = colors
 
         this.position = {
             x: x,
@@ -37,15 +39,17 @@ export default class Particles {
 
         this.isActive = true
 
-        for (let i = 0; i < 400; i++) {
-            this.particles.push(new Particle(this.position.x, this.position.y))
+        for (let i = 0; i < 20; i++) {
+            this.particles.push(
+                new Particle(this.position.x, this.position.y, this.getRandomColor())
+            )
         }
     }
 
     animate(ctx) {
         ++this.particleCounter
 
-        if (this.particleCounter === 100) {
+        if (this.particleCounter === 60) {
             this.isActive = false
         }
 
@@ -55,8 +59,16 @@ export default class Particles {
             particle.draw(ctx)
             if (particle.size <= 0.1) {
                 this.particles.splice(index, 1)
-                this.particles.push(new Particle(this.position.x, this.position.y))
+                this.particles.push(
+                    new Particle(this.position.x, this.position.y, this.getRandomColor())
+                )
             }
         })
+    }
+
+    getRandomColor() {
+        const index = Math.floor(Math.random() * this.colors.length)
+
+        return this.colors[index]
     }
 }
