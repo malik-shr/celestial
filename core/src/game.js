@@ -110,7 +110,7 @@ export default class Game {
                 y: 100,
             }
 
-            this.shootingStar.draw(this.ctx, this.starTick, 0, position)
+            //this.shootingStar.draw(this.ctx, this.starTick, 0, position)
 
             if (this.testTick % 15 === 0) {
                 ++this.starTick

@@ -7,7 +7,10 @@ export default class SolidBlock extends Element {
 
     action() {}
 
+    checkCollision(element) {}
+
     handleCollisionY(player) {
+        player.collidedY = true
         // if above top of element last frame
         if (
             player.previous.position.y - player.previous.velocity.y <=
@@ -19,10 +22,14 @@ export default class SolidBlock extends Element {
             player.velocity.y = 0
             player.gravity = 0
             player.isGrounded = true
+            player.notGroundedCounter = 0
             player.isJumping = false
             player.collidedDown = true
             player.canDash = true
             player.WallclimbCounter = 0
+
+            this.WallJumpRightCounter = 50
+            this.WallJumpLeftCounter = 50
         }
 
         // if below bottom of element last frame
@@ -41,6 +48,7 @@ export default class SolidBlock extends Element {
     }
 
     handleCollisionX(player) {
+        player.collidedX = true
         // if left of left side of that object last frame
         if (
             player.previous.position.x - player.previous.velocity.x <=
@@ -52,7 +60,7 @@ export default class SolidBlock extends Element {
             player.velocity.x = 0
 
             player.collidedRight = true
-            player.collisionCounter += 1
+            player.collidedRightCounter = 0
         }
         // if right of right side of that object last frame
         if (
@@ -64,6 +72,7 @@ export default class SolidBlock extends Element {
 
             player.velocity.x = 0
             player.collidedLeft = true
+            player.collidedLeftCounter = 0
         }
     }
 

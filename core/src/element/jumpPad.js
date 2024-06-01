@@ -17,9 +17,10 @@ export default class JumpPad extends SolidBlock {
             this.position.y - player.height
         ) {
             // do additional collision logic
-            player.velocity.y = -20
+            player.velocity.y = -15
 
             this.isActive = true
+            player.isGrounded = false
         }
 
         // save the object reference in case of reset
