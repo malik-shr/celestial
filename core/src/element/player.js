@@ -5,9 +5,10 @@ import Sprite from "./sprite"
 // import pixilartSprite from "D:/Uni/Projektseminar/core/public/pixilartSprite.png"
 
 export default class Player extends Element {
-    constructor(x, y, level) {
+    constructor(x, y, game, level) {
         super(x, y, 1, 1)
 
+        this.game = game
         this.level = level
         this.previous = null
 
@@ -156,10 +157,6 @@ export default class Player extends Element {
         this.position.y += this.velocity.y
 
         // increase counters
-        this.dashCounter += 1
-        if (this.dashCounter >= 20) {
-            this.isDashing = false
-        }
         this.collidedLeftCounter += 1
         this.collidedRightCounter += 1
         this.WallJumpLeftCounter += 1
@@ -169,7 +166,10 @@ export default class Player extends Element {
         }
 
         if (this.position.y > 512) {
+            this.velocity.x = 0
+            this.velocity.y = 0
             this.die()
+            this.game.camera.pan(false)
         }
     }
 
@@ -383,33 +383,46 @@ export default class Player extends Element {
             this.velocity.y = -this.gravity - 3.2
         }
 
-        // seit dem letzten Dash müssen 100 currentFrame vergangen sein und einmal der Boden berührt wurden sein
-        if (keysPressed.get("Shift") && this.canDash === true && this.dashCounter > 40) {
-            if (keysPressed.get("ArrowRight")) {
-                this.velocity.x = 15
+        // Dash
+        if ((keysPressed.get("Shift") && this.canDash) || this.isDashing) {
+            if (!this.isDashing) {
+                this.pressedRight = keysPressed.get("ArrowRight")
+                this.pressedLeft = keysPressed.get("ArrowLeft")
+                this.pressedDown = keysPressed.get("ArrowDown")
+                this.pressedUp = keysPressed.get("ArrowUp")
                 this.velocity.y = 0
-                this.dashCounter = 0
-                this.canDash = false
+                this.gravity = 0
                 this.isDashing = true
             }
-            if (keysPressed.get("ArrowLeft")) {
-                this.velocity.x = -15
+
+            //increase counter
+            this.dashCounter++
+
+            //apply velocities
+            if (this.pressedRight) {
+                this.velocity.x += 2
                 this.velocity.y = 0
-                this.dashCounter = 0
                 this.canDash = false
-                this.isDashing = true
             }
-            if (keysPressed.get("ArrowDown")) {
-                this.velocity.y = 15
-                this.dashCounter = 0
+            if (this.pressedLeft) {
+                this.velocity.x += -2
+                this.velocity.y = 0
                 this.canDash = false
-                this.isDashing = true
             }
-            if (keysPressed.get("ArrowUp")) {
-                this.velocity.y = -15
-                this.dashCounter = 0
+            if (this.pressedDown) {
+                this.velocity.y += 5
                 this.canDash = false
-                this.isDashing = true
+            }
+            if (this.pressedUp) {
+                this.velocity.y += -5
+                this.canDash = false
+            }
+
+            // stop dash after N frames and reset Dash State
+            if (this.dashCounter >= 5) {
+                this.isDashing = false
+                this.dashCounter = 0
+                this.canDash = true
             }
         }
     }
