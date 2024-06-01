@@ -24,5 +24,6 @@ level1.elementList.add(new SolidBlock(32, 96, 3, 1))
 level1.elementList.add(new SolidBlock(250, 50, 3, 1))
 
 level1.elementList.add(new SolidBlock(600, 32, 10, 1))
+level1.elementList.add(new SolidBlock(600, 0, 10, 1))
 
 level1.elementList.add(new MovingPlatform(0, 140, 3, 1, 5, 0))

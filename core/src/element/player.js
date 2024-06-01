@@ -158,13 +158,13 @@ export default class Player extends Element {
 
         // this.updateFrames()
 
-        console.log("velocity x: " + this.velocity.x)
-        console.log("velocity y: " + this.velocity.y)
-        console.log(this.currentSprite.img)
-        // console.log("grounded: " + this.isGrounded)
-        console.log("falling: " + this.falling)
-        console.log("Dash: " + this.isDashing)
-        console.log("Movingplatform: " + this.standingOnMovingPlatform)
+        // console.log("velocity x: " + this.velocity.x)
+        // console.log("velocity y: " + this.velocity.y)
+        // console.log(this.currentSprite.img)
+        // // console.log("grounded: " + this.isGrounded)
+        // console.log("falling: " + this.falling)
+        // console.log("Dash: " + this.isDashing)
+        // console.log("Movingplatform: " + this.standingOnMovingPlatform)
 
         // if player is unable to dash color him pink
         if (this.canDash && this.dashCounter >= 5) {
