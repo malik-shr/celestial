@@ -1,5 +1,4 @@
-import LevelList from "./level/levelList"
-import { level1 } from "./level/level1"
+import Level from "./level/level"
 import Camera from "./camera/camera"
 import UILayer from "./ui/uiLayer"
 import { Screen, currentScreen } from "./listener/store"
@@ -14,7 +13,8 @@ export default class Game {
 
         this.raf = null
 
-        this.levelList = new LevelList()
+        // first argument is name, second is gravity constant
+        this.level = new Level("level1", 0.8, this)
 
         this.menu = new Menu(this.canvas, this.ctx, this)
 
@@ -25,7 +25,7 @@ export default class Game {
         this.then = this.startTime
         this.raf = window.requestAnimationFrame(this.draw.bind(this))
 
-        this.level = level1
+        this.level.initLevel("level1")
 
         this.player = this.level.getPlayer()
 
