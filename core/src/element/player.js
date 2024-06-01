@@ -14,7 +14,6 @@ export default class Player extends Element {
         this.width = 32
         this.height = 38
 
-        this.gravity = 0
         this.velocity = {
             x: 0,
             y: 0,
@@ -24,24 +23,37 @@ export default class Player extends Element {
 
         this.startingPosition = structuredClone(this.position)
 
-        this.isJumping = false
-        this.isGrounded = false
-        this.isWallClimbing = false
-        this.canDash = false
-        this.isDashing = false
-
+        // additional velocities
+        this.gravity = 0
         this.platformVelocity = 0
 
+        // status flags
+        this.isJumping = false
+        this.isWallClimbing = false
+        this.isDashing = false
+        this.canDash = false
+
+        // collision flags
+        this.isGrounded = false
         this.standingOnMovingPlatform = false
+        this.collidingWithPlatform = false
         this.collidedDown = false
         this.collidedUp = false
         this.collidedRight = false
         this.collidedLeft = false
+        this.collidedY = false
+        this.collidedX = false
         this.collidedSpecialObjects = []
 
+        // counters
+        this.dashCounter = 0
         this.wallclimbCounter = 0
         this.collisionCounter = 0
-        this.dashCounter = 0
+        this.notGroundedCounter = 0
+        this.WallJumpLeftCounter = 0
+        this.WallJumpRightCounter = 0
+
+        this.dashCounter = 100
 
         // ------Variables for sprite
         this.isMovingRight = true
@@ -139,10 +151,22 @@ export default class Player extends Element {
         this.updateFrames()
         this.changeVelocities()
 
-        this.dashCounter += 1
-
+        // apply velocities
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
+
+        // increase counters
+        this.dashCounter += 1
+        if (this.dashCounter >= 20) {
+            this.isDashing = false
+        }
+        this.collidedLeftCounter += 1
+        this.collidedRightCounter += 1
+        this.WallJumpLeftCounter += 1
+        this.WallJumpRightCounter += 1
+        if (!this.isGrounded) {
+            this.notGroundedCounter += 1
+        }
 
         if (this.position.y > 512) {
             this.die()
@@ -192,6 +216,11 @@ export default class Player extends Element {
     }
 
     changeVelocities() {
+        //Acceleration stops after not pressing keys, it should continue and gradually stop
+        // dashing diagonaly has is like dashing up and dashing right
+        // when jumping on jump-pad and holding space you jump twice as high
+        // when moving to the right or left and meanwhile dashing the player holds the dash speed (15) even after the dash
+
         const maxSpeedX = 8
 
         // gravity
@@ -270,6 +299,30 @@ export default class Player extends Element {
             this.currentFrame = 0
         }
 
+        // walljump
+        else {
+            if (
+                (this.collidedLeftCounter <= 5 || this.collidedRightCounter <= 5) &&
+                keysPressed.get(" ") &&
+                this.notGroundedCounter > 8
+            ) {
+                if (this.collidedLeftCounter <= 5 && this.WallJumpLeftCounter > 50) {
+                    this.velocity.y = -7.5
+                    this.velocity.x = 7.5
+                    this.WallJumpLeft = true
+                    this.WallJumpLeftCounter = 0
+                    this.WallJumpRightCounter = 50
+                }
+                if (this.collidedRightCounter <= 5 && this.WallJumpRightCounter > 50) {
+                    this.velocity.y = -7.5
+                    this.velocity.x = -7.5
+                    this.WallJumpRight = true
+                    this.WallJumpRightCounter = 0
+                    this.WallJumpLeftCounter = 50
+                }
+            }
+        }
+
         // Check if the player is falling
         if (this.isGrounded === false && this.velocity.y > 0 && !this.standingOnMovingPlatform)
             this.falling = true
@@ -320,53 +373,6 @@ export default class Player extends Element {
         if (this.isGrounded && this.dashCounter > 40) {
             this.isDashing = false
         }
-        if (
-            (this.collidedLeft === true || this.collidedRight === true) &&
-            keysPressed.get("d") &&
-            this.wallclimbCounter < 50
-        ) {
-            // für einen wallclimb muss der Spieler mit der Wand collidieren und es muss d gedrückt sein und er darf nicht seit länger als 50 currentFrame am wallclimben sein
-            this.velocity.y = 0
-            this.gravity = 0
-            this.isWallClimbing = true
-            this.wallclimbCounter += 1
-        } else {
-            this.isWallClimbing = false
-        }
-
-        // wenn man wallclimbed und nach oben drückt kletter der spieler langsam hoch
-        if (keysPressed.get("ArrowUp")) {
-            if (this.isWallClimbing === true) {
-                this.velocity.y = -2
-            }
-        }
-
-        //Acceleration stops after not pressing keys, it should continue and gradually stop
-        // dashing diagonaly has is like dashing up and dashing right
-        // when jumping on jump-pad and holding space you jump twice as high
-        // when moving to the right or left and meanwhile dashing the player holds the dash speed (15) even after the dash
-
-        // walljump
-        // momentan frame perfect input, buffer einfügen
-        // buffer für so einiges einfügen, auch für is Grounded
-        // deque?
-        // else {
-        //     if (
-        //         (this.collidedLeft === true || this.collidedRight === true) &&
-        //         keysPressed.get(" ") &&
-        //         !this.isGrounded
-        //     ) {
-        //         this.velocity.y = -7
-        //         if (this.collidedLeft) {
-        //             this.velocity.x = 7
-        //             this.WallJumpLeft = true
-        //         }
-        //         if (this.collidedRight) {
-        //             this.velocity.x = -7
-        //             this.WalljumpRight.img = true
-        //         }
-        //     }
-        // }
 
         // enables variable jump, makes it so you fall down quicker if you let go of spacebar mid jump
         if (
@@ -462,11 +468,14 @@ export default class Player extends Element {
 
         this.isGrounded = false
         this.standingOnMovingPlatform = false
+        this.collidingWithPlatform = false
 
         this.collidedDown = false
         this.collidedUp = false
         this.collidedRight = false
         this.collidedLeft = false
+        this.collidedY = false
+        this.collidedX = false
     }
 
     revertYCollision() {
@@ -479,6 +488,7 @@ export default class Player extends Element {
         this.wallclimbCounter = this.previous.wallclimbCounter
         this.collidedDown = false
         this.collidedUp = false
+        this.collidedY = false
     }
 
     /** @returns if player is in an element */
