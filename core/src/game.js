@@ -32,8 +32,6 @@ export default class Game {
 
         this.camera = new Camera(0, 0, this.canvas, this.player)
 
-        this.testTick = 0
-
         this.uiLayer = new UILayer(this)
 
         this.loop = this.loop.bind(this)
@@ -46,9 +44,7 @@ export default class Game {
         this.bg1 = new Sprite("bg/bg.png", 512, 288, 512, 288)
         this.bg2 = new Sprite("bg/bg_layer_top.png", 512, 288, 512, 288)
 
-        this.starTick = 0
-
-        this.particles = new Particles(100, 100)
+        this.particles = null
 
         //this.camera.shaking = true
         window.setInterval(this.loop, 1000 / 40)
@@ -108,25 +104,11 @@ export default class Game {
 
             this.level.elementList.draw(this.ctx)
 
-            const position = {
-                x: 200,
-                y: 100,
-            }
-
-            //this.shootingStar.draw(this.ctx, this.starTick, 0, position)
-
-            if (this.testTick % 15 === 0) {
-                ++this.starTick
-            }
-
-            if (this.starTick === 5) {
-                this.starTick = 0
-            }
-
             this.uiLayer.drawLayer(this.ctx)
 
-
-            this.particles.animate(this.ctx)
+            if (this.particles !== null) {
+                this.particles.animate(this.ctx)
+            }
             // DEBUG
             //this.camera.draw(this.ctx)
 

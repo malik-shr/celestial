@@ -44,6 +44,7 @@ export default class Particles {
 
     animate(ctx) {
         ++this.particleCounter
+        console.log(this.particleCounter)
 
         if (this.particleCounter === 100) {
             this.isActive = false

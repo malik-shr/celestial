@@ -1,6 +1,7 @@
 import Element from "./element"
 import { keysPressed } from "../listener/store"
 import Sprite from "./sprite"
+import Particles from "../ui/particle"
 
 // import pixilartSprite from "D:/Uni/Projektseminar/core/public/pixilartSprite.png"
 
@@ -32,6 +33,7 @@ export default class Player extends Element {
         this.isJumping = false
         this.isWallClimbing = false
         this.isDashing = false
+        this.isDead = false
         this.canDash = false
 
         // collision flags
@@ -48,13 +50,13 @@ export default class Player extends Element {
 
         // counters
         this.dashCounter = 0
+        this.deadCounter = 0
+
         this.wallclimbCounter = 0
         this.collisionCounter = 0
         this.notGroundedCounter = 0
         this.WallJumpLeftCounter = 0
         this.WallJumpRightCounter = 0
-
-        this.dashCounter = 100
 
         // ------Variables for sprite
         this.isMovingRight = true
@@ -168,12 +170,15 @@ export default class Player extends Element {
         if (this.position.y > 512) {
             this.velocity.x = 0
             this.velocity.y = 0
-            this.die()
+            this.activateDie()
             this.game.camera.pan(false)
         }
+
+        this.die()
     }
 
     draw(ctx) {
+        if (this.isDead) return
         ctx.beginPath()
 
         if (!this.currentSprite.loaded) return
@@ -515,7 +520,20 @@ export default class Player extends Element {
     }
 
     die() {
-        this.position = structuredClone(this.respawnPoint)
+        if (!this.isDead) return
+        ++this.deadCounter
+
+        if (this.deadCounter === 100) {
+            this.position = structuredClone(this.respawnPoint)
+            this.isDead = false
+            this.deadCounter = 0
+        }
+    }
+
+    activateDie() {
+        this.isDead = true
+        this.game.particles = new Particles(this.position.x, this.position.y)
+        console.log("DIE")
     }
 
     /** @returns players state at the time of function call */
