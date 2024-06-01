@@ -37,7 +37,7 @@ export default class MovingPlatform extends Element {
             // save current player velocities
             this.playerPreviousVelocityX = player.velocity.x
 
-            if (player.collidedY === true) {
+            if (player.collidedY === true && !player.isDead) {
                 player.activateDie()
             }
 
@@ -73,7 +73,7 @@ export default class MovingPlatform extends Element {
 
             // do additional collision logic
 
-            if (player.collidedY === true) {
+            if (player.collidedY === true && !player.isDead) {
                 player.activateDie()
             }
             player.collidingWithPlatform = true
@@ -94,7 +94,7 @@ export default class MovingPlatform extends Element {
 
             // do additional collision logic
 
-            if (player.collidedX === true) {
+            if (player.collidedX === true && !player.isDead) {
                 player.activateDie()
             }
 
@@ -112,8 +112,8 @@ export default class MovingPlatform extends Element {
 
             // do additional collision logic
 
-            if (player.collidedX === true) {
-                player.isDead = true
+            if (player.collidedX === true && !player.isDead) {
+                player.activateDie()
             }
 
             player.velocity.x = this.velocity.x
