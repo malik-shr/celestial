@@ -1,16 +1,27 @@
 import Element from "./element"
 
 export default class Checkpoint extends Element {
-    constructor(x, y, relativeWidth = 1, relativeHeight = 1) {
+    constructor(x, y, game, relativeWidth = 1, relativeHeight = 1) {
         super(x, y, relativeWidth, relativeHeight)
+
+        this.game = game
     }
 
     handleCollisionX(player) {
-        player.respawnPoint = structuredClone(this.position)
+        this.updateRespawnPoint(player)
     }
 
     handleCollisionY(player) {
-        player.respawnPoint = structuredClone(this.position)
+        this.updateRespawnPoint(player)
+    }
+
+    updateRespawnPoint(player) {
+        player.respawnPoint = {
+            x: this.position.x,
+            y: this.position.y + this.height - player.height,
+        }
+
+        this.game.camera.save()
     }
 
     draw(ctx) {

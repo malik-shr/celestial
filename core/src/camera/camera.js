@@ -7,10 +7,14 @@ export default class Camera {
         this.canvas = canvas
         this.player = player
 
-        this.bgLayerpos = {
-            x: 0,
-            y: 0,
+        this.bgLayer = {
+            position: {
+                x: 0,
+                y: 0,
+            },
         }
+
+        this.previous = null
 
         this.relativeRightBound = (this.canvas.width / 2) * 0.5
         this.relativeLeftBound = (this.canvas.width / 2) * 0.2
@@ -20,54 +24,56 @@ export default class Camera {
         this.shaking = false
     }
 
-    shouldPanCameraToTheLeft(considerMoving) {
+    shouldPanCameraToTheLeft() {
         const rightBound = this.relativeRightBound + Math.abs(this.position.x) - this.player.width
-        const shouldPan = considerMoving ? this.player.velocity.x > 0 : true
 
-        if (this.player.position.x >= rightBound && shouldPan) {
+        if (this.player.position.x >= rightBound && this.player.velocity.x > 0) {
             this.position.x -= this.player.velocity.x
-            this.bgLayerpos.x -= (99 / 100) * this.player.velocity.x
+            this.bgLayer.position.x -= (99 / 100) * this.player.velocity.x
         }
     }
 
-    shouldPanCameraToTheRight(considerMoving) {
+    shouldPanCameraToTheRight() {
         const leftBound = this.relativeLeftBound + Math.abs(this.position.x)
-        const shouldPan = considerMoving ? this.player.velocity.x < 0 : true
 
-        if (this.player.position.x <= leftBound && shouldPan) {
+        if (this.player.position.x <= leftBound && this.player.velocity.x < 0) {
             if (this.position.x - this.player.velocity.x >= 0) {
                 this.position.x = 0
                 return
             }
             this.position.x -= this.player.velocity.x
-            this.bgLayerpos.x -= (99 / 100) * this.player.velocity.x
+            this.bgLayer.position.x -= (99 / 100) * this.player.velocity.x
         }
     }
 
-    shouldPanCameraDown(considerMoving) {
+    shouldPanCameraDown() {
         const verticalBound = this.relativeVerticalBound - Math.abs(this.position.y)
-        const shouldPan = considerMoving ? this.player.velocity.y < 0 : true
 
-        if (this.player.position.y <= verticalBound && shouldPan) {
+        if (this.player.position.y <= verticalBound && this.player.velocity.y < 0) {
             this.position.y -= this.player.velocity.y
+            this.bgLayer.position.y -= (99 / 100) * this.player.velocity.y
         }
     }
 
-    shouldPanCameraUp(considerMoving) {
+    shouldPanCameraUp() {
         const verticalBound = this.relativeVerticalBound - Math.abs(this.position.y)
-        const shouldPan = considerMoving ? this.player.velocity.y > 0 : true
 
-        if (this.player.position.y >= verticalBound && shouldPan) {
+        if (this.player.position.y >= verticalBound && this.player.velocity.y > 0) {
             if (this.position.y - this.player.velocity.y <= 0) {
                 this.position.y = 0
                 return
             }
             this.position.y -= this.player.velocity.y
+            this.bgLayer.position.y -= (99 / 100) * this.player.velocity.y
         }
     }
 
-    shakeCamera() {
+    checkShaking() {
         if (!this.shaking) return
+
+        if (this.shakerTick === 0) {
+            this.save()
+        }
 
         ++this.shakerTick
 
@@ -91,16 +97,15 @@ export default class Camera {
         if (this.shakerTick >= 20) {
             this.shaking = false
             this.shakerTick = 0
-            this.pan(false) // Stop panning if any
+            this.load() // Stop panning if any
         }
     }
-    pan(considerMoving = true) {
-        if (this.shaking) return
 
-        this.shouldPanCameraToTheLeft(considerMoving)
-        this.shouldPanCameraToTheRight(considerMoving)
-        this.shouldPanCameraDown(considerMoving)
-        this.shouldPanCameraUp(considerMoving)
+    pan() {
+        this.shouldPanCameraToTheLeft()
+        this.shouldPanCameraToTheRight()
+        this.shouldPanCameraDown()
+        this.shouldPanCameraUp()
     }
 
     draw(ctx) {
@@ -129,5 +134,35 @@ export default class Camera {
         )
 
         ctx.closePath()
+    }
+
+    save() {
+        this.previous = this.clone()
+    }
+
+    load() {
+        if (this.previous === null) {
+            this.position = {
+                x: 0,
+                y: 0,
+            }
+            this.bgLayer.position = {
+                x: 0,
+                y: 0,
+            }
+
+            return
+        }
+
+        this.position = structuredClone(this.previous.position)
+        this.bgLayer.position = structuredClone(this.previous.bgLayer.position)
+    }
+
+    /** @returns camera state at the time of function call */
+    clone() {
+        return {
+            position: structuredClone(this.position),
+            bgLayer: structuredClone(this.bgLayer),
+        }
     }
 }

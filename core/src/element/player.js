@@ -170,11 +170,10 @@ export default class Player extends Element {
         if (this.position.y > 512) {
             this.velocity.x = 0
             this.velocity.y = 0
-            this.activateDie()
-            this.game.camera.pan(false)
+            this.die()
         }
 
-        this.die()
+        this.checkDeath()
     }
 
     draw(ctx) {
@@ -519,21 +518,23 @@ export default class Player extends Element {
         return belowTop && aboveBottom && rightOrLeft && leftOrRight && element1 !== element2
     }
 
-    die() {
+    checkDeath() {
         if (!this.isDead) return
         ++this.deadCounter
 
-        if (this.deadCounter === 100) {
+        if (this.deadCounter === 70) {
             this.position = structuredClone(this.respawnPoint)
+            this.game.camera.load()
             this.isDead = false
             this.deadCounter = 0
         }
     }
 
-    activateDie() {
+    die() {
         this.isDead = true
-        this.game.particles = new Particles(this.position.x, this.position.y)
-        console.log("DIE")
+
+        const colors = ["#693a00", "#546d8e", "#ffffff", "#333a42"]
+        this.game.particles = new Particles(this.position.x, this.position.y, colors)
     }
 
     /** @returns players state at the time of function call */

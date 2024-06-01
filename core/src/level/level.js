@@ -23,7 +23,7 @@ export default class Level {
 
         this.elementList.add(new JumpPad(200, 224, 1, 1))
         this.elementList.add(new TemporaryBlock(232, 224, 1, 1))
-        this.elementList.add(new Checkpoint(264, 224, 1, 1))
+        this.elementList.add(new Checkpoint(264, 224, this.game, 1, 1))
 
         this.elementList.add(new SolidBlock(364, 128, 10, 1))
         this.elementList.add(new SolidBlock(32, 96, 3, 1))

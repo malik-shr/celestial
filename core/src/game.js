@@ -5,7 +5,6 @@ import { Screen, currentScreen } from "./listener/store"
 import Menu from "./ui/menu"
 import Pause from "./ui/pause"
 import Sprite from "./element/sprite"
-import Particles from "./ui/particle"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -61,13 +60,12 @@ export default class Game {
 
         this.level.elementList.action()
         this.camera.pan()
-        this.camera.shakeCamera()
+        this.camera.checkShaking()
 
         this.player.checkCollision()
     }
 
     draw() {
-        ++this.testTick
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         if (currentScreen === Screen.Menu) {
@@ -95,7 +93,7 @@ export default class Game {
                     0,
                     0,
                     {
-                        x: Math.abs(this.camera.bgLayerpos.x) + 512 * i,
+                        x: Math.abs(this.camera.bgLayer.position.x) + 512 * i,
                         y: -Math.abs(this.camera.position.y),
                     },
                     5
@@ -110,11 +108,9 @@ export default class Game {
                 this.particles.animate(this.ctx)
             }
             // DEBUG
-            //this.camera.draw(this.ctx)
+            this.camera.draw(this.ctx)
 
             this.ctx.restore()
-
-            this.tickCounter += 1
         }
 
         this.pause.draw(this.ctx)
