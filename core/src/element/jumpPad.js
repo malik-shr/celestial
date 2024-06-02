@@ -1,11 +1,18 @@
 import SolidBlock from "./solidBlock"
-
+import Sprite from "./sprite"
 export default class JumpPad extends SolidBlock {
     constructor(x, y) {
         super(x, y)
 
         this.activeFrames = 0
         this.isActive = false
+
+        this.jumpPadStill = new Sprite("player/jumpPadStill.png", this.width, this.height, 70, 70)
+        this.jumpPadAni = new Sprite("player/jumpPadAni.png", this.width, this.height, 70, 70)
+
+        this.currentSprite = this.jumpPadStill
+        this.currentFrame = 0
+        this.elapsedFrames = 0
     }
 
     handleCollisionY(player, currentPositionY, currentVelocityY) {
@@ -46,13 +53,28 @@ export default class JumpPad extends SolidBlock {
             this.activeFrames = 0
             this.isActive = false
         }
+
+        if (this.isActive) {
+            this.currentSprite = this.jumpPadAni
+        } else this.currentSprite = this.jumpPadStill
     }
 
     draw(ctx) {
-        ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        ctx.fillStyle = this.isActive ? "yellow" : "purple"
-        ctx.fill()
-        ctx.closePath()
+        this.updateFrames()
+        this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
+    }
+    updateFrames() {
+        this.elapsedFrames++
+        if (this.elapsedFrames % 4 === 0) {
+            if (this.isActive) {
+                // Only iterate once when jumping
+                if (this.currentFrame < 8 - 1) {
+                    this.currentFrame++
+                }
+            } else {
+                if (this.currentFrame < 8 - 1) this.currentFrame++
+                else this.currentFrame = 0
+            }
+        }
     }
 }
