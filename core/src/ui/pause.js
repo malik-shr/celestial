@@ -12,9 +12,6 @@ export default class Pause {
         this.resumeGame = this.resumeGame.bind(this)
         this.exitGame = this.exitGame.bind(this)
 
-        this.width = 250
-        this.height = 250
-
         this.isActive = false
 
         this.buttonList = new ButtonList(canvas)
@@ -23,6 +20,9 @@ export default class Pause {
         this.openTime = 0
         this.time = 0
         this.closeTime = 0
+
+        this.width = 250
+        this.height = 250
 
         this.box = {
             position: {
@@ -36,7 +36,7 @@ export default class Pause {
 
             if (event.key === "Escape") {
                 if (!this.isActive) {
-                    this.openPause()
+                    this.open()
                     return
                 }
 
@@ -68,17 +68,17 @@ export default class Pause {
     }
 
     resumeGame() {
-        this.closePause()
+        this.close()
     }
 
     exitGame() {
-        this.closePause()
-        this.game.menu.openMenu()
+        this.close()
+        this.game.menu.open()
 
         setCurrentScreen(Screen.Menu)
     }
 
-    openPause() {
+    open() {
         this.startTime = performance.now()
 
         this.alreadyOpened = true
@@ -88,7 +88,7 @@ export default class Pause {
         this.buttonList.isActive = true
     }
 
-    closePause() {
+    close() {
         this.time += performance.now() - this.startTime
         this.isActive = false
 
