@@ -40,8 +40,8 @@ export default class Game {
         this.time = 0
 
         //this.shootingStar = new Sprite("shooting-star.png", 32, 64, 32, 64)
-        this.bg1 = new Sprite("bg/bg.png", 512, 288, 512, 288)
-        this.bg2 = new Sprite("bg/bg_layer_top.png", 512, 288, 512, 288)
+        this.bg1 = new Sprite("bg/bg.png", 512, 320, 512, 288)
+        this.bg2 = new Sprite("bg/bg_layer_top.png", 512, 320, 512, 288)
 
         this.particles = null
 

@@ -1,8 +1,11 @@
 import Element from "./element"
+import Sprite from "./sprite"
 
 export default class SolidBlock extends Element {
     constructor(x, y, relativeWidth = 1, relativeHeight = 1) {
         super(x, y, relativeWidth, relativeHeight)
+
+        this.sprite = new Sprite("tileset.png", this.width, this.height, 47, 48)
     }
 
     action() {}
@@ -77,10 +80,6 @@ export default class SolidBlock extends Element {
     }
 
     draw(ctx) {
-        ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        ctx.fillStyle = "green"
-        ctx.fill()
-        ctx.closePath()
+        this.sprite.draw(ctx, 1, 1, this.position)
     }
 }

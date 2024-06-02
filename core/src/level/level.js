@@ -5,6 +5,7 @@ import JumpPad from "../element/jumpPad"
 import MovingPlatform from "../element/movingPlatform"
 import SolidBlock from "../element/solidBlock"
 import TemporaryBlock from "../element/temporaryBlock"
+import Spike from "../element/spike"
 
 export default class Level {
     constructor(name, gravity, game) {
@@ -19,19 +20,31 @@ export default class Level {
         this.name = name
         //Todo initialise Level with Levelparser
         this.elementList.add(new Player(0, 0, this.game, this))
-        this.elementList.add(new SolidBlock(0, 256, 100, 1))
 
+        for (let i = 0; i <= 100; i++) {
+            this.elementList.add(new SolidBlock(0 + i * 32, 288, 1, 1))
+        }
+
+        this.elementList.add(new Spike(200 - 64, 224, 1, 1))
         this.elementList.add(new JumpPad(200, 224, 1, 1))
         this.elementList.add(new TemporaryBlock(232, 224, 1, 1))
         this.elementList.add(new Checkpoint(264, 224, this.game, 1, 1))
 
-        this.elementList.add(new SolidBlock(364, 128, 10, 1))
-        this.elementList.add(new SolidBlock(32, 96, 3, 1))
+        for (let i = 0; i <= 10; i++) {
+            this.elementList.add(new SolidBlock(364 + i * 32, 128, 1, 1))
+        }
 
-        this.elementList.add(new SolidBlock(250, 50, 3, 1))
+        for (let i = 0; i <= 3; i++) {
+            this.elementList.add(new SolidBlock(250 + i * 32, 128, 1, 1))
+        }
 
-        this.elementList.add(new SolidBlock(600, 32, 10, 1))
-        this.elementList.add(new SolidBlock(600, 0, 10, 1))
+        for (let i = 0; i <= 10; i++) {
+            this.elementList.add(new SolidBlock(600 + 32 * i, 32, 1, 1))
+        }
+
+        for (let i = 0; i <= 10; i++) {
+            this.elementList.add(new SolidBlock(600 + 32 * i, 0, 1, 1))
+        }
 
         this.elementList.add(new MovingPlatform(0, 224, 3, 1, 0, -2))
     }
