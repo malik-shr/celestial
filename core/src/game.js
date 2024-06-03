@@ -5,6 +5,7 @@ import { Screen, currentScreen } from "./listener/store"
 import Menu from "./ui/menu"
 import Pause from "./ui/pause"
 import Sprite from "./element/sprite"
+import Completed from "./ui/completed"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -19,6 +20,7 @@ export default class Game {
         this.menu = new Menu(this.canvas, this.ctx, this)
 
         this.pause = new Pause(this, canvas)
+        this.completed = new Completed(this, canvas)
     }
 
     start() {
@@ -54,7 +56,7 @@ export default class Game {
     }
 
     loop() {
-        if (this.pause.isActive) return
+        if (this.pause.isActive || this.completed.isActive || currentScreen !== Screen.Game) return
 
         this.time = performance.now() - this.startTime - this.pause.time
 
@@ -114,6 +116,7 @@ export default class Game {
         }
 
         this.pause.draw(this.ctx)
+        this.completed.draw(this.ctx)
 
         this.raf = window.requestAnimationFrame(this.draw.bind(this))
     }

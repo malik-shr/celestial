@@ -1,25 +1,20 @@
-import { Screen, currentScreen, setCurrentScreen } from "../listener/store"
+import { Screen, setCurrentScreen } from "../listener/store"
 import { PauseButton } from "./button"
 import ButtonList from "./buttonList"
 
-export default class Pause {
+export default class Completed {
     constructor(game, canvas) {
         this.game = game
         this.canvas = canvas
 
         this.scale = 0
 
-        this.resumeGame = this.resumeGame.bind(this)
-        this.exitGame = this.exitGame.bind(this)
+        this.back = this.back.bind(this)
 
         this.isActive = false
 
         this.buttonList = new ButtonList(canvas)
         this.buttonList.isActive = false
-
-        this.openTime = 0
-        this.time = 0
-        this.closeTime = 0
 
         this.width = 250
         this.height = 250
@@ -31,31 +26,10 @@ export default class Pause {
             },
         }
 
-        window.addEventListener("keyup", (event) => {
-            if (currentScreen !== Screen.Game) return
-
-            if (event.key === "Escape") {
-                if (!this.isActive) {
-                    this.open()
-                    return
-                }
-
-                this.resumeGame()
-            }
-        })
         const positionY = this.box.position.y + this.height / 2 - 40
 
-        this.resumeBtn = new PauseButton(
-            this.resumeGame,
-            this.box.position.x,
-            positionY,
-            this.width,
-            50,
-            "Resume"
-        )
-
-        this.exitBtn = new PauseButton(
-            this.exitGame,
+        this.backBtn = new PauseButton(
+            this.back,
             this.box.position.x,
             positionY + 55,
             this.width,
@@ -64,14 +38,10 @@ export default class Pause {
         )
 
         this.buttonList.add(this.resumeBtn)
-        this.buttonList.add(this.exitBtn)
+        this.buttonList.add(this.backBtn)
     }
 
-    resumeGame() {
-        this.close()
-    }
-
-    exitGame() {
+    back() {
         this.close()
         this.game.menu.open()
 
@@ -79,20 +49,12 @@ export default class Pause {
     }
 
     open() {
-        this.startTime = performance.now()
-
-        this.alreadyOpened = true
-
         this.isActive = true
-        this.openTime = performance.now()
         this.buttonList.isActive = true
     }
 
     close() {
-        this.time += performance.now() - this.startTime
         this.isActive = false
-
-        this.closeTime = performance.now()
         this.buttonList.isActive = false
     }
 
@@ -132,7 +94,11 @@ export default class Pause {
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 
-        ctx.fillText("Pause", this.box.position.x + this.width / 2, this.box.position.y + 40)
+        ctx.fillText(
+            `Completed in ${this.game.pause}`,
+            this.box.position.x + this.width / 2,
+            this.box.position.y + 40
+        )
 
         this.buttonList.draw(ctx)
 
