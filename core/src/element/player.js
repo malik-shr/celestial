@@ -414,6 +414,7 @@ export default class Player extends Element {
                 this.velocity.y = this.level.gravity
                 this.gravity = 0
                 this.isDashing = true
+                this.canDash = false
                 this.pastDashPositions = []
             }
 
@@ -474,8 +475,6 @@ export default class Player extends Element {
                     this.velocity.x += 1
                 }
             }
-
-            this.canDash = false
 
             // stop dash after N frames and reset Dash State
             if (this.dashCounter > 16) {
