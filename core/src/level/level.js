@@ -7,6 +7,7 @@ import SolidBlock from "../element/solidBlock"
 import TemporaryBlock from "../element/temporaryBlock"
 import Spike from "../element/spike"
 import Goal from "../element/goal"
+import Bubble from "../element/bubble"
 
 export default class Level {
     constructor(name, gravity, game) {
@@ -32,6 +33,7 @@ export default class Level {
         this.elementList.add(new Checkpoint(264, 256, this.game, 32, 32))
 
         this.elementList.add(new Goal(600, 256, this.game, 32, 32))
+        this.elementList.add(new Bubble(264, 50, 32, 32))
 
         for (let i = 0; i <= 10; i++) {
             this.elementList.add(new SolidBlock(364 + i * 32, 128, 32, 32))
