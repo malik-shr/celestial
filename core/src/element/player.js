@@ -184,14 +184,18 @@ export default class Player extends Element {
 
         this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
 
-        ctx.globalAlpha = 0.4
+        ctx.globalAlpha = 0
+
+        ctx.filter = "blur(4px)"
 
         if (this.isDashing) {
-            this.currentSprite.draw(ctx, this.currentFrame, 0, {
-                x: this.position.x - 20,
-                y: this.position.y,
-            })
+            for (let i = 0; i < this.pastDashPositions.length; i++) {
+                ctx.globalAlpha += 0.035
+                this.currentSprite.draw(ctx, this.currentFrame, 0, this.pastDashPositions[i])
+            }
         }
+
+        ctx.filter = "none"
 
         ctx.globalAlpha = 1
 
@@ -237,11 +241,12 @@ export default class Player extends Element {
         this.velocity.y += this.level.gravity
         this.gravity += this.level.gravity
 
-        // entschleunigung wenn man weder nach rechts noch nach links drückt
+        // entschleunigung wenn man weder nach rechts noch nach links drückt und nicht dasht
         if (
             !keysPressed.get("ArrowRight") &&
             !keysPressed.get("ArrowLeft") &&
-            !this.standingOnMovingPlatform
+            !this.standingOnMovingPlatform &&
+            !this.isDashing
         ) {
             this.velocity.x = 0
         }
@@ -385,35 +390,58 @@ export default class Player extends Element {
         }
 
         // enables variable jump, makes it so you fall down quicker if you let go of spacebar mid jump
-        if (
-            !keysPressed.get(" ") &&
-            this.velocity.y < -this.gravity - 3.2 &&
-            this.isJumping === true
-        ) {
-            this.velocity.y = -this.gravity - 3.2
+        if (!keysPressed.get(" ") && this.velocity.y < -this.gravity && this.isJumping === true) {
+            this.velocity.y = -this.gravity
         }
 
-        // Dash
-        if ((keysPressed.get("Shift") && this.canDash) || this.isDashing) {
+        // Dash if shift is pressed and you can dash and at least one direction is pressed or you are already dashing
+        if (
+            (keysPressed.get("Shift") &&
+                this.canDash &&
+                (keysPressed.get("ArrowRight") ||
+                    keysPressed.get("ArrowLeft") ||
+                    keysPressed.get("ArrowDown") ||
+                    keysPressed.get("ArrowUp"))) ||
+            this.isDashing
+        ) {
             if (!this.isDashing) {
                 this.pressedRight = keysPressed.get("ArrowRight")
                 this.pressedLeft = keysPressed.get("ArrowLeft")
                 this.pressedDown = keysPressed.get("ArrowDown")
                 this.pressedUp = keysPressed.get("ArrowUp")
-                this.velocity.y = 0
+                this.velocity.y = this.level.gravity
                 this.gravity = 0
                 this.isDashing = true
-                this.pastPosition = this.position
+                this.pastDashPositions = []
             }
+
             //increase counter
             this.dashCounter++
+
+            // save positions
+            if (this.dashCounter > 4 && this.dashCounter % 2) {
+                this.pastDashPositions.push(structuredClone(this.position))
+            }
 
             // acceleration
             if (this.dashCounter < 5) {
                 if (this.pressedRight) {
-                    this.game.camera.shake(2, 0)
+                    this.game.camera.shake(-2, 0)
                     this.velocity.x += 0.5
-                    this.velocity.y = 0
+                    this.velocity.y -= this.level.gravity
+                }
+                if (this.pressedLeft) {
+                    this.game.camera.shake(2, 0)
+                    this.velocity.x -= 0.5
+                    this.velocity.y -= this.level.gravity
+                }
+                if (this.pressedDown) {
+                    this.game.camera.shake(0, 2)
+                    this.velocity.y = 0.5 * this.dashCounter
+                }
+                if (this.pressedUp) {
+                    this.game.camera.shake(0, -2)
+                    this.velocity.y = -0.5 * this.dashCounter
                 }
             }
 
@@ -421,11 +449,11 @@ export default class Player extends Element {
             if (this.dashCounter >= 5 && this.dashCounter <= 12) {
                 if (this.pressedRight) {
                     this.velocity.x = 10
-                    this.velocity.y = 0
+                    this.velocity.y -= this.level.gravity
                 }
                 if (this.pressedLeft) {
                     this.velocity.x = -10
-                    this.velocity.y = 0
+                    this.velocity.y -= this.level.gravity
                 }
                 if (this.pressedDown) {
                     this.velocity.y = 7
@@ -437,7 +465,12 @@ export default class Player extends Element {
 
             // decceleration
             if (this.dashCounter > 12) {
-                this.velocity.x -= 1
+                if (this.pressedRight) {
+                    this.velocity.x -= 0.5
+                }
+                if (this.pressedLeft) {
+                    this.velocity.x += 0.5
+                }
             }
 
             this.canDash = false
