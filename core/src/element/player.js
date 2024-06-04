@@ -466,17 +466,17 @@ export default class Player extends Element {
             // decceleration
             if (this.dashCounter > 12) {
                 if (this.pressedRight) {
-                    this.velocity.x -= 0.5
+                    this.velocity.x -= 1
                 }
                 if (this.pressedLeft) {
-                    this.velocity.x += 0.5
+                    this.velocity.x += 1
                 }
             }
 
             this.canDash = false
 
             // stop dash after N frames and reset Dash State
-            if (this.dashCounter >= 16) {
+            if (this.dashCounter > 16) {
                 this.isDashing = false
                 this.dashDecelCounter = 0
                 this.dashCounter = 0
