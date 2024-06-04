@@ -563,10 +563,14 @@ export default class Player extends Element {
 
     /** @returns if player is in an element */
     isColliding(element1, element2) {
-        const belowTop = element1.position.y > element2.position.y - element1.height
-        const aboveBottom = element1.position.y < element2.position.y + element2.height
-        const rightOrLeft = element2.position.x - element1.width < element1.position.x
-        const leftOrRight = element1.position.x < element2.position.x + element2.width
+        const belowTop =
+            element1.position.y > element2.position.y - element1.height + element2.collisionOffset.y
+        const aboveBottom =
+            element1.position.y < element2.position.y + element2.height - element2.collisionOffset.y
+        const rightOrLeft =
+            element2.position.x - element1.width + element2.collisionOffset.x < element1.position.x
+        const leftOrRight =
+            element1.position.x < element2.position.x + element2.width - element2.collisionOffset.x
 
         return belowTop && aboveBottom && rightOrLeft && leftOrRight && element1 !== element2
     }

@@ -123,7 +123,8 @@ export default class Pause {
             (-(this.scale - 1) * this.canvas.height) / 2
         )
 
-        ctx.fillStyle = "rgba(17,48,101,0.8)"
+        ctx.fillStyle = "rgba(144, 238, 144, 0.95)"
+
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
 

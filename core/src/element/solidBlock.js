@@ -2,8 +2,8 @@ import Element from "./element"
 import Sprite from "./sprite"
 
 export default class SolidBlock extends Element {
-    constructor(x, y, relativeWidth = 1, relativeHeight = 1) {
-        super(x, y, relativeWidth, relativeHeight)
+    constructor(x, y) {
+        super(x, y)
 
         this.sprite = new Sprite("tileset.png", this.width, this.height, 47, 48)
     }

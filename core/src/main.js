@@ -12,3 +12,4 @@ const game = new Game(canvas, ctx)
 new KeyboardListener()
 
 game.start()
+game.startLevel()

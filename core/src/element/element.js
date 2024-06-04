@@ -1,11 +1,16 @@
 export default class Element {
-    constructor(x, y, relativeWidth = 1, relativeHeight = 1) {
+    constructor(x, y, width = 32, height = 32) {
         this.position = {
             x: x,
             y: y,
         }
-        this.width = relativeWidth * 32
-        this.height = relativeHeight * 32
+        this.width = width
+        this.height = height
+
+        this.collisionOffset = {
+            x: 0,
+            y: 0,
+        }
     }
 
     action() {}

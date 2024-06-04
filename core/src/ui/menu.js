@@ -60,7 +60,7 @@ export default class Menu {
     }
 
     selectLevel(button) {
-        this.submenu = new SubMenu(this, this.canvas, button.level)
+        this.submenu = new SubMenu(this, this.game, this.canvas, button.level)
         this.submenu.open()
     }
 }

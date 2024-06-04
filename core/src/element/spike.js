@@ -2,33 +2,31 @@ import Element from "./element"
 import Sprite from "./sprite"
 
 export default class Spike extends Element {
-    constructor(x, y, game, relativeWidth = 1, relativeHeight = 1) {
-        super(x, y, relativeWidth, relativeHeight)
+    constructor(x, y, game) {
+        super(x, y + 32 - 24)
 
-        this.spikes = new Sprite("spikes/spikes2.png", this.width, this.height, 70, 70)
+        this.height = 24
+
+        this.spikes = new Sprite("spikes/spikes.png", this.width, this.height, 70, 48)
         this.currentSprite = this.spikes
         this.currentFrame = 0
         this.elapsedFrames = 0
-        this.activeFrames = 0
+
+        this.collisionOffset = {
+            x: 10,
+            y: 10,
+        }
     }
 
     handleCollisionX(player) {
         if (!player.isDead) {
-            if (this.activeFrames === 4) {
-                this.activeFrames = 0
-                player.die()
-            }
+            player.die()
         }
     }
 
     handleCollisionY(player) {
         if (!player.isDead) {
-            ++this.activeFrames
-
-            if (this.activeFrames === 3) {
-                this.activeFrames = 0
-                player.die()
-            }
+            player.die()
         }
     }
 
