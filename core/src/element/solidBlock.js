@@ -33,6 +33,7 @@ export default class SolidBlock extends Element {
 
             this.WallJumpRightCounter = 50
             this.WallJumpLeftCounter = 50
+            player.collidedDownCounter = 0
         }
 
         // if below bottom of element last frame
@@ -46,6 +47,7 @@ export default class SolidBlock extends Element {
             player.velocity.y = 0
             player.gravity = 0
             player.collidedUp = true
+            player.collidedUpCounter = 0
             player.isJumping = false
         }
     }

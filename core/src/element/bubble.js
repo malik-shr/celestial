@@ -11,12 +11,12 @@ export default class Bubble extends Element {
     }
 
     handleCollisionX(player) {
-        player.velocity.x = 0.8
+        player.velocity.x *= 0.8
         player.canDash = true
     }
 
     handleCollisionY(player) {
-        player.velocity.y = 0.8
+        player.velocity.y *= 0.8
         player.canDash = true
     }
 

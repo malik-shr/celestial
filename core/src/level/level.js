@@ -51,7 +51,7 @@ export default class Level {
             this.elementList.add(new SolidBlock(600 + 32 * i, 0, 32, 32))
         }
 
-        this.elementList.add(new MovingPlatform(0, 224, 64, 32, 0, -2))
+        this.elementList.add(new MovingPlatform(0, 224, 64, 32, 5, -5))
     }
 
     getPlayer() {
