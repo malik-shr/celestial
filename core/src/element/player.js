@@ -60,16 +60,16 @@ export default class Player extends Element {
 
         // ------Variables for sprite
         this.isMovingRight = true
-        this.playerImage = new Sprite("player/pixilartSprite.png", this.width, this.height, 70, 70)
-        this.standRight = new Sprite("player/standingRight.png", this.width, this.height, 70, 70)
-        this.standLeft = new Sprite("player/StandingLeft.png", this.width, this.height, 70, 70)
-        this.runRight = new Sprite("player/pixilartSprite.png", this.width, this.height, 70, 70)
-        this.runLeft = new Sprite("player/pixilartSpriteLeft.png", this.width, this.height, 70, 70)
-        this.jumpRight = new Sprite("player/jumpRight.png", this.width, this.height, 70, 70)
-        this.jumpUp = new Sprite("player/jumpUp.png", this.width, this.height, 70, 70)
-        this.airTimeUp = new Sprite("player/airTimeUp.png", this.width, this.height, 70, 70)
-        this.jumpUpLeft = new Sprite("player/jumpUpLeft.png", this.width, this.height, 70, 70)
-        this.airTimeLeft = new Sprite("player/airTimeLeft.png", this.width, this.height, 70, 70)
+        this.playerImage = new Sprite("player/pixilartSprite.png", this.width, this.height, 70, 65)
+        this.standRight = new Sprite("player/standingRight.png", this.width, this.height, 70, 65)
+        this.standLeft = new Sprite("player/StandingLeft.png", this.width, this.height, 70, 65)
+        this.runRight = new Sprite("player/pixilartSprite.png", this.width, this.height, 70, 65)
+        this.runLeft = new Sprite("player/pixilartSpriteLeft.png", this.width, this.height, 70, 65)
+        this.jumpRight = new Sprite("player/jumpRight.png", this.width, this.height, 70, 65)
+        this.jumpUp = new Sprite("player/jumpUp.png", this.width, this.height, 70, 65)
+        this.airTimeUp = new Sprite("player/airTimeUp.png", this.width, this.height, 70, 65)
+        this.jumpUpLeft = new Sprite("player/jumpUpLeft.png", this.width, this.height, 70, 65)
+        this.airTimeLeft = new Sprite("player/airTimeLeft.png", this.width, this.height, 70, 65)
 
         this.dashJumpUpRight = new Sprite(
             "player/dashJumpUpRight.png",
@@ -181,6 +181,8 @@ export default class Player extends Element {
         ctx.beginPath()
 
         if (!this.currentSprite.loaded) return
+
+        ctx.filter = this.isDashing ? "blur(0.6px)" : "none"
 
         this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
 

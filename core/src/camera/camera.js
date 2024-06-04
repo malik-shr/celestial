@@ -73,10 +73,6 @@ export default class Camera {
     checkShaking() {
         if (!this.shaking) return
 
-        if (this.shakerTick === 0) {
-            this.save()
-        }
-
         ++this.shakerTick
 
         // Calculate the current shake amplitude using a decaying sine wave
@@ -102,7 +98,6 @@ export default class Camera {
         if (this.shakerTick >= 20) {
             this.shaking = false
             this.shakerTick = 0
-            //this.load() // Stop panning if any
         }
     }
 

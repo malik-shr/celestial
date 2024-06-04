@@ -65,7 +65,7 @@ export default class SubMenu {
         ctx.beginPath()
         ctx.save()
 
-        ctx.fillStyle = "rgba(144, 238, 144, 0.95)"
+        ctx.fillStyle = "rgba(144, 238, 144, 1)"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
 

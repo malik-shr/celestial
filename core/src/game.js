@@ -110,7 +110,7 @@ export default class Game {
                 this.particles.animate(this.ctx)
             }
             // DEBUG
-            this.camera.draw(this.ctx)
+            //this.camera.draw(this.ctx)
 
             this.ctx.restore()
         }
