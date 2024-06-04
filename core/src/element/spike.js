@@ -3,7 +3,7 @@ import Sprite from "./sprite"
 
 export default class Spike extends Element {
     constructor(x, y, game, relativeWidth = 1, relativeHeight = 1) {
-        super(x, y + 7, relativeWidth, relativeHeight)
+        super(x, y, relativeWidth, relativeHeight)
 
         this.spikes = new Sprite("spikes/spikes2.png", this.width, this.height, 70, 70)
         this.currentSprite = this.spikes

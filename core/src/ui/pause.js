@@ -32,7 +32,7 @@ export default class Pause {
         }
 
         window.addEventListener("keyup", (event) => {
-            if (currentScreen !== Screen.Game) return
+            if (currentScreen !== Screen.Game || this.game.completed.isActive) return
 
             if (event.key === "Escape") {
                 if (!this.isActive) {
@@ -123,7 +123,7 @@ export default class Pause {
             (-(this.scale - 1) * this.canvas.height) / 2
         )
 
-        ctx.fillStyle = "rgba(0,0,0,0.8)"
+        ctx.fillStyle = "rgba(17,48,101,0.8)"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
 

@@ -71,7 +71,6 @@ export default class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         if (currentScreen === Screen.Menu) {
-            this.menu.openMenu() // TEMPORARY
             this.menu.draw()
         }
 

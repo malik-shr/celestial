@@ -7,9 +7,13 @@ export default class Goal extends Element {
         this.game = game
     }
 
-    handleCollisionX(player) {}
+    handleCollisionX(player) {
+        this.game.completed.open()
+    }
 
-    handleCollisionY(player) {}
+    handleCollisionY(player) {
+        this.game.completed.open()
+    }
 
     draw(ctx) {
         ctx.beginPath()

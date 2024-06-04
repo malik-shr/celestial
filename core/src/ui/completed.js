@@ -16,8 +16,8 @@ export default class Completed {
         this.buttonList = new ButtonList(canvas)
         this.buttonList.isActive = false
 
-        this.width = 250
-        this.height = 250
+        this.width = 300
+        this.height = 300
 
         this.box = {
             position: {
@@ -31,13 +31,12 @@ export default class Completed {
         this.backBtn = new PauseButton(
             this.back,
             this.box.position.x,
-            positionY + 55,
+            positionY + 80,
             this.width,
             50,
-            "Exit Game"
+            "Back"
         )
 
-        this.buttonList.add(this.resumeBtn)
         this.buttonList.add(this.backBtn)
     }
 
@@ -85,7 +84,7 @@ export default class Completed {
             (-(this.scale - 1) * this.canvas.height) / 2
         )
 
-        ctx.fillStyle = "rgba(0,0,0,0.8)"
+        ctx.fillStyle = "rgba(17,48,101,0.8)"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
 
@@ -95,9 +94,17 @@ export default class Completed {
         ctx.textBaseline = "middle"
 
         ctx.fillText(
-            `Completed in ${this.game.pause}`,
+            "Level Completed",
             this.box.position.x + this.width / 2,
             this.box.position.y + 40
+        )
+
+        ctx.fillText("Time:", this.box.position.x + this.width / 2, this.box.position.y + 120)
+
+        ctx.fillText(
+            (this.game.time / 1000).toFixed(2),
+            this.box.position.x + this.width / 2,
+            this.box.position.y + 150
         )
 
         this.buttonList.draw(ctx)
