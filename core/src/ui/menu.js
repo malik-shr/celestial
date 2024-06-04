@@ -1,12 +1,11 @@
-import { LevelButton, MenuButton } from "./button"
+import { LevelButton } from "./button"
 import ButtonList from "./buttonList"
 import { Screen, setCurrentScreen } from "../listener/store"
-import SubMenu from "./submenu"
+import SubMenu from "./modal/submenu"
 
 export default class Menu {
-    constructor(canvas, ctx, game) {
+    constructor(game, canvas) {
         this.canvas = canvas
-        this.ctx = ctx
         this.game = game
 
         this.isActive = false
@@ -22,25 +21,15 @@ export default class Menu {
 
         const levelButton = new LevelButton(() => this.selectLevel(levelButton), 20, 20, "Level 1")
 
-        this.width = 250
-        this.height = 250
-
-        this.box = {
-            position: {
-                x: this.canvas.width - this.width - 50,
-                y: this.canvas.height - this.height - 50,
-            },
-        }
-
         //this.buttonList.add(startButton)
         this.buttonList.add(levelButton)
     }
 
-    draw() {
-        this.buttonList.draw(this.ctx)
+    draw(ctx) {
+        this.buttonList.draw(ctx)
 
         if (this.submenu !== null) {
-            this.submenu.draw(this.ctx)
+            this.submenu.draw(ctx)
         }
     }
 

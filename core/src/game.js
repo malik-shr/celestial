@@ -3,9 +3,9 @@ import Camera from "./camera/camera"
 import UILayer from "./ui/uiLayer"
 import { Screen, currentScreen } from "./listener/store"
 import Menu from "./ui/menu"
-import Pause from "./ui/pause"
+import Pause from "./ui/modal/pause"
 import Sprite from "./element/sprite"
-import Completed from "./ui/completed"
+import Completed from "./ui/modal/completed"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -13,9 +13,10 @@ export default class Game {
         this.ctx = ctx
 
         this.raf = null
+        this.intervalLoop = null
         this.level = null
 
-        this.menu = new Menu(this.canvas, this.ctx, this)
+        this.menu = new Menu(this, this.canvas)
     }
 
     start() {
@@ -23,7 +24,11 @@ export default class Game {
         this.raf = window.requestAnimationFrame(this.draw.bind(this))
     }
 
-    startLevel(templateString = "") {
+    startLevel(path = "") {
+        if (this.intervalLoop !== null) {
+            window.clearInterval(this.intervalLoop)
+        }
+
         this.level = new Level("level1", 0.8, this)
         this.level.initLevel("level1")
 
@@ -48,8 +53,7 @@ export default class Game {
 
         this.particles = null
 
-        //this.camera.shaking = true
-        window.setInterval(this.loop, 1000 / 40)
+        this.intervalLoop = window.setInterval(this.loop, 1000 / 40)
     }
 
     stop() {
@@ -72,7 +76,7 @@ export default class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         if (currentScreen === Screen.Menu) {
-            this.menu.draw()
+            this.menu.draw(this.ctx)
         }
 
         if (currentScreen === Screen.Game) {

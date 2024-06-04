@@ -1,31 +1,14 @@
-import { Screen, currentScreen, setCurrentScreen } from "../listener/store"
-import { MenuButton } from "./button"
-import ButtonList from "./buttonList"
+import { Screen, setCurrentScreen } from "../../listener/store"
+import { MenuButton } from "../button"
+import Modal from "./modal"
 
-export default class SubMenu {
+export default class SubMenu extends Modal {
     constructor(menu, game, canvas, level = "") {
-        this.canvas = canvas
+        super(canvas.width - 250 - 50, canvas.height - 250 - 50, 250, 250, game, canvas)
+
         this.menu = menu
-        this.game = game
 
         this.level = level
-
-        this.scale = 0
-
-        this.isActive = false
-
-        this.buttonList = new ButtonList(canvas)
-        this.buttonList.isActive = false
-
-        this.width = 250
-        this.height = 250
-
-        this.box = {
-            position: {
-                x: this.canvas.width - this.width - 50,
-                y: this.canvas.height - this.height - 50,
-            },
-        }
 
         this.startGame = this.startGame.bind(this)
 
@@ -49,19 +32,17 @@ export default class SubMenu {
     }
 
     open() {
-        this.isActive = true
-
-        this.buttonList.isActive = true
+        super.open()
     }
 
     close() {
-        this.isActive = false
-        this.buttonList.isActive = false
-
+        super.close()
         this.menu.close()
     }
 
     draw(ctx) {
+        super.updateFrames()
+
         ctx.beginPath()
         ctx.save()
 
