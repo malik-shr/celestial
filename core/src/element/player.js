@@ -180,8 +180,6 @@ export default class Player extends Element {
         if (this.isDead) return
         ctx.beginPath()
 
-        ctx.save()
-
         if (!this.currentSprite.loaded) return
 
         this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
@@ -195,6 +193,8 @@ export default class Player extends Element {
             })
         }
 
+        ctx.globalAlpha = 1
+
         // this.updateFrames()
 
         // console.log("velocity x: " + this.velocity.x)
@@ -206,7 +206,7 @@ export default class Player extends Element {
         // console.log("Movingplatform: " + this.standingOnMovingPlatform)
 
         ctx.fill()
-        ctx.restore()
+
         ctx.closePath()
     }
 
