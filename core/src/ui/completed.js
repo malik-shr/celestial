@@ -102,7 +102,7 @@ export default class Completed {
         ctx.fillText("Time:", this.box.position.x + this.width / 2, this.box.position.y + 120)
 
         ctx.fillText(
-            (this.game.time / 1000).toFixed(2),
+            `${(this.game.time / 1000).toFixed(1)}s`,
             this.box.position.x + this.width / 2,
             this.box.position.y + 160
         )

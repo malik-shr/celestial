@@ -18,9 +18,11 @@ export default class UILayer {
             250 + Math.abs(this.game.camera.position.x),
             20 - Math.abs(this.game.camera.position.y)
         )
+
+        ctx.textAlign = "right"
         ctx.fillText(
-            (this.game.time / 1000).toFixed(2),
-            450 + Math.abs(this.game.camera.position.x),
+            (this.game.time / 1000).toFixed(1),
+            490 + Math.abs(this.game.camera.position.x),
             20 - Math.abs(this.game.camera.position.y)
         )
     }
