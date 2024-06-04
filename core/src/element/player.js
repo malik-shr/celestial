@@ -180,9 +180,20 @@ export default class Player extends Element {
         if (this.isDead) return
         ctx.beginPath()
 
+        ctx.save()
+
         if (!this.currentSprite.loaded) return
 
         this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
+
+        ctx.globalAlpha = 0.4
+
+        if (this.isDashing) {
+            this.currentSprite.draw(ctx, this.currentFrame, 0, {
+                x: this.position.x - 20,
+                y: this.position.y,
+            })
+        }
 
         // this.updateFrames()
 
@@ -194,13 +205,8 @@ export default class Player extends Element {
         // console.log("Dash: " + this.isDashing)
         // console.log("Movingplatform: " + this.standingOnMovingPlatform)
 
-        // if player is unable to dash color him pink
-        if (this.canDash && this.dashCounter >= 5) {
-            ctx.fillStyle = "red"
-        } else {
-            ctx.fillStyle = "pink"
-        }
         ctx.fill()
+        ctx.restore()
         ctx.closePath()
     }
 
@@ -225,7 +231,7 @@ export default class Player extends Element {
         // when jumping on jump-pad and holding space you jump twice as high
         // when moving to the right or left and meanwhile dashing the player holds the dash speed (15) even after the dash
 
-        const maxSpeedX = 8
+        const maxSpeedX = 6
 
         // gravity
         this.velocity.y += this.level.gravity
@@ -271,7 +277,7 @@ export default class Player extends Element {
         // zusätzlich beschleunigung wenn man die jeweilige taste drückt
         if (keysPressed.get("ArrowRight")) {
             if (this.velocity.x < maxSpeedX) {
-                this.velocity.x += 0.4
+                this.velocity.x += maxSpeedX / 4
                 this.isMovingRight = true
             }
         }
@@ -284,7 +290,7 @@ export default class Player extends Element {
         // Left Movement
         if (keysPressed.get("ArrowLeft")) {
             if (this.velocity.x > -maxSpeedX) {
-                this.velocity.x -= 0.4
+                this.velocity.x -= maxSpeedX / 4
                 this.isMovingRight = false
             }
         }
@@ -297,7 +303,7 @@ export default class Player extends Element {
 
         // jump
         if (keysPressed.get(" ") && this.isGrounded === true) {
-            this.velocity.y -= 15
+            this.velocity.y -= 10
             this.isJumping = true
             this.jummping = true
             this.currentFrame = 0
@@ -397,36 +403,50 @@ export default class Player extends Element {
                 this.velocity.y = 0
                 this.gravity = 0
                 this.isDashing = true
+                this.pastPosition = this.position
             }
-
             //increase counter
             this.dashCounter++
 
-            //apply velocities
-            if (this.pressedRight) {
-                this.velocity.x += 2
-                this.velocity.y = 0
-                this.canDash = false
-            }
-            if (this.pressedLeft) {
-                this.velocity.x += -2
-                this.velocity.y = 0
-                this.canDash = false
-            }
-            if (this.pressedDown) {
-                this.velocity.y += 5
-                this.canDash = false
-            }
-            if (this.pressedUp) {
-                this.velocity.y += -5
-                this.canDash = false
+            // acceleration
+            if (this.dashCounter < 5) {
+                if (this.pressedRight) {
+                    this.game.camera.shake(2, 0)
+                    this.velocity.x += 0.5
+                    this.velocity.y = 0
+                }
             }
 
+            // top Speed
+            if (this.dashCounter >= 5 && this.dashCounter <= 12) {
+                if (this.pressedRight) {
+                    this.velocity.x = 10
+                    this.velocity.y = 0
+                }
+                if (this.pressedLeft) {
+                    this.velocity.x = -10
+                    this.velocity.y = 0
+                }
+                if (this.pressedDown) {
+                    this.velocity.y = 7
+                }
+                if (this.pressedUp) {
+                    this.velocity.y = -7
+                }
+            }
+
+            // decceleration
+            if (this.dashCounter > 12) {
+                this.velocity.x -= 1
+            }
+
+            this.canDash = false
+
             // stop dash after N frames and reset Dash State
-            if (this.dashCounter >= 5) {
+            if (this.dashCounter >= 16) {
                 this.isDashing = false
+                this.dashDecelCounter = 0
                 this.dashCounter = 0
-                this.canDash = true
             }
         }
     }

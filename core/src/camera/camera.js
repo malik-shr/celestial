@@ -22,6 +22,8 @@ export default class Camera {
 
         this.shakerTick = 0
         this.shaking = false
+
+        this.intensity = { x: 0, y: 0 }
     }
 
     shouldPanCameraToTheLeft() {
@@ -80,25 +82,31 @@ export default class Camera {
         // Calculate the current shake amplitude using a decaying sine wave
         const progress = this.shakerTick / 20
         const intensity = 4 * (1 - progress)
-        let xOffset = (Math.random() * 2 - 1) * intensity
-        let yOffset = (Math.random() * 2 - 1) * intensity
+        let xOffset = (Math.random() * 2 - 1) * this.intensity.x
+        let yOffset = (Math.random() * 2 - 1) * this.intensity.y
 
         while (this.position.y + yOffset < 0) {
-            yOffset = (Math.random() * 2 - 1) * intensity
-        }
-
-        while (this.position.x + xOffset > 0) {
-            xOffset = (Math.random() * 2 - 1) * intensity
+            yOffset = (Math.random() * 2 - 1) * this.intensity.y
         }
 
         this.position.x += xOffset
         this.position.y += yOffset
 
+        this.bgLayer.position.x += xOffset
+        this.bgLayer.position.y += yOffset
+
         if (this.shakerTick >= 20) {
             this.shaking = false
             this.shakerTick = 0
-            this.load() // Stop panning if any
+            //this.load() // Stop panning if any
         }
+    }
+
+    shake(intensityX, intensityY) {
+        this.shaking = true
+
+        this.intensity.x = intensityX
+        this.intensity.y = intensityY
     }
 
     pan() {
