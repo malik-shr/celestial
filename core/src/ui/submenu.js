@@ -1,5 +1,5 @@
 import { Screen, currentScreen, setCurrentScreen } from "../listener/store"
-import { MenuButton, PauseButton } from "./button"
+import { MenuButton } from "./button"
 import ButtonList from "./buttonList"
 
 export default class SubMenu {
@@ -43,8 +43,9 @@ export default class SubMenu {
 
     startGame() {
         this.close()
+        setCurrentScreen(Screen.Game)
 
-        console.log("Close")
+        this.game.startLevel(this.level)
     }
 
     open() {
@@ -55,7 +56,6 @@ export default class SubMenu {
 
     close() {
         this.isActive = false
-
         this.buttonList.isActive = false
 
         this.menu.close()
@@ -65,7 +65,7 @@ export default class SubMenu {
         ctx.beginPath()
         ctx.save()
 
-        ctx.fillStyle = "rgba(0,0,0,0.8)"
+        ctx.fillStyle = "rgba(144, 238, 144, 0.95)"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
 

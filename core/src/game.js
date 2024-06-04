@@ -13,21 +13,22 @@ export default class Game {
         this.ctx = ctx
 
         this.raf = null
-
-        // first argument is name, second is gravity constant
-        this.level = new Level("level1", 0.8, this)
+        this.level = null
 
         this.menu = new Menu(this.canvas, this.ctx, this)
-
-        this.pause = new Pause(this, canvas)
-        this.completed = new Completed(this, canvas)
     }
 
     start() {
         this.then = this.startTime
         this.raf = window.requestAnimationFrame(this.draw.bind(this))
+    }
 
+    startLevel(templateString = "") {
+        this.level = new Level("level1", 0.8, this)
         this.level.initLevel("level1")
+
+        this.completed = new Completed(this, this.canvas)
+        this.pause = new Pause(this, this.canvas)
 
         this.player = this.level.getPlayer()
 

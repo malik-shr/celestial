@@ -31,10 +31,10 @@ export default class Completed {
         this.backBtn = new PauseButton(
             this.back,
             this.box.position.x,
-            positionY + 80,
+            positionY + 100,
             this.width,
             50,
-            "Back"
+            "Next"
         )
 
         this.buttonList.add(this.backBtn)
@@ -84,7 +84,7 @@ export default class Completed {
             (-(this.scale - 1) * this.canvas.height) / 2
         )
 
-        ctx.fillStyle = "rgba(17,48,101,0.8)"
+        ctx.fillStyle = "rgba(144, 238, 144, 0.95)"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
 
@@ -104,7 +104,7 @@ export default class Completed {
         ctx.fillText(
             (this.game.time / 1000).toFixed(2),
             this.box.position.x + this.width / 2,
-            this.box.position.y + 150
+            this.box.position.y + 160
         )
 
         this.buttonList.draw(ctx)

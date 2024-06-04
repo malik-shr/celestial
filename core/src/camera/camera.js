@@ -89,6 +89,10 @@ export default class Camera {
             yOffset = (Math.random() * 2 - 1) * this.intensity.y
         }
 
+        while (this.position.x + xOffset > 0) {
+            xOffset = (Math.random() * 2 - 1) * this.intensity.x
+        }
+
         this.position.x += xOffset
         this.position.y += yOffset
 
