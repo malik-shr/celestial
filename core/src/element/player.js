@@ -442,32 +442,32 @@ export default class Player extends Element {
             if (this.dashCounter < 5) {
                 if (this.pressedRight) {
                     this.game.camera.shake(-2, 0)
-                    this.velocity.x += 0.5
+                    this.velocity.x += 0.1
                     this.velocity.y -= this.level.gravity
                 }
                 if (this.pressedLeft) {
                     this.game.camera.shake(2, 0)
-                    this.velocity.x -= 0.5
+                    this.velocity.x -= 0.1
                     this.velocity.y -= this.level.gravity
                 }
                 if (this.pressedDown) {
                     this.game.camera.shake(0, 2)
-                    this.velocity.y = 0.5 * this.dashCounter
+                    this.velocity.y = 0.1 * this.dashCounter
                 }
                 if (this.pressedUp) {
                     this.game.camera.shake(0, -2)
-                    this.velocity.y = -0.5 * this.dashCounter
+                    this.velocity.y = -0.1 * this.dashCounter
                 }
             }
 
             // top Speed
-            if (this.dashCounter >= 5 && this.dashCounter <= 12) {
+            if (this.dashCounter >= 5 && this.dashCounter <= 10) {
                 if (this.pressedRight) {
-                    this.velocity.x = 10
+                    this.velocity.x = 14
                     this.velocity.y -= this.level.gravity
                 }
                 if (this.pressedLeft) {
-                    this.velocity.x = -10
+                    this.velocity.x = -14
                     this.velocity.y -= this.level.gravity
                 }
                 if (this.pressedDown) {
@@ -479,12 +479,12 @@ export default class Player extends Element {
             }
 
             // decceleration
-            if (this.dashCounter > 12) {
+            if (this.dashCounter > 10) {
                 if (this.pressedRight) {
-                    this.velocity.x -= 1
+                    this.velocity.x -= 1.34
                 }
                 if (this.pressedLeft) {
-                    this.velocity.x += 1
+                    this.velocity.x += 1.34
                 }
             }
 
