@@ -6,6 +6,7 @@ import MovingPlatform from "../element/movingPlatform"
 import SolidBlock from "../element/solidBlock"
 import TemporaryBlock from "../element/temporaryBlock"
 import Spike from "../element/spike"
+import Goal from "../element/goal"
 
 export default class Level {
     constructor(name, gravity, game) {
@@ -25,10 +26,12 @@ export default class Level {
             this.elementList.add(new SolidBlock(0 + i * 32, 288, 1, 1))
         }
 
-        this.elementList.add(new Spike(200 - 64, 224, 1, 1))
-        this.elementList.add(new JumpPad(200, 224, 1, 1))
-        this.elementList.add(new TemporaryBlock(232, 224, 1, 1))
-        this.elementList.add(new Checkpoint(264, 224, this.game, 1, 1))
+        this.elementList.add(new Spike(200 - 64, 256, 1, 1))
+        this.elementList.add(new JumpPad(200, 256, 1, 1))
+        this.elementList.add(new TemporaryBlock(232, 256, 1, 1))
+        this.elementList.add(new Checkpoint(264, 256, this.game, 1, 1))
+
+        this.elementList.add(new Goal(600, 256, this.game, 1, 1))
 
         for (let i = 0; i <= 10; i++) {
             this.elementList.add(new SolidBlock(364 + i * 32, 128, 1, 1))
