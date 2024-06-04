@@ -28,6 +28,8 @@ export default class Player extends Element {
         // additional velocities
         this.gravity = 0
         this.platformVelocity = 0
+        this.platformVelocityX = 0
+        this.platformVelocityY = 0
 
         // status flags
         this.isJumping = false
@@ -51,6 +53,11 @@ export default class Player extends Element {
         // counters
         this.dashCounter = 0
         this.deadCounter = 0
+
+        this.collidedDownCounter = 0
+        this.collidedUpCounter = 0
+        this.collidedLeftCounter = 0
+        this.collidedRightCounter = 0
 
         this.wallclimbCounter = 0
         this.collisionCounter = 0
@@ -159,6 +166,8 @@ export default class Player extends Element {
         this.position.y += this.velocity.y
 
         // increase counters
+        this.collidedDownCounter += 1
+        this.collidedUpCounter += 1
         this.collidedLeftCounter += 1
         this.collidedRightCounter += 1
         this.WallJumpLeftCounter += 1
@@ -268,7 +277,7 @@ export default class Player extends Element {
             !keysPressed.get("ArrowLeft") &&
             this.standingOnMovingPlatform
         ) {
-            this.velocity.x = this.platformVelocity
+            this.velocity.x = this.platformVelocityX
             if (this.isMovingRight) this.currentSprite = this.sprites.stand.right
             else this.currentSprite = this.sprites.stand.left
         }
@@ -313,30 +322,33 @@ export default class Player extends Element {
             this.velocity.y -= 10
             this.isJumping = true
             this.jummping = true
+            this.letGoOfSpace = false
             this.currentFrame = 0
         }
 
+        if (!keysPressed.get(" ")) {
+            this.letGoOfSpace = true
+        }
+
         // walljump
-        else {
-            if (
-                (this.collidedLeftCounter <= 5 || this.collidedRightCounter <= 5) &&
-                keysPressed.get(" ") &&
-                this.notGroundedCounter > 8
-            ) {
-                if (this.collidedLeftCounter <= 5 && this.WallJumpLeftCounter > 50) {
-                    this.velocity.y = -7.5
-                    this.velocity.x = 7.5
-                    this.WallJumpLeft = true
-                    this.WallJumpLeftCounter = 0
-                    this.WallJumpRightCounter = 50
-                }
-                if (this.collidedRightCounter <= 5 && this.WallJumpRightCounter > 50) {
-                    this.velocity.y = -7.5
-                    this.velocity.x = -7.5
-                    this.WallJumpRight = true
-                    this.WallJumpRightCounter = 0
-                    this.WallJumpLeftCounter = 50
-                }
+        if (
+            (this.collidedLeftCounter <= 5 || this.collidedRightCounter <= 5) &&
+            keysPressed.get(" ") &&
+            this.letGoOfSpace
+        ) {
+            if (this.collidedLeftCounter <= 5 && this.WallJumpLeftCounter > 50) {
+                this.velocity.y = -7.5
+                this.velocity.x = 7.5
+                this.WallJumpLeft = true
+                this.WallJumpLeftCounter = 0
+                this.WallJumpRightCounter = 50
+            }
+            if (this.collidedRightCounter <= 5 && this.WallJumpRightCounter > 50) {
+                this.velocity.y = -7.5
+                this.velocity.x = -7.5
+                this.WallJumpRight = true
+                this.WallJumpRightCounter = 0
+                this.WallJumpLeftCounter = 50
             }
         }
 
@@ -536,6 +548,9 @@ export default class Player extends Element {
 
     resetCollisionState() {
         this.collidedSpecialObjects = []
+
+        this.platformVelocityX = 0
+        this.platformVelocityY = 0
 
         this.isGrounded = false
         this.standingOnMovingPlatform = false

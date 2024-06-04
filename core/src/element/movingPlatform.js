@@ -8,23 +8,30 @@ export default class MovingPlatform extends Element {
             y: velocityY,
         }
 
+        this.traveledX = 0
+        this.traveledY = 0
+
+        this.maxX = 100
+        this.maxY = 150
+
         this.isActive = 0
         this.steppedOn = false
     }
 
     checkCollision(element) {}
 
-    // TODO zerquetschlogik einfügen
     handleCollisionY(player) {
-        // if above top of element last frame
+        player.platformVelocityX = this.velocity.x
+        player.platformVelocityY = this.velocity.y
+        // if above top of element last frame (dont know why minus one maybe a rounding error sometimes?)
         if (
-            player.previous.position.y - player.previous.velocity.y <=
+            player.previous.position.y - player.previous.velocity.y - 1 <=
             this.position.y - player.height - this.velocity.y
         ) {
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
             player.position.y = this.position.y - player.height
 
-            player.velocity.y = 0
+            player.velocity.y = this.velocity.y
             player.gravity = 0
             player.isGrounded = true
             player.isJumping = false
@@ -37,7 +44,7 @@ export default class MovingPlatform extends Element {
             // save current player velocities
             this.playerPreviousVelocityX = player.velocity.x
 
-            if (player.collidedY === true && !player.isDead) {
+            if (player.collidedUpCounter < 2 && !player.isDead) {
                 player.die()
             }
 
@@ -49,7 +56,6 @@ export default class MovingPlatform extends Element {
 
             player.standingOnMovingPlatform = true
             player.collidingWithPlatform = true
-            player.platformVelocity = this.velocity.x
             this.steppedOn = true
 
             this.isActive = 2
@@ -64,16 +70,19 @@ export default class MovingPlatform extends Element {
             this.position.y + this.height - this.velocity.y
         ) {
             // set the player below this object, reset the velocities, relevant flags and relevant counters and set collidedUp to true
-            player.position.y = this.position.y + this.height + this.velocity.y
+            player.position.y = this.position.y + this.height
 
             player.velocity.y = 0
+            if (this.velocity.y > 0) {
+                player.velocity.y = this.velocity.y
+            }
             player.gravity = 0
             player.collidedUp = true
             player.isJumping = false
 
             // do additional collision logic
 
-            if (player.collidedY === true && !player.isDead) {
+            if (player.collidedDownCounter < 2 && !player.isDead) {
                 player.die()
             }
             player.collidingWithPlatform = true
@@ -83,7 +92,8 @@ export default class MovingPlatform extends Element {
 
     handleCollisionX(player) {
         // sometimes a bug where you can go through the platform, but only at the start of the level
-
+        player.platformVelocityX = this.velocity.x
+        player.platformVelocityY = this.velocity.y
         // if left of left side of that object last frame
         if (
             player.previous.position.x - player.previous.velocity.x <=
@@ -101,6 +111,8 @@ export default class MovingPlatform extends Element {
             player.velocity.x = this.velocity.x
             player.collidingWithPlatform = true
             player.platformVelocity = this.velocity.x
+            player.collidedRight = true
+            player.collidedRightCounter = 0
         }
         // if right of right side of that object last frame
         if (
@@ -119,6 +131,8 @@ export default class MovingPlatform extends Element {
             player.velocity.x = this.velocity.x
             player.collidingWithPlatform = true
             player.platformVelocity = this.velocity.x
+            player.collidedLeft = true
+            player.collidedLeftCounter = 0
         }
     }
 
@@ -136,8 +150,23 @@ export default class MovingPlatform extends Element {
     action() {
         this.isActive -= 1
 
+        if (this.traveledX >= this.maxX) {
+            this.velocity.x = -this.velocity.x
+            this.traveledX = 0
+            this.steppedOn = false
+        }
+
+        if (this.traveledY >= this.maxY) {
+            this.velocity.y = -this.velocity.y
+            this.traveledY = 0
+            this.steppedOn = false
+        }
+
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
+
+        this.traveledX += Math.abs(this.velocity.x)
+        this.traveledY += Math.abs(this.velocity.y)
 
         if (this.isActive < 0) {
             this.steppedOn = false
