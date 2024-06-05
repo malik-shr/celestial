@@ -48,8 +48,8 @@ export default class Game {
         this.time = 0
 
         //this.shootingStar = new Sprite("shooting-star.png", 32, 64, 32, 64)
-        this.bg1 = new Sprite("bg/bg.png", 512, 320, 512, 288)
-        this.bg2 = new Sprite("bg/bg_layer_top.png", 512, 320, 512, 288)
+        this.bg1 = new Sprite("bg/bg.png", 1024, 640, 1024, 640)
+        this.bg2 = new Sprite("bg/bg_layer_top.png", 1024 * 2, 640 * 2, 1024 * 2, 640 * 2)
 
         this.particles = null
 
@@ -83,15 +83,9 @@ export default class Game {
         if (currentScreen === Screen.Game) {
             this.ctx.save()
 
-            this.ctx.scale(2, 2)
-
-            // vielleicht in Camera class verschieben?
-            this.ctx.translate(this.camera.position.x, this.camera.position.y)
-
-            // JUST TESTING!
             this.bg1.draw(this.ctx, 0, 0, {
-                x: Math.abs(this.camera.position.x),
-                y: -Math.abs(this.camera.position.y),
+                x: 0,
+                y: 0,
             })
 
             for (let i = 0; i < 6; i++) {
@@ -100,12 +94,19 @@ export default class Game {
                     0,
                     0,
                     {
-                        x: Math.abs(this.camera.bgLayer.position.x) + 512 * i,
-                        y: -Math.abs(this.camera.position.y),
+                        x: 1000 * i - Math.abs(this.camera.bgLayer.position.x),
+                        y: 0,
                     },
                     5
                 )
             }
+
+            this.ctx.scale(2, 2)
+
+            // vielleicht in Camera class verschieben?
+            this.ctx.translate(this.camera.position.x, this.camera.position.y)
+
+            // JUST TESTING!
 
             this.level.elementList.draw(this.ctx)
 

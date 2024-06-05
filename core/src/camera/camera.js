@@ -31,7 +31,7 @@ export default class Camera {
 
         if (this.player.position.x >= rightBound && this.player.velocity.x > 0) {
             this.position.x -= this.player.velocity.x
-            this.bgLayer.position.x -= (99 / 100) * this.player.velocity.x
+            this.bgLayer.position.x -= (2 / 100) * this.player.velocity.x
         }
     }
 
@@ -44,7 +44,7 @@ export default class Camera {
                 return
             }
             this.position.x -= this.player.velocity.x
-            this.bgLayer.position.x -= (99 / 100) * this.player.velocity.x
+            this.bgLayer.position.x -= (2 / 100) * this.player.velocity.x
         }
     }
 
@@ -53,7 +53,7 @@ export default class Camera {
 
         if (this.player.position.y <= verticalBound && this.player.velocity.y < 0) {
             this.position.y -= this.player.velocity.y
-            this.bgLayer.position.y -= (99 / 100) * this.player.velocity.y
+            this.bgLayer.position.y -= (2 / 100) * this.player.velocity.y
         }
     }
 
@@ -66,7 +66,7 @@ export default class Camera {
                 return
             }
             this.position.y -= this.player.velocity.y
-            this.bgLayer.position.y -= (99 / 100) * this.player.velocity.y
+            this.bgLayer.position.y -= (2 / 100) * this.player.velocity.y
         }
     }
 
