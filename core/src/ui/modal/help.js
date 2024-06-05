@@ -1,7 +1,7 @@
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
-export default class Controls extends Modal {
+export default class Help extends Modal {
     constructor(game, canvas) {
         super(canvas.width / 2 - 400 / 2, canvas.height / 2 - 400 / 2, 400, 400, game, canvas)
 

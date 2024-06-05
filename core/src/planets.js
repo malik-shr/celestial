@@ -27,7 +27,7 @@ export function getPlanets(canvas) {
             sprite: new Sprite("bg/mars.png", 339, 339, 339, 339),
             buttonList: new ButtonList(canvas),
         },
-        Saturn: {
+        saturn: {
             gravity: 0,
             backgroundImage: "",
             tileset: "",
