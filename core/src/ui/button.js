@@ -63,20 +63,10 @@ export class SlideButton extends Button {
     draw(ctx) {
         ctx.beginPath()
 
-        ctx.fillStyle = "blue"
-
-        // ctx.roundRect(
-        //     this.rect.position.x,
-        //     this.rect.position.y,
-        //     this.rect.width,
-        //     this.rect.height,
-        //     [6]
-        // )
-
         ctx.fill()
 
         ctx.fillStyle = this.isActive ? (this.hover ? "#adb5bd" : "#f8f9fa") : "#495057"
-        ctx.font = `800 96px Montserrat`
+        ctx.font = `800 86px Montserrat`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 

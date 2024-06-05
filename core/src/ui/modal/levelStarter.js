@@ -2,7 +2,7 @@ import { Screen, setCurrentScreen } from "../../listener/store"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
-export default class SubMenu extends Modal {
+export default class LevelStarter extends Modal {
     constructor(menu, game, canvas, level = "") {
         super(canvas.width / 2 - 200 / 2, canvas.height / 2 - 200 / 2, 200, 200, game, canvas)
 
@@ -42,6 +42,8 @@ export default class SubMenu extends Modal {
     }
 
     open() {
+        this.menu.closeModals()
+
         super.open()
     }
 

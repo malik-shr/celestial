@@ -1,7 +1,7 @@
 import { LevelButton, MenuButton, SlideButton } from "./button"
 import ButtonList from "./buttonList"
 import { Screen, setCurrentScreen } from "../listener/store"
-import SubMenu from "./modal/submenu"
+import LevelStarter from "./modal/levelStarter"
 import Sprite from "../element/sprite"
 import Controls from "./modal/controls"
 import Settings from "./modal/settings"
@@ -24,7 +24,7 @@ export default class Menu {
         this.openSettings = this.openSettings.bind(this)
         this.openControls = this.openControls.bind(this)
 
-        this.submenu = null
+        this.levelStarter = null
         this.help = null
         this.settings = null
 
@@ -38,8 +38,8 @@ export default class Menu {
         const settingsBtn = new MenuButton(this.openSettings, 950, 40, 50, 50, "⚙️", 34)
         const helpButton = new MenuButton(this.openControls, 880, 40, 50, 50, "?", 34)
 
-        this.nextBtn = new SlideButton(this.selectNext, 1024 - 180 - 80, 360, 80, 60, "🡲")
-        this.prevBtn = new SlideButton(this.selectPrev, 180, 360, 80, 60, "🡰")
+        this.nextBtn = new SlideButton(this.selectNext, 1024 - 180 - 80, 360, 75, 65, "🡲")
+        this.prevBtn = new SlideButton(this.selectPrev, 180, 360, 75, 65, "🡰")
 
         this.mainList.add(helpButton)
         this.mainList.add(settingsBtn)
@@ -119,6 +119,10 @@ export default class Menu {
         if (this.settings !== null) {
             this.settings.close()
         }
+
+        if (this.levelStarter !== null) {
+            this.levelStarter.close()
+        }
     }
 
     draw(ctx) {
@@ -132,8 +136,8 @@ export default class Menu {
         this.mainList.draw(ctx)
         this.activePlanet.buttonList.draw(ctx)
 
-        if (this.submenu !== null) {
-            this.submenu.draw(ctx)
+        if (this.levelStarter !== null) {
+            this.levelStarter.draw(ctx)
         }
 
         if (this.settings !== null) {
@@ -189,7 +193,7 @@ export default class Menu {
     }
 
     selectLevel(button) {
-        this.submenu = new SubMenu(this, this.game, this.canvas, button.level)
-        this.submenu.open()
+        this.levelStarter = new LevelStarter(this, this.game, this.canvas, button.level)
+        this.levelStarter.open()
     }
 }
