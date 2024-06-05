@@ -49,6 +49,7 @@ export default class Game {
 
         //this.shootingStar = new Sprite("shooting-star.png", 32, 64, 32, 64)
         this.bg1 = new Sprite("bg/bg.png", 1024, 640, 1024, 640)
+        this.dimmed = new Sprite("bg/dimmed.png", 1024, 640, 1024, 640)
         this.bg2 = new Sprite("bg/bg_layer_top.png", 1024 * 2, 640 * 2, 1024 * 2, 640 * 2)
 
         this.particles = null
@@ -121,6 +122,9 @@ export default class Game {
             this.ctx.restore()
         }
 
+        if (this.pause.isActive || this.completed.isActive) {
+            this.dimmed.draw(this.ctx, 0, 0, { x: 0, y: 0 })
+        }
         this.pause.draw(this.ctx)
         this.completed.draw(this.ctx)
 
