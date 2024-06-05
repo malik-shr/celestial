@@ -254,7 +254,7 @@ export default class Player extends Element {
         if (
             !keysPressed.get("ArrowRight") &&
             !keysPressed.get("ArrowLeft") &&
-            !this.standingOnMovingPlatform &&
+            !this.collidingWithPlatform &&
             !this.isDashing
         ) {
             this.velocity.x = 0
