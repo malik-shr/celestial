@@ -66,10 +66,11 @@ export default class Game {
         this.time = performance.now() - this.startTime - this.pause.time
 
         this.level.elementList.action()
-        this.camera.pan()
-        this.camera.checkShaking()
 
         this.player.checkCollision()
+
+        this.camera.pan()
+        this.camera.checkShaking()
     }
 
     draw() {

@@ -11,7 +11,7 @@ export default class MovingPlatform extends Element {
         this.traveledX = 0
         this.traveledY = 0
 
-        this.maxX = 100
+        this.maxX = 500
         this.maxY = 150
 
         this.isActive = 0
@@ -55,7 +55,7 @@ export default class MovingPlatform extends Element {
             }
 
             player.standingOnMovingPlatform = true
-            player.collidingWithPlatform = true
+            player.collidingWithPlatformCounter = 0
             this.steppedOn = true
 
             this.isActive = 2
@@ -85,7 +85,7 @@ export default class MovingPlatform extends Element {
             if (player.collidedDownCounter < 2 && !player.isDead) {
                 player.die()
             }
-            player.collidingWithPlatform = true
+            player.collidingWithPlatformCounter = 0
             player.platformVelocity = this.velocity.x
         }
     }
@@ -109,7 +109,7 @@ export default class MovingPlatform extends Element {
             }
 
             player.velocity.x = this.velocity.x
-            player.collidingWithPlatform = true
+            player.collidingWithPlatformCounter = 0
             player.platformVelocity = this.velocity.x
             player.collidedRight = true
             player.collidedRightCounter = 0
@@ -129,7 +129,7 @@ export default class MovingPlatform extends Element {
             }
 
             player.velocity.x = this.velocity.x
-            player.collidingWithPlatform = true
+            player.collidingWithPlatformCounter = 0
             player.platformVelocity = this.velocity.x
             player.collidedLeft = true
             player.collidedLeftCounter = 0
@@ -141,7 +141,7 @@ export default class MovingPlatform extends Element {
         this.isActive = 0
 
         player.standingOnMovingPlatform = false
-        player.collidingWithPlatform = false
+        player.collidingWithPlatformCounter = 10
 
         player.velocity.x = this.playerPreviousVelocityX
         player.platformVelocity = 0

@@ -39,7 +39,6 @@ export default class Player extends Element {
         // collision flags
         this.isGrounded = false
         this.standingOnMovingPlatform = false
-        this.collidingWithPlatform = false
         this.collidedDown = false
         this.collidedUp = false
         this.collidedRight = false
@@ -56,6 +55,8 @@ export default class Player extends Element {
         this.collidedUpCounter = 0
         this.collidedLeftCounter = 0
         this.collidedRightCounter = 0
+
+        this.collidingWithPlatformCounter = 0
 
         this.wallclimbCounter = 0
         this.collisionCounter = 0
@@ -163,6 +164,8 @@ export default class Player extends Element {
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
+        console.log(this.collidingWithPlatformCounter)
+
         // increase counters
         this.collidedDownCounter += 1
         this.collidedUpCounter += 1
@@ -170,6 +173,7 @@ export default class Player extends Element {
         this.collidedRightCounter += 1
         this.WallJumpLeftCounter += 1
         this.WallJumpRightCounter += 1
+        this.collidingWithPlatformCounter += 1
         if (!this.isGrounded) {
             this.notGroundedCounter += 1
         }
@@ -254,7 +258,7 @@ export default class Player extends Element {
         if (
             !keysPressed.get("ArrowRight") &&
             !keysPressed.get("ArrowLeft") &&
-            !this.collidingWithPlatform &&
+            this.collidingWithPlatformCounter > 1 &&
             !this.isDashing
         ) {
             this.velocity.x = 0
@@ -553,7 +557,6 @@ export default class Player extends Element {
 
         this.isGrounded = false
         this.standingOnMovingPlatform = false
-        this.collidingWithPlatform = false
 
         this.collidedDown = false
         this.collidedUp = false
