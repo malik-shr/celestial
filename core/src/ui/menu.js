@@ -1,7 +1,6 @@
 import { LevelButton, MenuButton, SlideButton } from "./button"
 import ButtonList from "./buttonList"
 import { Screen, setCurrentScreen } from "../listener/store"
-import LevelStarter from "./modal/levelStarter"
 import Sprite from "../element/sprite"
 import Help from "./modal/help"
 import Settings from "./modal/settings"
@@ -53,6 +52,7 @@ export default class Menu {
             () => this.selectLevel(levelButton),
             400,
             320,
+            this,
             "Level 1"
         )
 
@@ -195,7 +195,9 @@ export default class Menu {
     }
 
     selectLevel(button) {
-        this.levelStarter = new LevelStarter(this, this.game, this.canvas, button.level)
-        this.levelStarter.open()
+        this.close()
+
+        setCurrentScreen(Screen.Game)
+        this.game.startLevel(button.level)
     }
 }

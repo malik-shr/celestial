@@ -1,3 +1,5 @@
+import { Screen, setCurrentScreen } from "../listener/store"
+
 export default class Button {
     constructor(action, x, y, width, height) {
         this.rect = {
@@ -84,15 +86,31 @@ export class LevelButton extends Button {
     constructor(action, x, y, level) {
         super(action, x, y, 30, 30, "")
 
-        this.canvas = level
         this.level = level
 
         this.strokeScale = 0
 
         this.increaseSize = true
+
+        this.clicked = false
+        this.clickedFrames = 0
     }
 
     draw(ctx) {
+        ++this.clickedFrames
+
+        if (!this.clicked) {
+            this.clickedFrames = 0
+        }
+
+        const progress = this.clickedFrames / 40
+
+        if (progress > 1) {
+            this.clickedFrames = 0
+            this.clicked = false
+            this.action()
+        }
+
         const circleCenter = {
             x: this.rect.position.x + this.rect.width / 2,
             y: this.rect.position.y + this.rect.height / 2,
@@ -117,28 +135,33 @@ export class LevelButton extends Button {
             }
         }
 
-        ctx.beginPath()
-
         ctx.save()
 
+        ctx.beginPath()
+        ctx.fillStyle = this.hover ? "#e9ecef" : "#f8f9fa"
         ctx.arc(
             circleCenter.x,
             circleCenter.y,
-            this.hover ? this.rect.width / 2 + 1 : this.rect.width / 2,
+            this.hover ? this.rect.width / 2 - 1 : this.rect.width / 2,
             0,
             2 * Math.PI,
             false
         )
-        ctx.fillStyle = this.hover ? "#e9ecef" : "#f8f9fa"
         ctx.fill()
 
         ctx.strokeStyle = "#adb5bd"
-        ctx.lineWidth = 2 + this.strokeScale * 3
+        ctx.lineWidth = this.hover ? 2 + this.strokeScale * 3 - 1 : 2 + this.strokeScale * 3
         ctx.stroke()
+        ctx.closePath()
+
+        ctx.beginPath()
+        ctx.arc(circleCenter.x, circleCenter.y, this.rect.width / 2, 0, 2 * progress * Math.PI)
+        ctx.strokeStyle = "#add8e6"
+        ctx.lineWidth = 4
+        ctx.stroke()
+        ctx.closePath()
 
         ctx.restore()
-
-        ctx.closePath()
     }
 }
 

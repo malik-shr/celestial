@@ -52,7 +52,7 @@ export default class Help extends Modal {
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 
-        ctx.fillText("Controls", this.box.position.x + this.width / 2, this.box.position.y + 40)
+        ctx.fillText("Help", this.box.position.x + this.width / 2, this.box.position.y + 40)
 
         this.buttonList.draw(ctx)
 

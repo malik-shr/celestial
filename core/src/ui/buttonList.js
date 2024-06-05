@@ -1,3 +1,5 @@
+import { LevelButton } from "./button"
+
 export default class ButtonList {
     constructor(canvas) {
         this.canvas = canvas
@@ -6,6 +8,8 @@ export default class ButtonList {
         this.buttons = []
 
         this.canvas.addEventListener("click", (e) => this.onClick(e))
+        this.canvas.addEventListener("mousedown", (e) => this.onMouseDown(e))
+        this.canvas.addEventListener("mouseup", (e) => this.onMouseUp(e))
         this.canvas.addEventListener("mousemove", (e) => this.onHover(e))
     }
 
@@ -17,6 +21,8 @@ export default class ButtonList {
         if (!this.isActive) return
 
         for (const button of this.buttons) {
+            if (button instanceof LevelButton) continue
+
             const mousePos = this.getMousePos(this.canvas, e)
 
             if (this.isInside(mousePos, button.rect)) {
@@ -24,6 +30,32 @@ export default class ButtonList {
 
                 break
             }
+        }
+    }
+
+    onMouseDown(e) {
+        if (!this.isActive) return
+
+        for (const button of this.buttons) {
+            if (!(button instanceof LevelButton)) continue
+
+            const mousePos = this.getMousePos(this.canvas, e)
+
+            if (this.isInside(mousePos, button.rect)) {
+                button.clicked = true
+
+                break
+            }
+        }
+    }
+
+    onMouseUp(e) {
+        if (!this.isActive) return
+
+        for (const button of this.buttons) {
+            if (!(button instanceof LevelButton)) continue
+
+            button.clicked = false
         }
     }
 
