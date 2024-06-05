@@ -161,6 +161,17 @@ export class LevelButton extends Button {
         ctx.stroke()
         ctx.closePath()
 
+        if (this.hover) {
+            ctx.beginPath()
+            ctx.fillStyle = "white"
+            ctx.font = "500 16px Montserrat"
+            ctx.textAlign = "left"
+            ctx.textBaseline = "middle"
+
+            ctx.fillText(this.level, this.rect.position.x + 20, this.rect.position.y - 15)
+            ctx.closePath()
+        }
+
         ctx.restore()
     }
 }

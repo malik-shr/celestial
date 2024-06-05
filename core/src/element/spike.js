@@ -7,7 +7,7 @@ export default class Spike extends Element {
 
         this.height = 24
 
-        this.spikes = new Sprite("spikes/spikes.png", this.width, this.height, 70, 48)
+        this.spikes = new Sprite("spikes/spikes_alternative.png", this.width, this.height, 70, 48)
         this.currentSprite = this.spikes
         this.currentFrame = 0
         this.elapsedFrames = 0

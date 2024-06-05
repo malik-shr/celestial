@@ -52,7 +52,6 @@ export default class Menu {
             () => this.selectLevel(levelButton),
             400,
             320,
-            this,
             "Level 1"
         )
 
