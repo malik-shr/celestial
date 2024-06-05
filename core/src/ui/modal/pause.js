@@ -1,4 +1,4 @@
-import { Screen, currentScreen, setCurrentScreen } from "../../listener/store"
+import { Screen, currentScreen } from "../../listener/store"
 import { PauseButton } from "../button"
 import Modal from "./modal"
 

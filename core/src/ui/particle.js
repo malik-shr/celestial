@@ -5,13 +5,16 @@ export class Particle {
             y: y,
         }
         this.size = 5
-        this.speedX = Math.random() * 1.5 - 0.75
-        this.speedY = Math.random() * 1.5 - 0.75
+
+        this.speed = {
+            x: Math.random() * 1.5 - 0.75,
+            y: Math.random() * 1.5 - 0.75,
+        }
         this.color = color
     }
     update() {
-        this.position.x += this.speedX
-        this.position.y += this.speedY
+        this.position.x += this.speed.x
+        this.position.y += this.speed.y
         if (this.size > 0.1) this.size -= 0.05
     }
     draw(ctx) {
@@ -46,7 +49,7 @@ export default class Particles {
         }
     }
 
-    animate(ctx) {
+    draw(ctx) {
         ++this.particleCounter
 
         if (this.particleCounter === 60) {
