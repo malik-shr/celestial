@@ -89,9 +89,6 @@ export default class Camera {
         this.position.x += xOffset
         this.position.y += yOffset
 
-        this.bgLayer.position.x += xOffset
-        this.bgLayer.position.y += yOffset
-
         if (this.shakerTick >= 20) {
             this.shaking = false
             this.shakerTick = 0
