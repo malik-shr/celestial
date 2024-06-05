@@ -1,30 +1,14 @@
-import { Screen, setCurrentScreen } from "../listener/store"
-import { PauseButton } from "./button"
-import ButtonList from "./buttonList"
+import { Screen, setCurrentScreen } from "../../listener/store"
+import { PauseButton } from "../button"
+import Modal from "./modal"
 
-export default class Completed {
+export default class Completed extends Modal {
     constructor(game, canvas) {
+        super(canvas.width / 2 - 300 / 2, canvas.height / 2 - 300 / 2, 300, 300, game, canvas)
         this.game = game
         this.canvas = canvas
 
-        this.scale = 0
-
         this.back = this.back.bind(this)
-
-        this.isActive = false
-
-        this.buttonList = new ButtonList(canvas)
-        this.buttonList.isActive = false
-
-        this.width = 300
-        this.height = 300
-
-        this.box = {
-            position: {
-                x: this.canvas.width / 2 - this.width / 2,
-                y: this.canvas.height / 2 - this.height / 2,
-            },
-        }
 
         const positionY = this.box.position.y + this.height / 2 - 40
 
@@ -41,38 +25,14 @@ export default class Completed {
     }
 
     back() {
-        this.close()
+        super.close()
         this.game.menu.open()
-
-        setCurrentScreen(Screen.Menu)
-    }
-
-    open() {
-        this.isActive = true
-        this.buttonList.isActive = true
-    }
-
-    close() {
-        this.isActive = false
-        this.buttonList.isActive = false
     }
 
     draw(ctx) {
+        super.updateFrames()
         ctx.beginPath()
         ctx.save()
-
-        if (this.isActive && this.scale < 1) {
-            this.scale += 1 / 20
-        }
-
-        if (!this.isActive && this.scale > 0) {
-            this.scale -= 1 / 20
-
-            // Rounding Point
-            if (this.scale < 0) {
-                this.scale = 0
-            }
-        }
 
         ctx.scale(this.scale, this.scale)
         ctx.setTransform(

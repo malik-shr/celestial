@@ -15,10 +15,11 @@ export default class Button {
 }
 
 export class MenuButton extends Button {
-    constructor(action, x, y, width, height, text) {
+    constructor(action, x, y, width, height, text, fontSize = 26) {
         super(action, x, y, width, height)
 
         this.text = text
+        this.fontSize = fontSize
     }
 
     draw(ctx) {
@@ -36,7 +37,46 @@ export class MenuButton extends Button {
         ctx.fill()
 
         ctx.fillStyle = "black"
-        ctx.font = "500 20px Montserrat"
+        ctx.font = `500 ${this.fontSize}px Montserrat`
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+
+        ctx.fillText(
+            this.text,
+            this.rect.position.x + this.rect.width / 2,
+            this.rect.position.y + this.rect.height / 2
+        )
+
+        ctx.closePath()
+    }
+}
+
+export class SlideButton extends Button {
+    constructor(action, x, y, width, height, text, fontSize = 26) {
+        super(action, x, y, width, height)
+
+        this.text = text
+        this.fontSize = fontSize
+        this.isActive = false
+    }
+
+    draw(ctx) {
+        ctx.beginPath()
+
+        ctx.fillStyle = "blue"
+
+        // ctx.roundRect(
+        //     this.rect.position.x,
+        //     this.rect.position.y,
+        //     this.rect.width,
+        //     this.rect.height,
+        //     [6]
+        // )
+
+        ctx.fill()
+
+        ctx.fillStyle = this.isActive ? (this.hover ? "#adb5bd" : "#f8f9fa") : "#495057"
+        ctx.font = `800 96px Montserrat`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 
@@ -52,19 +92,15 @@ export class MenuButton extends Button {
 
 export class LevelButton extends Button {
     constructor(action, x, y, level) {
-        super(action, x, y, 15, 15, "")
+        super(action, x, y, 30, 30, "")
 
         this.isActive = false
         this.canvas = level
-        this.zoomTick = 0
         this.level = level
 
-        this.currentTransformedCursor = null
-    }
+        this.strokeScale = 0
 
-    getTransformedPoint(ctx, x, y) {
-        const originalPoint = new DOMPoint(x, y)
-        return ctx.getTransform().invertSelf().transformPoint(originalPoint)
+        this.increaseSize = true
     }
 
     draw(ctx) {
@@ -73,44 +109,46 @@ export class LevelButton extends Button {
             y: this.rect.position.y + this.rect.height / 2,
         }
 
-        // Get the transformed point after applying the current transformation
+        if (this.increaseSize && this.strokeScale < 1) {
+            this.strokeScale += 1 / 40
 
-        ctx.beginPath()
-        ctx.save() // Save the current context state
-
-        if (this.startLevel) {
-            ++this.zoomTick
-
-            // Adjust the scale over time to create the zoom effect
-            const scale = 1 + this.zoomTick / 10
-
-            const transformedPoint = this.getTransformedPoint(ctx, circleCenter.x, circleCenter.y)
-
-            ctx.translate(transformedPoint.x, transformedPoint.y)
-            ctx.scale(scale, scale)
-            ctx.translate(-transformedPoint.x, -transformedPoint.y)
-
-            if (this.zoomTick === 100) {
-                this.zoomTick = 0
-                this.startLevel = false
+            if (this.strokeScale >= 1) {
+                this.strokeScale = 1
+                this.increaseSize = false
             }
         }
 
-        // Translate to the transformed point, scale, and then translate back
+        if (!this.increaseSize && this.strokeScale > 0) {
+            this.strokeScale -= 1 / 40
 
-        // Draw the circle
-        ctx.arc(circleCenter.x, circleCenter.y, this.rect.width / 2, 0, 2 * Math.PI, false)
-
-        if (this.hover) {
-            ctx.strokeStyle = "white"
-            ctx.lineWidth = 2
-            ctx.stroke()
+            // Rounding Point
+            if (this.strokeScale < 0) {
+                this.strokeScale = 0
+                this.increaseSize = true
+            }
         }
 
-        ctx.fillStyle = "red"
+        ctx.beginPath()
+
+        ctx.save()
+
+        ctx.arc(
+            circleCenter.x,
+            circleCenter.y,
+            this.hover ? this.rect.width / 2 + 1 : this.rect.width / 2,
+            0,
+            2 * Math.PI,
+            false
+        )
+        ctx.fillStyle = this.hover ? "#e9ecef" : "#f8f9fa"
         ctx.fill()
 
-        ctx.restore() // Restore the previous context state
+        ctx.strokeStyle = "#adb5bd"
+        ctx.lineWidth = 2 + this.strokeScale * 2
+        ctx.stroke()
+
+        ctx.restore()
+
         ctx.closePath()
     }
 }
@@ -130,7 +168,7 @@ export class PauseButton extends Button {
         ctx.fillRect(this.rect.position.x, this.rect.position.y, this.rect.width, this.rect.height)
 
         ctx.fillStyle = "white"
-        ctx.font = "500 18px Montserrat"
+        ctx.font = "500 20px Montserrat"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 

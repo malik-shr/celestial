@@ -1,35 +1,17 @@
-import { Screen, currentScreen, setCurrentScreen } from "../listener/store"
-import { PauseButton } from "./button"
-import ButtonList from "./buttonList"
+import { Screen, currentScreen, setCurrentScreen } from "../../listener/store"
+import { PauseButton } from "../button"
+import Modal from "./modal"
 
-export default class Pause {
+export default class Pause extends Modal {
     constructor(game, canvas) {
-        this.game = game
-        this.canvas = canvas
-
-        this.scale = 0
+        super(canvas.width / 2 - 250 / 2, canvas.height / 2 - 250 / 2, 250, 250, game, canvas)
 
         this.resumeGame = this.resumeGame.bind(this)
         this.exitGame = this.exitGame.bind(this)
 
-        this.isActive = false
-
-        this.buttonList = new ButtonList(canvas)
-        this.buttonList.isActive = false
-
         this.openTime = 0
         this.time = 0
         this.closeTime = 0
-
-        this.width = 250
-        this.height = 250
-
-        this.box = {
-            position: {
-                x: this.canvas.width / 2 - this.width / 2,
-                y: this.canvas.height / 2 - this.height / 2,
-            },
-        }
 
         window.addEventListener("keyup", (event) => {
             if (currentScreen !== Screen.Game || this.game.completed.isActive) return
@@ -74,44 +56,28 @@ export default class Pause {
     exitGame() {
         this.close()
         this.game.menu.open()
-
-        setCurrentScreen(Screen.Menu)
     }
 
     open() {
+        super.open()
+
         this.startTime = performance.now()
-
         this.alreadyOpened = true
-
-        this.isActive = true
         this.openTime = performance.now()
-        this.buttonList.isActive = true
     }
 
     close() {
-        this.time += performance.now() - this.startTime
-        this.isActive = false
+        super.close()
 
+        this.time += performance.now() - this.startTime
         this.closeTime = performance.now()
-        this.buttonList.isActive = false
     }
 
     draw(ctx) {
+        super.updateFrames()
+
         ctx.beginPath()
         ctx.save()
-
-        if (this.isActive && this.scale < 1) {
-            this.scale += 1 / 20
-        }
-
-        if (!this.isActive && this.scale > 0) {
-            this.scale -= 1 / 20
-
-            // Rounding Point
-            if (this.scale < 0) {
-                this.scale = 0
-            }
-        }
 
         ctx.scale(this.scale, this.scale)
         ctx.setTransform(

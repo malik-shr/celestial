@@ -1,31 +1,14 @@
-import { Screen, currentScreen, setCurrentScreen } from "../listener/store"
-import { MenuButton } from "./button"
-import ButtonList from "./buttonList"
+import { Screen, setCurrentScreen } from "../../listener/store"
+import { MenuButton } from "../button"
+import Modal from "./modal"
 
-export default class SubMenu {
+export default class SubMenu extends Modal {
     constructor(menu, game, canvas, level = "") {
-        this.canvas = canvas
+        super(canvas.width / 2 - 200 / 2, canvas.height / 2 - 200 / 2, 200, 200, game, canvas)
+
         this.menu = menu
-        this.game = game
 
         this.level = level
-
-        this.scale = 0
-
-        this.isActive = false
-
-        this.buttonList = new ButtonList(canvas)
-        this.buttonList.isActive = false
-
-        this.width = 250
-        this.height = 250
-
-        this.box = {
-            position: {
-                x: this.canvas.width - this.width - 50,
-                y: this.canvas.height - this.height - 50,
-            },
-        }
 
         this.startGame = this.startGame.bind(this)
 
@@ -39,31 +22,48 @@ export default class SubMenu {
         )
 
         this.buttonList.add(startButton)
+
+        window.addEventListener("keyup", (event) => {
+            if (event.key === "Escape") {
+                if (!this.isActive) return
+
+                this.close()
+            }
+        })
     }
 
     startGame() {
         this.close()
+        this.menu.close()
+
         setCurrentScreen(Screen.Game)
 
         this.game.startLevel(this.level)
     }
 
     open() {
-        this.isActive = true
-
-        this.buttonList.isActive = true
+        super.open()
     }
 
     close() {
-        this.isActive = false
-        this.buttonList.isActive = false
-
-        this.menu.close()
+        super.close()
     }
 
     draw(ctx) {
+        super.updateFrames(10)
+
         ctx.beginPath()
         ctx.save()
+
+        ctx.scale(this.scale, this.scale)
+        ctx.setTransform(
+            this.scale,
+            0,
+            0,
+            this.scale,
+            (-(this.scale - 1) * this.canvas.width) / 2,
+            (-(this.scale - 1) * this.canvas.height) / 2
+        )
 
         ctx.fillStyle = "rgba(144, 238, 144, 1)"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
