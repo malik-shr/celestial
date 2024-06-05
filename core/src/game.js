@@ -111,7 +111,7 @@ export default class Game {
             this.uiLayer.drawLayer(this.ctx)
 
             if (this.particles !== null) {
-                this.particles.animate(this.ctx)
+                this.particles.draw(this.ctx)
             }
             // DEBUG
             //this.camera.draw(this.ctx)
