@@ -156,8 +156,8 @@ export class LevelButton extends Button {
 
         ctx.beginPath()
         ctx.arc(circleCenter.x, circleCenter.y, this.rect.width / 2, 0, 2 * progress * Math.PI)
-        ctx.strokeStyle = "#add8e6"
-        ctx.lineWidth = 4
+        ctx.strokeStyle = "#487394"
+        ctx.lineWidth = 6
         ctx.stroke()
         ctx.closePath()
 
