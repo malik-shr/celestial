@@ -1,27 +1,22 @@
-import { Screen, setCurrentScreen } from "../../listener/store"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
-export default class SubMenu extends Modal {
-    constructor(menu, game, canvas, level = "") {
-        super(canvas.width / 2 - 200 / 2, canvas.height / 2 - 200 / 2, 200, 200, game, canvas)
+export default class Settings extends Modal {
+    constructor(game, canvas) {
+        super(canvas.width / 2 - 250 / 2, canvas.height / 2 - 250 / 2, 250, 250, game, canvas)
 
-        this.menu = menu
+        this.close = this.close.bind(this)
 
-        this.level = level
-
-        this.startGame = this.startGame.bind(this)
-
-        const startButton = new MenuButton(
-            this.startGame,
+        const closeButton = new MenuButton(
+            this.close,
             this.box.position.x + this.width / 2 - 80,
             this.box.position.y + this.height - 70,
             160,
             50,
-            "Start"
+            "Close"
         )
 
-        this.buttonList.add(startButton)
+        this.buttonList.add(closeButton)
 
         window.addEventListener("keyup", (event) => {
             if (event.key === "Escape") {
@@ -30,23 +25,6 @@ export default class SubMenu extends Modal {
                 this.close()
             }
         })
-    }
-
-    startGame() {
-        this.close()
-        this.menu.close()
-
-        setCurrentScreen(Screen.Game)
-
-        this.game.startLevel(this.level)
-    }
-
-    open() {
-        super.open()
-    }
-
-    close() {
-        super.close()
     }
 
     draw(ctx) {
@@ -74,7 +52,7 @@ export default class SubMenu extends Modal {
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 
-        ctx.fillText(this.level, this.box.position.x + this.width / 2, this.box.position.y + 40)
+        ctx.fillText("Settings", this.box.position.x + this.width / 2, this.box.position.y + 40)
 
         this.buttonList.draw(ctx)
 

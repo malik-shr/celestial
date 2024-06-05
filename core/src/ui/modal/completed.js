@@ -27,8 +27,6 @@ export default class Completed extends Modal {
     back() {
         super.close()
         this.game.menu.open()
-
-        setCurrentScreen(Screen.Menu)
     }
 
     draw(ctx) {

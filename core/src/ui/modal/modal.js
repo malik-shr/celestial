@@ -34,13 +34,13 @@ export default class Modal {
         this.buttonList.isActive = false
     }
 
-    updateFrames() {
+    updateFrames(speed = 20) {
         if (this.isActive && this.scale < 1) {
-            this.scale += 1 / 20
+            this.scale += 1 / speed
         }
 
         if (!this.isActive && this.scale > 0) {
-            this.scale -= 1 / 20
+            this.scale -= 1 / speed
 
             // Rounding Point
             if (this.scale < 0) {

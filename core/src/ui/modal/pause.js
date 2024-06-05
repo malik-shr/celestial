@@ -56,8 +56,6 @@ export default class Pause extends Modal {
     exitGame() {
         this.close()
         this.game.menu.open()
-
-        setCurrentScreen(Screen.Menu)
     }
 
     open() {
