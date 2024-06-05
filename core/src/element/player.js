@@ -423,6 +423,7 @@ export default class Player extends Element {
                 this.pressedLeft = keysPressed.get("ArrowLeft")
                 this.pressedDown = keysPressed.get("ArrowDown")
                 this.pressedUp = keysPressed.get("ArrowUp")
+                this.velocity.x = 0
                 this.velocity.y = this.level.gravity
                 this.gravity = 0
                 this.isDashing = true
