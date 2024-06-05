@@ -3,7 +3,7 @@ import ButtonList from "./buttonList"
 import { Screen, setCurrentScreen } from "../listener/store"
 import LevelStarter from "./modal/levelStarter"
 import Sprite from "../element/sprite"
-import Controls from "./modal/controls"
+import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
 
@@ -22,7 +22,7 @@ export default class Menu {
         this.selectPrev = this.selectPrev.bind(this)
         this.selectNext = this.selectNext.bind(this)
         this.openSettings = this.openSettings.bind(this)
-        this.openControls = this.openControls.bind(this)
+        this.openHelp = this.openHelp.bind(this)
 
         this.levelStarter = null
         this.help = null
@@ -36,9 +36,11 @@ export default class Menu {
         this.currentPlanetIndex = 0
 
         const settingsBtn = new MenuButton(this.openSettings, 950, 40, 50, 50, "⚙️", 34)
-        const helpButton = new MenuButton(this.openControls, 880, 40, 50, 50, "?", 34)
+        const helpButton = new MenuButton(this.openHelp, 880, 40, 50, 50, "?", 34)
 
+        /** @type {SlideButton} */
         this.nextBtn = new SlideButton(this.selectNext, 1024 - 180 - 80, 360, 75, 65, "🡲")
+        /** @type {SlideButton} */
         this.prevBtn = new SlideButton(this.selectPrev, 180, 360, 75, 65, "🡰")
 
         this.mainList.add(helpButton)
@@ -180,10 +182,10 @@ export default class Menu {
         this.settings.open()
     }
 
-    openControls() {
+    openHelp() {
         this.closeModals()
 
-        this.help = new Controls(this.game, this.canvas)
+        this.help = new Help(this.game, this.canvas)
         this.help.open()
     }
 

@@ -84,7 +84,6 @@ export class LevelButton extends Button {
     constructor(action, x, y, level) {
         super(action, x, y, 30, 30, "")
 
-        this.isActive = false
         this.canvas = level
         this.level = level
 
@@ -134,7 +133,7 @@ export class LevelButton extends Button {
         ctx.fill()
 
         ctx.strokeStyle = "#adb5bd"
-        ctx.lineWidth = 2 + this.strokeScale * 2
+        ctx.lineWidth = 2 + this.strokeScale * 3
         ctx.stroke()
 
         ctx.restore()

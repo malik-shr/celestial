@@ -23,8 +23,6 @@ export default class Player extends Element {
 
         this.respawnPoint = structuredClone(this.position)
 
-        this.startingPosition = structuredClone(this.position)
-
         // additional velocities
         this.gravity = 0
         this.platformVelocity = 0
