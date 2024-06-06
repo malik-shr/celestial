@@ -8,6 +8,7 @@ import TemporaryBlock from "../element/temporaryBlock"
 import Spike from "../element/spike"
 import Goal from "../element/goal"
 import Bubble from "../element/bubble"
+import levelEditor from "../element/levelEditor"
 
 export default class Level {
     constructor(name, gravity, game) {
@@ -23,35 +24,19 @@ export default class Level {
         //Todo initialise Level with Levelparser
         this.elementList.add(new Player(0, 0, this.game, this))
 
-        for (let i = 0; i <= 100; i++) {
-            this.elementList.add(new SolidBlock(0 + i * 32, 288, 32, 32))
-        }
+        this.elementList.add(new levelEditor(this.game, this))
 
-        this.elementList.add(new Spike(200 - 64, 256, 32, 32))
-        this.elementList.add(new JumpPad(200, 256, 32, 32))
-        this.elementList.add(new TemporaryBlock(232, 256, 32, 32))
-        this.elementList.add(new Checkpoint(264, 256, this.game, 32, 32))
-
-        this.elementList.add(new Goal(600, 256, this.game, 32, 32))
-        this.elementList.add(new Bubble(264, 50, 32, 32))
-
-        for (let i = 0; i <= 10; i++) {
-            this.elementList.add(new SolidBlock(364 + i * 32, 128, 32, 32))
-        }
-
-        for (let i = 0; i <= 3; i++) {
-            this.elementList.add(new SolidBlock(250 + i * 32, 128, 32, 32))
-        }
-
-        for (let i = 0; i <= 10; i++) {
-            this.elementList.add(new SolidBlock(600 + 32 * i, 32, 32, 32))
-        }
-
-        for (let i = 0; i <= 10; i++) {
-            this.elementList.add(new SolidBlock(600 + 32 * i, 0, 32, 32))
-        }
-
-        this.elementList.add(new MovingPlatform(0, 224, 64, 32, 5, -5))
+        //add LevelEditor Stuff here
+        this.elementList.add(new JumpPad(128, 256, 32, 32))
+        this.elementList.add(new JumpPad(288, 160, 32, 32))
+        this.elementList.add(new JumpPad(384, 224, 32, 32))
+        this.elementList.add(new JumpPad(96, 224, 32, 32))
+        this.elementList.add(new JumpPad(288, 32, 32, 32))
+        this.elementList.add(new JumpPad(320, 192, 32, 32))
+        this.elementList.add(new JumpPad(32, 160, 32, 32))
+        this.elementList.add(new JumpPad(320, 224, 32, 32))
+        this.elementList.add(new JumpPad(416, 96, 32, 32))
+        this.elementList.add(new JumpPad(160, 224, 32, 32))
     }
 
     getPlayer() {
