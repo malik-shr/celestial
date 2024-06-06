@@ -3,14 +3,14 @@ import Modal from "./modal"
 
 export default class Help extends Modal {
     constructor(game, canvas) {
-        super(canvas.width / 2 - 400 / 2, canvas.height / 2 - 400 / 2, 400, 400, game, canvas)
+        super("Help", 400, 400, game, canvas)
 
         this.close = this.close.bind(this)
 
         const closeButton = new MenuButton(
             this.close,
-            this.box.position.x + this.width / 2 - 80,
-            this.box.position.y + this.height - 70,
+            this.box.position.x + this.width / 2 - 160 / 2,
+            this.box.position.y + this.height - 50 - 20,
             160,
             50,
             "Close"
@@ -33,26 +33,9 @@ export default class Help extends Modal {
         ctx.beginPath()
         ctx.save()
 
-        ctx.scale(this.scale, this.scale)
-        ctx.setTransform(
-            this.scale,
-            0,
-            0,
-            this.scale,
-            (-(this.scale - 1) * this.canvas.width) / 2,
-            (-(this.scale - 1) * this.canvas.height) / 2
-        )
-
-        ctx.fillStyle = "#487394"
-        ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
-        ctx.fill()
-
-        ctx.fillStyle = "white"
-        ctx.font = "800 26px Montserrat"
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-
-        ctx.fillText("Help", this.box.position.x + this.width / 2, this.box.position.y + 40)
+        super.scaleBox(ctx)
+        super.drawBox(ctx)
+        super.drawTitle(ctx)
 
         this.buttonList.draw(ctx)
 

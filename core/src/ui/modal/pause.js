@@ -1,10 +1,10 @@
 import { Screen, currentScreen } from "../../listener/store"
-import { PauseButton } from "../button"
+import { MenuButton } from "../button"
 import Modal from "./modal"
 
 export default class Pause extends Modal {
     constructor(game, canvas) {
-        super(canvas.width / 2 - 250 / 2, canvas.height / 2 - 250 / 2, 250, 250, game, canvas)
+        super("Pause", 240, 240, game, canvas)
 
         this.resumeGame = this.resumeGame.bind(this)
         this.exitGame = this.exitGame.bind(this)
@@ -25,22 +25,23 @@ export default class Pause extends Modal {
                 this.resumeGame()
             }
         })
-        const positionY = this.box.position.y + this.height / 2 - 40
+        const positionY = this.box.position.y + this.height / 2 - 35
+        const marginX = 45
 
-        this.resumeBtn = new PauseButton(
+        this.resumeBtn = new MenuButton(
             this.resumeGame,
-            this.box.position.x,
+            this.box.position.x + marginX / 2,
             positionY,
-            this.width,
+            this.width - marginX,
             50,
             "Resume"
         )
 
-        this.exitBtn = new PauseButton(
+        this.exitBtn = new MenuButton(
             this.exitGame,
-            this.box.position.x,
-            positionY + 55,
-            this.width,
+            this.box.position.x + marginX / 2,
+            positionY + 70,
+            this.width - marginX,
             50,
             "Exit Game"
         )
@@ -79,27 +80,12 @@ export default class Pause extends Modal {
         ctx.beginPath()
         ctx.save()
 
-        ctx.scale(this.scale, this.scale)
-        ctx.setTransform(
-            this.scale,
-            0,
-            0,
-            this.scale,
-            (-(this.scale - 1) * this.canvas.width) / 2,
-            (-(this.scale - 1) * this.canvas.height) / 2
-        )
+        ctx.fillStyle = `rgba(0,0,0,${this.scale * 0.5})`
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
-        ctx.fillStyle = "#487394"
-
-        ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
-        ctx.fill()
-
-        ctx.fillStyle = "white"
-        ctx.font = "800 26px Montserrat"
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-
-        ctx.fillText("Pause", this.box.position.x + this.width / 2, this.box.position.y + 40)
+        super.scaleBox(ctx)
+        super.drawBox(ctx)
+        super.drawTitle(ctx)
 
         this.buttonList.draw(ctx)
 

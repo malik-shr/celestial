@@ -164,8 +164,6 @@ export default class Player extends Element {
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
-        console.log(this.collidingWithPlatformCounter)
-
         // increase counters
         this.collidedDownCounter += 1
         this.collidedUpCounter += 1

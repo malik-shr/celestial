@@ -1,5 +1,3 @@
-import { Screen, setCurrentScreen } from "../listener/store"
-
 export default class Button {
     constructor(action, x, y, width, height) {
         this.rect = {
@@ -17,7 +15,7 @@ export default class Button {
 }
 
 export class MenuButton extends Button {
-    constructor(action, x, y, width, height, text, fontSize = 26) {
+    constructor(action, x, y, width, height, text, fontSize = 22) {
         super(action, x, y, width, height)
 
         this.text = text
@@ -39,7 +37,7 @@ export class MenuButton extends Button {
         ctx.fill()
 
         ctx.fillStyle = "black"
-        ctx.font = `500 ${this.fontSize}px Montserrat`
+        ctx.font = `600 ${this.fontSize}px Montserrat`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 
@@ -53,7 +51,7 @@ export class MenuButton extends Button {
     }
 }
 
-export class SlideButton extends Button {
+export class TransparentButton extends Button {
     constructor(action, x, y, width, height, text, fontSize = 26) {
         super(action, x, y, width, height)
 
@@ -94,26 +92,25 @@ export class LevelButton extends Button {
 
         this.clicked = false
         this.clickedFrames = 0
+
+        this.progress = 0
+        this.circleCenter = {
+            x: this.rect.position.x + this.rect.width / 2,
+            y: this.rect.position.y + this.rect.height / 2,
+        }
     }
 
-    draw(ctx) {
-        ++this.clickedFrames
-
+    updateProgress() {
         if (!this.clicked) {
             this.clickedFrames = 0
         }
 
-        const progress = this.clickedFrames / 40
+        this.progress = this.clickedFrames / 40
 
-        if (progress > 1) {
+        if (this.progress > 1) {
             this.clickedFrames = 0
             this.clicked = false
             this.action()
-        }
-
-        const circleCenter = {
-            x: this.rect.position.x + this.rect.width / 2,
-            y: this.rect.position.y + this.rect.height / 2,
         }
 
         if (this.increaseSize && this.strokeScale < 1) {
@@ -134,14 +131,20 @@ export class LevelButton extends Button {
                 this.increaseSize = true
             }
         }
+    }
+
+    draw(ctx) {
+        ++this.clickedFrames
+
+        this.updateProgress()
 
         ctx.save()
 
         ctx.beginPath()
         ctx.fillStyle = this.hover ? "#e9ecef" : "#f8f9fa"
         ctx.arc(
-            circleCenter.x,
-            circleCenter.y,
+            this.circleCenter.x,
+            this.circleCenter.y,
             this.hover ? this.rect.width / 2 - 1 : this.rect.width / 2,
             0,
             2 * Math.PI,
@@ -155,7 +158,13 @@ export class LevelButton extends Button {
         ctx.closePath()
 
         ctx.beginPath()
-        ctx.arc(circleCenter.x, circleCenter.y, this.rect.width / 2, 0, 2 * progress * Math.PI)
+        ctx.arc(
+            this.circleCenter.x,
+            this.circleCenter.y,
+            this.rect.width / 2,
+            0,
+            2 * this.progress * Math.PI
+        )
         ctx.strokeStyle = "#487394"
         ctx.lineWidth = 6
         ctx.stroke()
@@ -173,34 +182,5 @@ export class LevelButton extends Button {
         }
 
         ctx.restore()
-    }
-}
-
-export class PauseButton extends Button {
-    constructor(action, x, y, width, height, text) {
-        super(action, x, y, width, height)
-
-        this.text = text
-    }
-
-    draw(ctx) {
-        ctx.beginPath()
-
-        ctx.fillStyle = this.hover ? "rgba(250, 250, 250, 0.3)" : "rgba(0,0,0,0)"
-
-        ctx.fillRect(this.rect.position.x, this.rect.position.y, this.rect.width, this.rect.height)
-
-        ctx.fillStyle = "white"
-        ctx.font = "500 20px Montserrat"
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-
-        ctx.fillText(
-            this.text,
-            this.rect.position.x + this.rect.width / 2,
-            this.rect.position.y + this.rect.height / 2
-        )
-
-        ctx.closePath()
     }
 }

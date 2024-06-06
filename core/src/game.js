@@ -122,9 +122,6 @@ export default class Game {
             this.ctx.restore()
         }
 
-        if (this.pause.isActive || this.completed.isActive) {
-            this.dimmed.draw(this.ctx, 0, 0, { x: 0, y: 0 })
-        }
         this.pause.draw(this.ctx)
         this.completed.draw(this.ctx)
 

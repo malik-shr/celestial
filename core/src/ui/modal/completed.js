@@ -1,27 +1,26 @@
-import { Screen, setCurrentScreen } from "../../listener/store"
-import { PauseButton } from "../button"
+import { MenuButton } from "../button"
 import Modal from "./modal"
 
 export default class Completed extends Modal {
     constructor(game, canvas) {
-        super(canvas.width / 2 - 300 / 2, canvas.height / 2 - 300 / 2, 300, 300, game, canvas)
+        super("Completed", 300, 300, game, canvas)
         this.game = game
         this.canvas = canvas
 
         this.back = this.back.bind(this)
 
-        const positionY = this.box.position.y + this.height / 2 - 40
+        const marginX = 60
 
-        this.backBtn = new PauseButton(
+        const nextBtn = new MenuButton(
             this.back,
-            this.box.position.x,
-            positionY + 100,
-            this.width,
+            this.box.position.x + this.width / 2 - (this.width - marginX) / 2,
+            this.box.position.y + this.height - 50 - 20,
+            this.width - marginX,
             50,
             "Next"
         )
 
-        this.buttonList.add(this.backBtn)
+        this.buttonList.add(nextBtn)
     }
 
     back() {
@@ -31,36 +30,21 @@ export default class Completed extends Modal {
 
     draw(ctx) {
         super.updateFrames()
+
         ctx.beginPath()
         ctx.save()
 
-        ctx.scale(this.scale, this.scale)
-        ctx.setTransform(
-            this.scale,
-            0,
-            0,
-            this.scale,
-            (-(this.scale - 1) * this.canvas.width) / 2,
-            (-(this.scale - 1) * this.canvas.height) / 2
-        )
+        ctx.fillStyle = `rgba(0,0,0,${this.scale * 0.5})`
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
-        ctx.fillStyle = "#487394"
-        ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
-        ctx.fill()
+        super.scaleBox(ctx)
+        super.drawBox(ctx)
+        super.drawTitle(ctx)
 
-        ctx.fillStyle = "white"
-        ctx.font = "800 26px Montserrat"
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-
-        ctx.fillText(
-            "Level Completed",
-            this.box.position.x + this.width / 2,
-            this.box.position.y + 40
-        )
-
+        ctx.font = "700 24px Montserrat"
         ctx.fillText("Time:", this.box.position.x + this.width / 2, this.box.position.y + 120)
 
+        ctx.font = "500 22px Montserrat"
         ctx.fillText(
             `${(this.game.time / 1000).toFixed(1)}s`,
             this.box.position.x + this.width / 2,
