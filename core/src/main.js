@@ -13,5 +13,5 @@ new KeyboardListener()
 
 game.start()
 game.startLevel()
-game.pause.open()
-//game.menu.open()
+//game.pause.open()
+game.menu.open()

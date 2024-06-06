@@ -33,6 +33,7 @@ export default class Menu {
 
         this.planetKeys = Object.keys(this.planetList)
         this.currentPlanetIndex = 0
+        this.animationIndex = 0
 
         const settingsBtn = new MenuButton(this.openSettings, 950, 40, 50, 50, "⚙️", 34)
         const helpButton = new MenuButton(this.openHelp, 880, 40, 50, 50, "?", 34)
@@ -58,6 +59,7 @@ export default class Menu {
         this.planetList.moon.buttonList.add(levelButton)
 
         this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
+        this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
     }
 
     selectNext() {
@@ -126,16 +128,34 @@ export default class Menu {
         }
     }
 
+    updateAnimationIndex() {
+        if (this.animationIndex < this.currentPlanetIndex) {
+            this.animationIndex += 1 / 20
+
+            if (this.animationIndex > this.currentPlanetIndex) {
+                this.animationIndex = this.currentPlanetIndex
+            }
+        }
+
+        if (this.animationIndex > this.currentPlanetIndex) {
+            this.animationIndex -= 1 / 20
+
+            if (this.animationIndex < this.currentPlanetIndex) {
+                this.animationIndex = this.currentPlanetIndex
+            }
+        }
+    }
+
     draw(ctx) {
+        this.updateAnimationIndex()
         this.bg.draw(ctx, 0, 0, { x: 0, y: 0 })
 
-        this.activePlanet.sprite.draw(ctx, 0, 0, {
-            x: this.canvas.width / 2 - this.activePlanet.sprite.width / 2,
-            y: this.canvas.height / 2 - this.activePlanet.sprite.height / 2 + 60,
-        })
+        this.planets.draw(ctx, this.animationIndex, 0, { x: 0, y: 60 })
 
         this.mainList.draw(ctx)
-        this.activePlanet.buttonList.draw(ctx)
+        if (this.animationIndex === this.currentPlanetIndex) {
+            this.activePlanet.buttonList.draw(ctx)
+        }
 
         if (this.levelStarter !== null) {
             this.levelStarter.draw(ctx)

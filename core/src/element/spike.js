@@ -2,7 +2,7 @@ import Element from "./element"
 import Sprite from "./sprite"
 
 export default class Spike extends Element {
-    constructor(x, y, game) {
+    constructor(x, y) {
         super(x, y + 32 - 24)
 
         this.height = 24

@@ -7,7 +7,6 @@ import ButtonList from "./ui/buttonList"
  * @property {Sprite} bg
  * @property {Sprite} bgTop
  * @property {Sprite} tileset
- * @property {Sprite} sprite
  * @property {ButtonList} buttonList
  */
 
@@ -21,7 +20,6 @@ export function getPlanets(canvas) {
             bg: new Sprite(),
             bgTop: new Sprite(),
             tileset: new Sprite(),
-            sprite: new Sprite("bg/moon.png", 300, 300, 300, 300),
             buttonList: new ButtonList(canvas),
         },
         mars: {
@@ -29,7 +27,6 @@ export function getPlanets(canvas) {
             bg: new Sprite(),
             bgTop: new Sprite(),
             tileset: "",
-            sprite: new Sprite("bg/mars.png", 339, 339, 339, 339),
             buttonList: new ButtonList(canvas),
         },
         saturn: {
@@ -37,7 +34,6 @@ export function getPlanets(canvas) {
             bg: new Sprite(),
             bgTop: new Sprite(),
             tileset: new Sprite(),
-            sprite: new Sprite("bg/saturn.png", 520, 456, 520, 456),
             buttonList: new ButtonList(canvas),
         },
     }
