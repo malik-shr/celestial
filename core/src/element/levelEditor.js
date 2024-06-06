@@ -26,6 +26,7 @@ export default class levelEditor extends Element {
         this.sizeY = 32
         this.speedX = 1
         this.speedY = 0
+        this.Sprite = 6
 
         window.addEventListener("mousemove", (event) => this.handleMouseMove(event))
         window.addEventListener("mousedown", (event) => this.handleMouseDown(event))
@@ -63,7 +64,8 @@ export default class levelEditor extends Element {
                                 this.game.camera.position.y -
                                 ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
                             this.sizeX,
-                            this.sizeY
+                            this.sizeY,
+                            this.Sprite
                         )
                     )
                     break
@@ -182,6 +184,13 @@ export default class levelEditor extends Element {
             )
             this.sizeX = Number(prompt("Width"))
             this.sizeY = Number(prompt("Height"))
+            if (this.BlockType === 1) {
+                this.Sprite = Number(
+                    prompt(
+                        "Type a number\n1: Oben/links \n2: Oben\n3: Oben/Rechts\n4: Links/Oben/Unten\n5: Links\n6: Nichts\n7: Rechts\n8: Links/Rechts\n9: Links/Unten \n10: Unten\n11: Unten/Rechts\n12: Links/Unten/Rechts\n13: Oben/Links/Unten\n14: Unten/Oben\n15: Oben/Rechts/Unten"
+                    )
+                )
+            }
             if (this.BlockType === 2) {
                 this.speedX = Number(prompt("Speed X"))
                 this.speedY = Number(prompt("Speed Y"))
@@ -251,6 +260,8 @@ export default class levelEditor extends Element {
                     String(elementItem.width) +
                     "," +
                     String(elementItem.height) +
+                    "," +
+                    String(elementItem.type + 1) +
                     "))" +
                     "\n"
             } else if (elementItem instanceof Spike) {

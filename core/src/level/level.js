@@ -21,22 +21,22 @@ export default class Level {
 
     initLevel(name, gravity) {
         this.name = name
+
         //Todo initialise Level with Levelparser
         this.elementList.add(new Player(0, 0, this.game, this))
 
         this.elementList.add(new levelEditor(this.game, this))
 
+        this.elementList.add(new SolidBlock(0, 288, 32, 32, 6))
+
         //add LevelEditor Stuff here
-        this.elementList.add(new JumpPad(128, 256, 32, 32))
-        this.elementList.add(new JumpPad(288, 160, 32, 32))
-        this.elementList.add(new JumpPad(384, 224, 32, 32))
-        this.elementList.add(new JumpPad(96, 224, 32, 32))
-        this.elementList.add(new JumpPad(288, 32, 32, 32))
-        this.elementList.add(new JumpPad(320, 192, 32, 32))
-        this.elementList.add(new JumpPad(32, 160, 32, 32))
-        this.elementList.add(new JumpPad(320, 224, 32, 32))
-        this.elementList.add(new JumpPad(416, 96, 32, 32))
-        this.elementList.add(new JumpPad(160, 224, 32, 32))
+        this.elementList.add(new SolidBlock(0, 288, 32, 32, 6))
+        this.elementList.add(new SolidBlock(224, 96, 32, 32, 5))
+        this.elementList.add(new SolidBlock(256, 96, 32, 32, 5))
+        this.elementList.add(new SolidBlock(288, 96, 32, 32, 5))
+        this.elementList.add(new SolidBlock(288, 64, 32, 32, 5))
+        this.elementList.add(new SolidBlock(256, 64, 32, 32, 5))
+        this.elementList.add(new SolidBlock(224, 64, 32, 32, 5))
     }
 
     getPlayer() {
