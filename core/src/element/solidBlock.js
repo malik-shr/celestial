@@ -18,7 +18,7 @@ export default class SolidBlock extends Element {
         player.collidedY = true
         // if above top of element last frame
         if (
-            player.previous.position.y - player.previous.velocity.y <=
+            player.previous.position.y - player.previous.velocity.y - 1 <=
             this.position.y - player.height
         ) {
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
