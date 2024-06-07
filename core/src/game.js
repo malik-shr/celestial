@@ -24,13 +24,15 @@ export default class Game {
         this.raf = window.requestAnimationFrame(this.draw.bind(this))
     }
 
-    startLevel(path = "") {
+    startLevel(level) {
         if (this.intervalLoop !== null) {
             window.clearInterval(this.intervalLoop)
         }
 
-        this.level = new Level("level1", 0.8, this)
-        this.level.initLevel("level1")
+        console.log(level.name)
+
+        this.level = new Level(level.name, 0.8, level.planet, this)
+        this.level.initLevel(level.elementList)
 
         this.completed = new Completed(this, this.canvas)
         this.pause = new Pause(this, this.canvas)
@@ -120,10 +122,10 @@ export default class Game {
             //this.camera.draw(this.ctx)
 
             this.ctx.restore()
-        }
 
-        this.pause.draw(this.ctx)
-        this.completed.draw(this.ctx)
+            this.pause.draw(this.ctx)
+            this.completed.draw(this.ctx)
+        }
 
         this.raf = window.requestAnimationFrame(this.draw.bind(this))
     }

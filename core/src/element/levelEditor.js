@@ -1,7 +1,6 @@
 import Element from "./element"
 import { keysPressed } from "../listener/store"
 
-import ElementList from "./elementList"
 import Player from "./player"
 import Checkpoint from "./checkpoint"
 import JumpPad from "./jumpPad"
@@ -12,7 +11,7 @@ import Spike from "./spike"
 import Goal from "./goal"
 import Bubble from "./bubble"
 
-export default class levelEditor extends Element {
+export default class LevelEditor extends Element {
     constructor(game, level) {
         super(0, 0, 32, 32)
         this.game = game
@@ -163,7 +162,7 @@ export default class levelEditor extends Element {
 
         //remove element
         if (this.isActive && !this.pressed && event.button === 1) {
-            var counter = 0
+            let counter = 0
             for (const elementItem of this.game.level.elementList) {
                 if (
                     this.mouse.x / 2 - this.game.camera.position.x >= elementItem.position.x &&
@@ -186,7 +185,7 @@ export default class levelEditor extends Element {
     }
 
     leveltoConsole() {
-        var output = ""
+        let output = ""
         for (const elementItem of this.game.level.elementList) {
             if (elementItem instanceof JumpPad) {
                 output +=
@@ -299,7 +298,7 @@ export default class levelEditor extends Element {
 
     handleMouseMove(event) {
         const canvas = window.document.querySelector("canvas")
-        var rect = canvas.getBoundingClientRect()
+        const rect = canvas.getBoundingClientRect()
         this.mouse.x = event.clientX - rect.left
         this.mouse.y = event.clientY - rect.top
     }

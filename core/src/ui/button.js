@@ -177,7 +177,7 @@ export class LevelButton extends Button {
             ctx.textAlign = "left"
             ctx.textBaseline = "middle"
 
-            ctx.fillText(this.level, this.rect.position.x + 20, this.rect.position.y - 15)
+            ctx.fillText(this.level.name, this.rect.position.x + 20, this.rect.position.y - 15)
             ctx.closePath()
         }
 

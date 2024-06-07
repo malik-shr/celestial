@@ -5,6 +5,7 @@ import Sprite from "../element/sprite"
 import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
+import { levelList } from "../level/levelList"
 
 export default class Menu {
     constructor(game, canvas) {
@@ -49,14 +50,30 @@ export default class Menu {
         this.mainList.add(this.nextBtn)
         this.mainList.add(this.prevBtn)
 
-        const levelButton = new LevelButton(
-            () => this.selectLevel(levelButton),
+        const level1Btn = new LevelButton(
+            () => this.selectLevel(level1Btn),
             400,
             320,
-            "Level 1"
+            levelList.level1
         )
 
-        this.planetList.moon.buttonList.add(levelButton)
+        const level2Btn = new LevelButton(
+            () => this.selectLevel(level2Btn),
+            480,
+            320,
+            levelList.level2
+        )
+
+        const level3Btn = new LevelButton(
+            () => this.selectLevel(level3Btn),
+            550,
+            320,
+            levelList.level3
+        )
+
+        this.planetList.moon.buttonList.add(level1Btn)
+        this.planetList.moon.buttonList.add(level2Btn)
+        this.planetList.moon.buttonList.add(level3Btn)
 
         this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
         this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)

@@ -17,7 +17,7 @@ export const Screen = {
 }
 
 //
-export let currentScreen = Screen.Game
+export let currentScreen = Screen.Menu
 
 export function setCurrentScreen(screen) {
     currentScreen = screen
