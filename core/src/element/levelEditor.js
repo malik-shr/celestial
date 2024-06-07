@@ -189,7 +189,7 @@ export default class LevelEditor extends Element {
         for (const elementItem of this.game.level.elementList) {
             if (elementItem instanceof JumpPad) {
                 output +=
-                    "this.elementList.add(new JumpPad(" +
+                    "elementList.add(new JumpPad(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
@@ -201,7 +201,7 @@ export default class LevelEditor extends Element {
                     "\n"
             } else if (elementItem instanceof TemporaryBlock) {
                 output +=
-                    "this.elementList.add(new TemporaryBlock(" +
+                    "elementList.add(new TemporaryBlock(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
@@ -213,7 +213,7 @@ export default class LevelEditor extends Element {
                     "\n"
             } else if (elementItem instanceof SolidBlock) {
                 output +=
-                    "this.elementList.add(new SolidBlock(" +
+                    "elementList.add(new SolidBlock(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
@@ -227,7 +227,7 @@ export default class LevelEditor extends Element {
                     "\n"
             } else if (elementItem instanceof Spike) {
                 output +=
-                    "this.elementList.add(new Spike(" +
+                    "elementList.add(new Spike(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
@@ -239,25 +239,35 @@ export default class LevelEditor extends Element {
                     "\n"
             } else if (elementItem instanceof Checkpoint) {
                 output +=
-                    "this.elementList.add(new Checkpoint(" +
+                    "elementList.add(new Checkpoint(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
                     "," +
-                    "this.game"
-                "," + String(elementItem.width) + "," + String(elementItem.height) + "))" + "\n"
+                    "game" +
+                    "," +
+                    String(elementItem.width) +
+                    "," +
+                    String(elementItem.height) +
+                    "))" +
+                    "\n"
             } else if (elementItem instanceof Goal) {
                 output +=
-                    "this.elementList.add(new Goal" +
+                    "elementList.add(new Goal" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
                     "," +
-                    "this.game"
-                "," + String(elementItem.width) + "," + String(elementItem.height) + "))" + "\n"
+                    "game" +
+                    "," +
+                    String(elementItem.width) +
+                    "," +
+                    String(elementItem.height) +
+                    "))" +
+                    "\n"
             } else if (elementItem instanceof Bubble) {
                 output +=
-                    "this.elementList.add(new Bubble(" +
+                    "elementList.add(new Bubble(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
@@ -269,7 +279,7 @@ export default class LevelEditor extends Element {
                     "\n"
             } else if (elementItem instanceof MovingPlatform) {
                 output +=
-                    "this.elementList.add(new MovingPlatform(" +
+                    "elementList.add(new MovingPlatform(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +

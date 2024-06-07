@@ -1,3 +1,12 @@
 import ElementList from "../element/elementList"
+import SolidBlock from "../element/solidBlock"
+import Spike from "../element/spike"
+import JumpPad from "../element/jumpPad"
+import Checkpoint from "../element/checkpoint"
 
-export const elementList2 = new ElementList()
+/**@type {ElementList} */
+export function initElementList2(game) {
+    const elementList = new ElementList()
+
+    return elementList
+}
