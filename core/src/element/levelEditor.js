@@ -192,8 +192,8 @@ export default class levelEditor extends Element {
                 )
             }
             if (this.BlockType === 2) {
-                this.sizeX = Number(prompt("Width"))
-                this.sizeY = Number(prompt("Height"))
+                this.sizeX = 64
+                this.sizeY = 16
                 this.speedX = Number(prompt("Speed X"))
                 this.speedY = Number(prompt("Speed Y"))
                 this.maxDistanceX = Number(prompt("maxDistanceX"))
