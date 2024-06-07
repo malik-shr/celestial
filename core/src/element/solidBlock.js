@@ -7,7 +7,7 @@ export default class SolidBlock extends Element {
 
         this.type = type - 1
 
-        this.sprite = new Sprite("tileset.png", this.width, this.height, 47, 48)
+        this.sprite = new Sprite("tileset.png", this.width, this.height, 48, 49)
     }
 
     action() {}
