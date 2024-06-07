@@ -53,16 +53,30 @@ export default class levelEditor extends Element {
     handleMouseDown(event) {
         // add element
         if (this.isActive && !this.pressed && event.button === 0) {
+            // set positions
+            this.positionX =
+                this.mouse.x / 2 -
+                this.game.camera.position.x -
+                ((this.mouse.x / 2 - this.game.camera.position.x) % 32)
+            if (this.mouse.y / 2 - this.game.camera.position.y >= 0) {
+                this.positionY =
+                    this.mouse.y / 2 -
+                    this.game.camera.position.y -
+                    ((this.mouse.y / 2 - this.game.camera.position.y) % 32)
+            } else {
+                this.positionY =
+                    this.mouse.y / 2 -
+                    this.game.camera.position.y -
+                    ((this.mouse.y / 2 - this.game.camera.position.y) % 32) -
+                    32
+            }
+            // set the desired blocks
             switch (this.BlockType) {
                 case 1:
                     this.game.level.elementList.add(
                         new SolidBlock(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
+                            this.positionX,
+                            this.positionY,
                             this.sizeX,
                             this.sizeY,
                             this.Sprite
@@ -72,12 +86,8 @@ export default class levelEditor extends Element {
                 case 2:
                     this.game.level.elementList.add(
                         new MovingPlatform(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
+                            this.positionX,
+                            this.positionY,
                             this.sizeX,
                             this.sizeY,
                             this.speedX,
@@ -89,69 +99,29 @@ export default class levelEditor extends Element {
                     break
                 case 3:
                     this.game.level.elementList.add(
-                        new JumpPad(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
-                            this.sizeX,
-                            this.sizeY
-                        )
+                        new JumpPad(this.positionX, this.positionY, this.sizeX, this.sizeY)
                     )
                     break
                 case 4:
                     this.game.level.elementList.add(
-                        new Spike(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
-                            this.sizeX,
-                            this.sizeY
-                        )
+                        new Spike(this.positionX, this.positionY, this.sizeX, this.sizeY)
                     )
                     break
                 case 5:
                     this.game.level.elementList.add(
-                        new Bubble(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
-                            this.sizeX,
-                            this.sizeY
-                        )
+                        new Bubble(this.positionX, this.positionY, this.sizeX, this.sizeY)
                     )
                     break
                 case 6:
                     this.game.level.elementList.add(
-                        new TemporaryBlock(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
-                            this.sizeX,
-                            this.sizeY
-                        )
+                        new TemporaryBlock(this.positionX, this.positionY, this.sizeX, this.sizeY)
                     )
                     break
                 case 7:
                     this.game.level.elementList.add(
                         new Checkpoint(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
+                            this.positionX,
+                            this.positionY,
                             this.game,
                             this.sizeX,
                             this.sizeY
@@ -160,17 +130,7 @@ export default class levelEditor extends Element {
                     break
                 case 8:
                     this.game.level.elementList.add(
-                        new Goal(
-                            this.mouse.x / 2 -
-                                this.game.camera.position.x -
-                                ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                            this.mouse.y / 2 -
-                                this.game.camera.position.y -
-                                ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
-                            this.game,
-                            this.sizeX,
-                            this.sizeY
-                        )
+                        new Goal(this.positionX, this.positionY, this.game, this.sizeX, this.sizeY)
                     )
                     break
             }
@@ -345,18 +305,26 @@ export default class levelEditor extends Element {
     }
 
     draw(ctx) {
+        // set positions
+        this.positionX =
+            this.mouse.x / 2 -
+            this.game.camera.position.x -
+            ((this.mouse.x / 2 - this.game.camera.position.x) % 32)
+        if (this.mouse.y / 2 - this.game.camera.position.y >= 0) {
+            this.positionY =
+                this.mouse.y / 2 -
+                this.game.camera.position.y -
+                ((this.mouse.y / 2 - this.game.camera.position.y) % 32)
+        } else {
+            this.positionY =
+                this.mouse.y / 2 -
+                this.game.camera.position.y -
+                ((this.mouse.y / 2 - this.game.camera.position.y) % 32) -
+                32
+        }
         if (this.isActive) {
             ctx.beginPath()
-            ctx.rect(
-                this.mouse.x / 2 -
-                    this.game.camera.position.x -
-                    ((this.mouse.x / 2 - this.game.camera.position.x) % 32),
-                this.mouse.y / 2 -
-                    this.game.camera.position.y -
-                    ((this.mouse.y / 2 - this.game.camera.position.y) % 32),
-                this.sizeX,
-                this.sizeY
-            )
+            ctx.rect(this.positionX, this.positionY, this.sizeX, this.sizeY)
             ctx.fillStyle = "rgba(0,100,0,0.8)"
             ctx.fill()
             ctx.closePath()
