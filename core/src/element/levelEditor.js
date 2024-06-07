@@ -177,13 +177,13 @@ export default class levelEditor extends Element {
         }
         // choose element
         if (this.isActive && !this.pressed && event.button === 2) {
+            this.sizeX = 32
+            this.sizeY = 32
             this.BlockType = Number(
                 prompt(
                     "Type a number\n1: SolidBlock \n2: MovingPlatform\n3: JumpPad\n4: Spike\n5: Bubble\n6: Temporary Block\n7: Checkpoint\n8: Goal"
                 )
             )
-            this.sizeX = Number(prompt("Width"))
-            this.sizeY = Number(prompt("Height"))
             if (this.BlockType === 1) {
                 this.Sprite = Number(
                     prompt(
@@ -192,6 +192,8 @@ export default class levelEditor extends Element {
                 )
             }
             if (this.BlockType === 2) {
+                this.sizeX = Number(prompt("Width"))
+                this.sizeY = Number(prompt("Height"))
                 this.speedX = Number(prompt("Speed X"))
                 this.speedY = Number(prompt("Speed Y"))
                 this.maxDistanceX = Number(prompt("maxDistanceX"))
