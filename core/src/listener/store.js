@@ -2,6 +2,7 @@ export const keysPressed = new Map([
     ["w", false],
     ["a", false],
     ["s", false],
+    ["c", false],
     ["d", false],
     ["ArrowRight", false],
     ["ArrowLeft", false],

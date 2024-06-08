@@ -3,7 +3,7 @@ import Sprite from "./sprite"
 
 export default class SolidBlock extends Element {
     constructor(x, y, type, planet) {
-        super(x, y, 32, 32)
+        super(x, y)
 
         this.type = type - 1
 

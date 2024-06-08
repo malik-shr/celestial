@@ -4,7 +4,7 @@ export class Particle {
             x: x,
             y: y,
         }
-        this.size = 5
+        this.size = 6
 
         this.speed = {
             x: Math.random() * 1.5 - 0.75,
@@ -52,7 +52,7 @@ export default class Particles {
     draw(ctx) {
         ++this.particleCounter
 
-        if (this.particleCounter === 60) {
+        if (this.particleCounter === 40) {
             this.isActive = false
         }
 

@@ -2,8 +2,8 @@ import SolidBlock from "./solidBlock"
 import Sprite from "./sprite"
 
 export default class TemporaryBlock extends SolidBlock {
-    constructor(x, y, relativeWidth = 1, relativeHeight = 1) {
-        super(x, y, relativeWidth, relativeHeight)
+    constructor(x, y) {
+        super(x, y)
 
         this.isActive = false
         this.removeBlock = false
@@ -17,11 +17,11 @@ export default class TemporaryBlock extends SolidBlock {
 
         ++this.onBlockCounter
 
-        if (this.onBlockCounter === 20) {
+        if (this.onBlockCounter === 16) {
             this.removeBlock = true
         }
 
-        if (this.onBlockCounter === 60) {
+        if (this.onBlockCounter === 50) {
             this.onBlockCounter = 0
             this.isActive = false
             this.removeBlock = false
@@ -29,7 +29,7 @@ export default class TemporaryBlock extends SolidBlock {
     }
 
     handleCollisionY(player) {
-        if (this.onBlockCounter < 20) {
+        if (this.onBlockCounter < 16) {
             super.handleCollisionY(player)
         }
 
@@ -40,18 +40,18 @@ export default class TemporaryBlock extends SolidBlock {
             this.isActive = true
         }
 
-        if (this.onBlockCounter > 20) {
-            this.onBlockCounter = 20
+        if (this.onBlockCounter > 16) {
+            this.onBlockCounter = 16
         }
     }
 
     handleCollisionX(player) {
-        if (this.onBlockCounter < 20) {
+        if (this.onBlockCounter < 16) {
             super.handleCollisionX(player)
         }
 
-        if (this.onBlockCounter > 20) {
-            this.onBlockCounter = 20
+        if (this.onBlockCounter > 16) {
+            this.onBlockCounter = 16
         }
     }
 

@@ -2,7 +2,7 @@ import Element from "./element"
 
 export default class Checkpoint extends Element {
     constructor(x, y, game) {
-        super(x, y, 32, 32)
+        super(x, y)
 
         this.game = game
     }

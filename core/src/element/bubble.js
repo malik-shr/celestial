@@ -1,8 +1,8 @@
 import Element from "./element"
 
 export default class Bubble extends Element {
-    constructor(x, y, width, height) {
-        super(x, y, width, height)
+    constructor(x, y) {
+        super(x, y)
 
         this.collisionOffset = {
             x: 10,
@@ -11,13 +11,19 @@ export default class Bubble extends Element {
     }
 
     handleCollisionX(player) {
-        player.velocity.x *= 0.8
-        player.canDash = true
+        player.velocity.x *= 0.6
+
+        if (!player.canDash) {
+            player.canDash = true
+        }
     }
 
     handleCollisionY(player) {
-        player.velocity.y *= 0.8
-        player.canDash = true
+        player.velocity.y *= 0.6
+
+        if (!player.canDash) {
+            player.canDash = true
+        }
     }
 
     draw(ctx) {

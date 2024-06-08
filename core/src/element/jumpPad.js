@@ -1,8 +1,8 @@
 import SolidBlock from "./solidBlock"
 import Sprite from "./sprite"
 export default class JumpPad extends SolidBlock {
-    constructor(x, y, width, height) {
-        super(x, y, width, height)
+    constructor(x, y) {
+        super(x, y)
 
         this.activeFrames = 0
         this.isActive = false

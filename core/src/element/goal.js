@@ -1,8 +1,8 @@
 import Element from "./element"
 
 export default class Goal extends Element {
-    constructor(x, y, game, relativeWidth = 1, relativeHeight = 1) {
-        super(x, y, relativeWidth, relativeHeight)
+    constructor(x, y, game) {
+        super(x, y)
 
         this.game = game
     }

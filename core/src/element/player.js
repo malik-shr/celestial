@@ -7,14 +7,11 @@ import Particles from "../ui/particle"
 
 export default class Player extends Element {
     constructor(x, y, game, level) {
-        super(x, y, 1, 1)
+        super(x, y, 32, 38)
 
         this.game = game
         this.level = level
         this.previous = null
-
-        this.width = 32
-        this.height = 38
 
         this.velocity = {
             x: 0,
@@ -154,9 +151,13 @@ export default class Player extends Element {
 
         this.currentSpriteFrames = this.sprites.stand.frames
         this.currentFrameBuffer = this.sprites.stand.buffer
+
+        this.deaths = 0
     }
 
     action() {
+        this.checkDeath()
+
         this.updateFrames()
         this.changeVelocities()
 
@@ -177,12 +178,8 @@ export default class Player extends Element {
         }
 
         if (this.position.y > 512) {
-            this.velocity.x = 0
-            this.velocity.y = 0
             this.die()
         }
-
-        this.checkDeath()
     }
 
     draw(ctx) {
@@ -572,6 +569,8 @@ export default class Player extends Element {
         this.isGrounded = this.previous.isGrounded
         this.canDash = this.previous.canDash
         this.wallclimbCounter = this.previous.wallclimbCounter
+        this.respawnPoint.x = this.previous.respawnPoint.x
+        this.respawnPoint.y = this.previous.respawnPoint.y
         this.collidedDown = false
         this.collidedUp = false
         this.collidedY = false
@@ -595,7 +594,11 @@ export default class Player extends Element {
         if (!this.isDead) return
         ++this.deadCounter
 
-        if (this.deadCounter === 70) {
+        this.velocity.x = 0
+        this.velocity.y = 0
+
+        if (this.deadCounter === 30) {
+            ++this.deaths
             this.position = structuredClone(this.respawnPoint)
             this.game.camera.load()
             this.isDead = false
@@ -615,6 +618,7 @@ export default class Player extends Element {
         return {
             position: structuredClone(this.position),
             velocity: structuredClone(this.velocity),
+            respawnPoint: structuredClone(this.respawnPoint),
             gravity: this.gravity,
 
             isJumping: this.isJumping,

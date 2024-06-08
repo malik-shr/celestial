@@ -25,21 +25,21 @@ export default class LevelEditor extends Element {
         this.sizeY = 32
         this.speedX = 1
         this.speedY = 0
-        this.Sprite = 6
+        this.sprite = 6
+        this.spikeType = 1
 
         window.addEventListener("mousemove", (event) => this.handleMouseMove(event))
         window.addEventListener("mousedown", (event) => this.handleMouseDown(event))
 
         window.addEventListener("keyup", (event) => {
             if (event.key === "Control" && !this.pressed) {
-                console.log("yeahe")
                 if (!this.isActive) {
                     this.isActive = true
                 } else {
                     this.isActive = false
                 }
-                if (keysPressed.get("s")) {
-                    console.log("Yea")
+                if (keysPressed.get("c")) {
+                    console.log("Copied")
                     this.leveltoConsole()
                 }
             }
@@ -52,6 +52,11 @@ export default class LevelEditor extends Element {
     }
 
     handleMouseDown(event) {
+        let y = this.positionY
+        let x = this.positionX
+        let width = 32
+        let height = 32
+
         // add element
         if (this.isActive && !this.pressed && event.button === 0) {
             // set positions
@@ -78,7 +83,7 @@ export default class LevelEditor extends Element {
                         new SolidBlock(
                             this.positionX,
                             this.positionY,
-                            this.Sprite,
+                            this.sprite,
                             this.game.level.planet
                         )
                     )
@@ -88,8 +93,6 @@ export default class LevelEditor extends Element {
                         new MovingPlatform(
                             this.positionX,
                             this.positionY,
-                            this.sizeX,
-                            this.sizeY,
                             this.speedX,
                             this.speedY,
                             this.maxDistanceX,
@@ -101,7 +104,24 @@ export default class LevelEditor extends Element {
                     this.game.level.elementList.add(new JumpPad(this.positionX, this.positionY))
                     break
                 case 4:
-                    this.game.level.elementList.add(new Spike(this.positionX, this.positionY))
+                    switch (this.spikeType) {
+                        case 1:
+                            y += 32 - 24
+                            height = 24
+                            break
+                        case 2:
+                            x += 32 - 24
+                            width = 24
+                            break
+                        case 3:
+                            width = 24
+                            break
+                        case 4:
+                            height = 24
+                            break
+                        default:
+                    }
+                    this.game.level.elementList.add(new Spike(x, y, width, height, this.spikeType))
                     break
                 case 5:
                     this.game.level.elementList.add(new Bubble(this.positionX, this.positionY))
@@ -133,7 +153,7 @@ export default class LevelEditor extends Element {
                 )
             )
             if (this.BlockType === 1) {
-                this.Sprite = Number(
+                this.sprite = Number(
                     prompt(
                         "Type a number\n1: Oben/links \n2: Oben\n3: Oben/Rechts\n4: Links/Oben/Unten\n5: Links\n6: Nichts\n7: Rechts\n8: Links/Rechts\n9: Links/Unten \n10: Unten\n11: Unten/Rechts\n12: Links/Unten/Rechts\n13: Oben/Links/Unten\n14: Unten/Oben\n15: Oben/Rechts/Unten"
                     )
@@ -146,6 +166,11 @@ export default class LevelEditor extends Element {
                 this.speedY = Number(prompt("Speed Y"))
                 this.maxDistanceX = Number(prompt("maxDistanceX"))
                 this.maxDistanceY = Number(prompt("maxDistanceY"))
+            }
+            if (this.BlockType === 4) {
+                this.spikeType = Number(
+                    prompt("Type a number\n1: oben \n2: links\n3: rechts\n4: unten\n")
+                )
             }
         }
 
@@ -212,6 +237,12 @@ export default class LevelEditor extends Element {
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
+                    "," +
+                    String(elementItem.width) +
+                    "," +
+                    String(elementItem.height) +
+                    "," +
+                    elementItem.type +
                     "))" +
                     "\n"
             } else if (elementItem instanceof Checkpoint) {
@@ -226,7 +257,7 @@ export default class LevelEditor extends Element {
                     "\n"
             } else if (elementItem instanceof Goal) {
                 output +=
-                    "elementList.add(new Goal" +
+                    "elementList.add(new Goal(" +
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
@@ -268,6 +299,9 @@ export default class LevelEditor extends Element {
                     "\n"
             }
         }
+
+        console.log(output)
+        navigator.clipboard.writeText(output)
     }
 
     handleMouseMove(event) {

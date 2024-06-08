@@ -41,12 +41,15 @@ export default class Completed extends Modal {
         super.drawBox(ctx)
         super.drawTitle(ctx)
 
-        ctx.font = "700 24px Montserrat"
-        ctx.fillText("Time:", this.box.position.x + this.width / 2, this.box.position.y + 120)
-
-        ctx.font = "500 22px Montserrat"
+        ctx.font = "500 24px Montserrat"
         ctx.fillText(
-            `${(this.game.time / 1000).toFixed(1)}s`,
+            `💀 ${this.game.player.deaths}`,
+            this.box.position.x + this.width / 2,
+            this.box.position.y + 110
+        )
+
+        ctx.fillText(
+            `🕒 ${(this.game.time / 1000).toFixed(1)}s`,
             this.box.position.x + this.width / 2,
             this.box.position.y + 160
         )
