@@ -3,8 +3,6 @@ import { keysPressed } from "../listener/store"
 import Sprite from "./sprite"
 import Particles from "../ui/particle"
 
-// import pixilartSprite from "D:/Uni/Projektseminar/core/public/pixilartSprite.png"
-
 export default class Player extends Element {
     constructor(x, y, game, level) {
         super(x, y, 32, 38)
@@ -158,8 +156,14 @@ export default class Player extends Element {
     action() {
         this.checkDeath()
 
-        this.updateFrames()
-        this.changeVelocities()
+        if (!this.isDead) {
+            this.updateFrames()
+            this.changeVelocities()
+        }
+
+        if (this.position.y > 308 && !this.isDead) {
+            this.die()
+        }
 
         // apply velocities
         this.position.x += this.velocity.x
@@ -175,10 +179,6 @@ export default class Player extends Element {
         this.collidingWithPlatformCounter += 1
         if (!this.isGrounded) {
             this.notGroundedCounter += 1
-        }
-
-        if (this.position.y > 512) {
-            this.die()
         }
     }
 

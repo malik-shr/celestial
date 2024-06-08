@@ -168,7 +168,6 @@ export function initElementList3(game) {
     elementList.add(new SolidBlock(2976, -672, 1, "mars"))
     elementList.add(new Bubble(2784, -672))
     elementList.add(new SolidBlock(320, 384, 32, "mars"))
-    elementList.add(new SolidBlock(320, 192, 32, "mars"))
     elementList.add(new SolidBlock(1472, -128, 7, "mars"))
     elementList.add(new SolidBlock(1440, -96, 10, "mars"))
     elementList.add(new SolidBlock(1472, -96, 11, "mars"))

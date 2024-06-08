@@ -80,6 +80,13 @@ export default class Menu {
 
         this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
         this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
+
+        this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
+        this.activePlanet.buttonList.isActive = true
+
+        this.currentPlanetIndex = 0
+        this.nextBtn.isActive = true
+        this.prevBtn.isActive = false
     }
 
     selectNext() {
@@ -197,12 +204,7 @@ export default class Menu {
         this.isActive = true
 
         this.resetPlanetButtons()
-        this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
         this.activePlanet.buttonList.isActive = true
-
-        this.currentPlanetIndex = 0
-        this.nextBtn.isActive = true
-        this.prevBtn.isActive = false
     }
 
     close() {
