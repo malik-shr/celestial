@@ -1,34 +1,24 @@
+import { getLevels } from "../../level/levelList"
 import { Screen, currentScreen } from "../../listener/store"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
 export default class Pause extends Modal {
     constructor(game, canvas) {
-        super("Pause", 240, 240, game, canvas)
+        super("Pause", 250, 320, game, canvas)
 
         this.resumeGame = this.resumeGame.bind(this)
+        this.retry = this.retry.bind(this)
         this.exitGame = this.exitGame.bind(this)
 
         this.openTime = 0
         this.time = 0
         this.closeTime = 0
 
-        window.addEventListener("keyup", (event) => {
-            if (currentScreen !== Screen.Game || this.game.completed.isActive) return
-
-            if (event.key === "Escape") {
-                if (!this.isActive) {
-                    this.open()
-                    return
-                }
-
-                this.resumeGame()
-            }
-        })
-        const positionY = this.box.position.y + this.height / 2 - 35
+        const positionY = this.box.position.y + this.height / 2 - 80
         const marginX = 45
 
-        this.resumeBtn = new MenuButton(
+        const resumeBtn = new MenuButton(
             this.resumeGame,
             this.box.position.x + marginX / 2,
             positionY,
@@ -37,21 +27,39 @@ export default class Pause extends Modal {
             "Resume"
         )
 
-        this.exitBtn = new MenuButton(
-            this.exitGame,
+        const retryBtn = new MenuButton(
+            this.retry,
             this.box.position.x + marginX / 2,
             positionY + 70,
+            this.width - marginX,
+            50,
+            "Retry"
+        )
+
+        const exitBtn = new MenuButton(
+            this.exitGame,
+            this.box.position.x + marginX / 2,
+            positionY + 160,
             this.width - marginX,
             50,
             "Exit Game"
         )
 
-        this.buttonList.add(this.resumeBtn)
-        this.buttonList.add(this.exitBtn)
+        this.buttonList.add(resumeBtn)
+        this.buttonList.add(retryBtn)
+        this.buttonList.add(exitBtn)
     }
 
     resumeGame() {
         this.close()
+    }
+
+    retry() {
+        this.close()
+
+        const levels = getLevels(this.game)
+
+        this.game.startLevel(levels[this.game.level.name])
     }
 
     exitGame() {

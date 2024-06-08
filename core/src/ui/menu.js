@@ -52,34 +52,33 @@ export default class Menu {
 
         this.levelList = getLevels(game)
 
+        this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
+
         const level1Btn = new LevelButton(
             () => this.selectLevel(level1Btn),
             400,
             320,
-            this.levelList.level1
+            this.levelList["Level 1"]
         )
 
         const level2Btn = new LevelButton(
             () => this.selectLevel(level2Btn),
             480,
             320,
-            this.levelList.level2
+            this.levelList["Level 2"]
         )
 
         const level3Btn = new LevelButton(
             () => this.selectLevel(level3Btn),
             550,
             320,
-            this.levelList.level3
+            this.levelList["Level 3"]
         )
 
         this.planetList.moon.buttonList.add(level1Btn)
         this.planetList.moon.buttonList.add(level2Btn)
 
         this.planetList.mars.buttonList.add(level3Btn)
-
-        this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
-        this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
 
         this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
         this.activePlanet.buttonList.isActive = true

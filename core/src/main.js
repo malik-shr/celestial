@@ -17,7 +17,8 @@ new KeyboardListener()
 game.start()
 
 // Outcomment this for debugging and comment game.menu.open()
-setCurrentScreen(Screen.Game)
-game.startLevel(getLevels(game).level3)
+// setCurrentScreen(Screen.Game)
+// game.startLevel(getLevels(game)["Level 3"])
+// game.pause.open()
 
-//game.menu.open()
+game.menu.open()

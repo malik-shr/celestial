@@ -421,7 +421,6 @@ export function initElementList3(game) {
     elementList.add(new Spike(3200, -664, 32, 24, 1))
     elementList.add(new Spike(3168, -664, 32, 24, 1))
     elementList.add(new Spike(3136, -664, 32, 24, 1))
-    elementList.add(new Spike(3360, -504, 32, 24, 1))
     elementList.add(new Bubble(320, 384))
     elementList.add(new Goal(3968, -1056, game))
 

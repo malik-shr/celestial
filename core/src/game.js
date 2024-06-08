@@ -17,6 +17,22 @@ export default class Game {
         this.level = null
 
         this.menu = new Menu(this, this.canvas)
+
+        this.pause = null
+
+        window.addEventListener("keyup", (event) => {
+            if (this.pause === null || currentScreen !== Screen.Game || this.completed.isActive)
+                return
+
+            if (event.key === "Escape") {
+                if (!this.pause.isActive) {
+                    this.pause.open()
+                    return
+                }
+
+                this.pause.resumeGame()
+            }
+        })
     }
 
     start() {
