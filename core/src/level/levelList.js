@@ -16,7 +16,7 @@ export function getLevels(game) {
         },
         level3: {
             name: "Level 3",
-            planet: "moon",
+            planet: "mars",
             elementList: initElementList3(game),
         },
     }

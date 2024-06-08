@@ -2,12 +2,19 @@ import Element from "./element"
 import Sprite from "./sprite"
 
 export default class SolidBlock extends Element {
-    constructor(x, y, width, height, type) {
-        super(x, y, width, height)
+    constructor(x, y, type, planet) {
+        super(x, y, 32, 32)
 
         this.type = type - 1
 
-        this.sprite = new Sprite("tileset.png", this.width, this.height, 48, 49)
+        this.sprite = new Sprite("tileset_moon.png", this.width, this.height, 48, 49)
+
+        switch (planet) {
+            case "mars":
+                this.sprite = new Sprite("tileset_mars.png", this.width, this.height, 48, 49)
+                break
+            default:
+        }
     }
 
     action() {}

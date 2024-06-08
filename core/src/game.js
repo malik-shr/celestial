@@ -29,8 +29,6 @@ export default class Game {
             window.clearInterval(this.intervalLoop)
         }
 
-        console.log(level.name)
-
         this.level = new Level(level.name, 0.8, level.planet, this)
         this.level.initLevel(level.elementList)
 

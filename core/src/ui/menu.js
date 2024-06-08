@@ -75,7 +75,8 @@ export default class Menu {
 
         this.planetList.moon.buttonList.add(level1Btn)
         this.planetList.moon.buttonList.add(level2Btn)
-        this.planetList.moon.buttonList.add(level3Btn)
+
+        this.planetList.mars.buttonList.add(level3Btn)
 
         this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
         this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)

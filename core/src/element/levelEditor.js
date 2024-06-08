@@ -32,12 +32,14 @@ export default class LevelEditor extends Element {
 
         window.addEventListener("keyup", (event) => {
             if (event.key === "Control" && !this.pressed) {
+                console.log("yeahe")
                 if (!this.isActive) {
                     this.isActive = true
                 } else {
                     this.isActive = false
                 }
                 if (keysPressed.get("s")) {
+                    console.log("Yea")
                     this.leveltoConsole()
                 }
             }
@@ -76,9 +78,8 @@ export default class LevelEditor extends Element {
                         new SolidBlock(
                             this.positionX,
                             this.positionY,
-                            this.sizeX,
-                            this.sizeY,
-                            this.Sprite
+                            this.Sprite,
+                            this.game.level.planet
                         )
                     )
                     break
@@ -97,39 +98,27 @@ export default class LevelEditor extends Element {
                     )
                     break
                 case 3:
-                    this.game.level.elementList.add(
-                        new JumpPad(this.positionX, this.positionY, this.sizeX, this.sizeY)
-                    )
+                    this.game.level.elementList.add(new JumpPad(this.positionX, this.positionY))
                     break
                 case 4:
-                    this.game.level.elementList.add(
-                        new Spike(this.positionX, this.positionY, this.sizeX, this.sizeY)
-                    )
+                    this.game.level.elementList.add(new Spike(this.positionX, this.positionY))
                     break
                 case 5:
-                    this.game.level.elementList.add(
-                        new Bubble(this.positionX, this.positionY, this.sizeX, this.sizeY)
-                    )
+                    this.game.level.elementList.add(new Bubble(this.positionX, this.positionY))
                     break
                 case 6:
                     this.game.level.elementList.add(
-                        new TemporaryBlock(this.positionX, this.positionY, this.sizeX, this.sizeY)
+                        new TemporaryBlock(this.positionX, this.positionY)
                     )
                     break
                 case 7:
                     this.game.level.elementList.add(
-                        new Checkpoint(
-                            this.positionX,
-                            this.positionY,
-                            this.game,
-                            this.sizeX,
-                            this.sizeY
-                        )
+                        new Checkpoint(this.positionX, this.positionY, this.game)
                     )
                     break
                 case 8:
                     this.game.level.elementList.add(
-                        new Goal(this.positionX, this.positionY, this.game, this.sizeX, this.sizeY)
+                        new Goal(this.positionX, this.positionY, this.game)
                     )
                     break
             }
@@ -193,10 +182,6 @@ export default class LevelEditor extends Element {
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
                     "))" +
                     "\n"
             } else if (elementItem instanceof TemporaryBlock) {
@@ -205,10 +190,6 @@ export default class LevelEditor extends Element {
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
                     "))" +
                     "\n"
             } else if (elementItem instanceof SolidBlock) {
@@ -218,11 +199,11 @@ export default class LevelEditor extends Element {
                     "," +
                     String(elementItem.position.y) +
                     "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
-                    "," +
                     String(elementItem.type + 1) +
+                    "," +
+                    '"' +
+                    this.game.level.planet +
+                    '"' +
                     "))" +
                     "\n"
             } else if (elementItem instanceof Spike) {
@@ -231,10 +212,6 @@ export default class LevelEditor extends Element {
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
                     "))" +
                     "\n"
             } else if (elementItem instanceof Checkpoint) {
@@ -245,10 +222,6 @@ export default class LevelEditor extends Element {
                     String(elementItem.position.y) +
                     "," +
                     "game" +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
                     "))" +
                     "\n"
             } else if (elementItem instanceof Goal) {
@@ -259,10 +232,6 @@ export default class LevelEditor extends Element {
                     String(elementItem.position.y) +
                     "," +
                     "game" +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
                     "))" +
                     "\n"
             } else if (elementItem instanceof Bubble) {
@@ -271,10 +240,6 @@ export default class LevelEditor extends Element {
                     String(elementItem.position.x) +
                     "," +
                     String(elementItem.position.y) +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
                     "))" +
                     "\n"
             } else if (elementItem instanceof MovingPlatform) {
@@ -303,7 +268,6 @@ export default class LevelEditor extends Element {
                     "\n"
             }
         }
-        console.log(output)
     }
 
     handleMouseMove(event) {
