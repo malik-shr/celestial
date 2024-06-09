@@ -4,7 +4,7 @@ import Modal from "./modal"
 
 export default class Pause extends Modal {
     constructor(game, canvas) {
-        super("Pause", 300, 360, game, canvas)
+        super("Pause", 300, 370, game, canvas)
 
         this.resumeGame = this.resumeGame.bind(this)
         this.retry = this.retry.bind(this)
@@ -16,13 +16,14 @@ export default class Pause extends Modal {
         this.time = 0
         this.closeTime = 0
 
-        const positionY = this.box.position.y + this.height / 2 - 100
         const marginX = 60
+
+        const contentBottom = this.box.position.y + this.height - 50 - 25
 
         const resumeBtn = new MenuButton(
             this.resumeGame,
             this.box.position.x + marginX / 2,
-            positionY,
+            contentBottom - 210,
             this.width - marginX,
             50,
             "Resume"
@@ -31,7 +32,7 @@ export default class Pause extends Modal {
         const retryBtn = new MenuButton(
             this.retry,
             this.box.position.x + marginX / 2,
-            positionY + 70,
+            contentBottom - 140,
             this.width - marginX,
             50,
             "Retry"
@@ -40,7 +41,7 @@ export default class Pause extends Modal {
         const restartBtn = new MenuButton(
             this.restart,
             this.box.position.x + marginX / 2,
-            positionY + 140,
+            contentBottom - 70,
             this.width - marginX,
             50,
             "Restart Level"
@@ -49,7 +50,7 @@ export default class Pause extends Modal {
         const exitBtn = new MenuButton(
             this.exitGame,
             this.box.position.x + marginX / 2,
-            positionY + 210,
+            contentBottom,
             this.width - marginX,
             50,
             "Exit Game"
@@ -79,7 +80,13 @@ export default class Pause extends Modal {
         const savedItem = localStorage.getItem(this.game.level.name)
 
         if (savedItem) {
-            localStorage.removeItem(this.game.level.name)
+            const data = savedItem.split(",")
+            localStorage.setItem(
+                this.game.level.name,
+                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${
+                    Number.MAX_SAFE_INTEGER
+                },${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${0},${data[7]}`
+            )
         }
 
         const levelMetas = getLevelMetas()

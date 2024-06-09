@@ -60,8 +60,6 @@ export default class Menu {
             this.levelMetas["Level 1"]
         )
 
-        level1Btn.hover = true
-
         const level2Btn = new LevelButton(
             () => this.selectLevel(level2Btn),
             480,

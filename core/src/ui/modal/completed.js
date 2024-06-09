@@ -10,11 +10,12 @@ export default class Completed extends Modal {
         this.back = this.back.bind(this)
 
         const marginX = 60
+        const contentBottom = this.box.position.y + this.height - 50 - 25
 
         const nextBtn = new MenuButton(
             this.back,
             this.box.position.x + this.width / 2 - (this.width - marginX) / 2,
-            this.box.position.y + this.height - 50 - 20,
+            contentBottom,
             this.width - marginX,
             50,
             "Next"

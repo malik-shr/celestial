@@ -19,6 +19,6 @@ game.start()
 // Outcomment this for debugging and comment game.menu.open()
 // setCurrentScreen(Screen.Game)
 // game.startLevel(getLevelMetas()["Level 3"])
-// game.pause.open()
+// game.completed.open()
 
 game.menu.open()
