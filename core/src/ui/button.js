@@ -92,6 +92,7 @@ export class LevelButton extends Button {
 
         this.clicked = false
         this.clickedFrames = 0
+        this.hoverTick = 0
 
         this.progress = 0
         this.circleCenter = {
@@ -133,6 +134,76 @@ export class LevelButton extends Button {
         }
     }
 
+    drawHoverBox(ctx) {
+        const box = {
+            x: this.rect.position.x + 40,
+            y: this.rect.position.y - 130,
+            width: 160,
+            height: 90,
+        }
+
+        let bestTime =
+            this.level.data.best === Number.MAX_SAFE_INTEGER ? "-" : this.level.data.best + "s"
+
+        if (
+            this.level.data.best !== Number.MAX_SAFE_INTEGER &&
+            parseFloat(this.level.data.best) > 99999999
+        ) {
+            bestTime = 99999999 + "s"
+        }
+
+        if (!this.hover) {
+            this.hoverTick = 0
+        }
+
+        if (this.hover) {
+            this.hoverTick += 1 / 12
+
+            if (this.hoverTick > 1) {
+                this.hoverTick = 1
+            }
+
+            const currentX =
+                this.circleCenter.x + (box.x + 2 - this.circleCenter.x) * this.hoverTick
+            const currentY =
+                this.circleCenter.y +
+                (box.y - 2 + box.height - this.circleCenter.y) * this.hoverTick
+
+            ctx.beginPath()
+
+            ctx.strokeStyle = "#ced4da"
+            ctx.moveTo(this.circleCenter.x, this.circleCenter.y)
+            ctx.lineTo(currentX, currentY)
+            ctx.lineWidth = 2
+            ctx.stroke()
+            ctx.fill()
+
+            if (this.hoverTick < 1) {
+                ctx.closePath()
+                return
+            }
+
+            ctx.fillStyle = "rgba(0,0,0,0.3)"
+            ctx.roundRect(box.x, box.y, box.width, box.height, [9])
+            ctx.lineWidth = 2
+            ctx.stroke()
+            ctx.fill()
+
+            ctx.fillStyle = "white"
+            ctx.font = "600 20px Montserrat"
+            ctx.textAlign = "center"
+            ctx.textBaseline = "middle"
+
+            ctx.fillText(this.level.name, box.x + box.width / 2, box.y + 20)
+
+            ctx.font = "500 18px Montserrat"
+            ctx.textAlign = "left"
+            ctx.fillText(`🏆${bestTime}`, box.x + 15, box.y + 65)
+
+            ctx.closePath()
+        }
+    }
+
     draw(ctx) {
         ++this.clickedFrames
 
@@ -141,7 +212,9 @@ export class LevelButton extends Button {
         ctx.save()
 
         ctx.beginPath()
+
         ctx.fillStyle = this.hover ? "#e9ecef" : "#f8f9fa"
+
         ctx.arc(
             this.circleCenter.x,
             this.circleCenter.y,
@@ -168,18 +241,10 @@ export class LevelButton extends Button {
         ctx.strokeStyle = "#487394"
         ctx.lineWidth = 6
         ctx.stroke()
+
+        this.drawHoverBox(ctx)
+
         ctx.closePath()
-
-        if (this.hover) {
-            ctx.beginPath()
-            ctx.fillStyle = "white"
-            ctx.font = "500 16px Montserrat"
-            ctx.textAlign = "left"
-            ctx.textBaseline = "middle"
-
-            ctx.fillText(this.level.name, this.rect.position.x + 20, this.rect.position.y - 15)
-            ctx.closePath()
-        }
 
         ctx.restore()
     }

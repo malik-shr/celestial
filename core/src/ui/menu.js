@@ -5,7 +5,7 @@ import Sprite from "../element/sprite"
 import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
-import { getLevels } from "../level/levelList"
+import { getLevelMetas } from "../level/levelList"
 
 export default class Menu {
     constructor(game, canvas) {
@@ -24,9 +24,8 @@ export default class Menu {
         this.openSettings = this.openSettings.bind(this)
         this.openHelp = this.openHelp.bind(this)
 
-        this.levelStarter = null
-        this.help = null
-        this.settings = null
+        this.help = new Help(this.game, this.canvas)
+        this.settings = new Settings(this.game, this.canvas)
 
         this.bg = new Sprite("bg/bg_menu.png", 1024, 640, 1024, 640)
 
@@ -50,29 +49,31 @@ export default class Menu {
         this.mainList.add(this.nextBtn)
         this.mainList.add(this.prevBtn)
 
-        this.levelList = getLevels(game)
-
         this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
+
+        this.levelMetas = getLevelMetas()
 
         const level1Btn = new LevelButton(
             () => this.selectLevel(level1Btn),
             400,
             320,
-            this.levelList["Level 1"]
+            this.levelMetas["Level 1"]
         )
+
+        level1Btn.hover = true
 
         const level2Btn = new LevelButton(
             () => this.selectLevel(level2Btn),
             480,
             320,
-            this.levelList["Level 2"]
+            this.levelMetas["Level 2"]
         )
 
         const level3Btn = new LevelButton(
             () => this.selectLevel(level3Btn),
             550,
             320,
-            this.levelList["Level 3"]
+            this.levelMetas["Level 3"]
         )
 
         this.planetList.moon.buttonList.add(level1Btn)
@@ -141,17 +142,8 @@ export default class Menu {
     }
 
     closeModals() {
-        if (this.help !== null) {
-            this.help.close()
-        }
-
-        if (this.settings !== null) {
-            this.settings.close()
-        }
-
-        if (this.levelStarter !== null) {
-            this.levelStarter.close()
-        }
+        this.help.close()
+        this.settings.close()
     }
 
     updateAnimationIndex() {
@@ -183,27 +175,30 @@ export default class Menu {
             this.activePlanet.buttonList.draw(ctx)
         }
 
-        if (this.levelStarter !== null) {
-            this.levelStarter.draw(ctx)
-        }
-
-        if (this.settings !== null) {
-            this.settings.draw(ctx)
-        }
-
-        if (this.help !== null) {
-            this.help.draw(ctx)
-        }
+        this.settings.draw(ctx)
+        this.help.draw(ctx)
     }
 
     open() {
         setCurrentScreen(Screen.Menu)
+
+        this.updateButtonMeta()
 
         this.mainList.isActive = true
         this.isActive = true
 
         this.resetPlanetButtons()
         this.activePlanet.buttonList.isActive = true
+    }
+
+    updateButtonMeta() {
+        const newMetaData = getLevelMetas()
+
+        for (const key of this.planetKeys) {
+            for (const button of this.planetList[key].buttonList.buttons) {
+                button.level = newMetaData[button.level.name]
+            }
+        }
     }
 
     close() {
@@ -217,15 +212,11 @@ export default class Menu {
 
     openSettings() {
         this.closeModals()
-
-        this.settings = new Settings(this.game, this.canvas)
         this.settings.open()
     }
 
     openHelp() {
         this.closeModals()
-
-        this.help = new Help(this.game, this.canvas)
         this.help.open()
     }
 

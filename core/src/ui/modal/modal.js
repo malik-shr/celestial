@@ -35,7 +35,7 @@ export default class Modal {
         this.buttonList.isActive = false
     }
 
-    updateFrames(speed = 16) {
+    updateFrames(speed = 15) {
         if (this.isActive && this.scale < 1) {
             this.scale += 1 / speed
         }

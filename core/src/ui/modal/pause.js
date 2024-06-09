@@ -1,22 +1,23 @@
-import { getLevels } from "../../level/levelList"
-import { Screen, currentScreen } from "../../listener/store"
+import { getLevelMetas } from "../../level/levelList"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
 export default class Pause extends Modal {
     constructor(game, canvas) {
-        super("Pause", 250, 320, game, canvas)
+        super("Pause", 300, 360, game, canvas)
 
         this.resumeGame = this.resumeGame.bind(this)
         this.retry = this.retry.bind(this)
+
+        this.restart = this.restart.bind(this)
         this.exitGame = this.exitGame.bind(this)
 
         this.openTime = 0
         this.time = 0
         this.closeTime = 0
 
-        const positionY = this.box.position.y + this.height / 2 - 80
-        const marginX = 45
+        const positionY = this.box.position.y + this.height / 2 - 100
+        const marginX = 60
 
         const resumeBtn = new MenuButton(
             this.resumeGame,
@@ -36,10 +37,19 @@ export default class Pause extends Modal {
             "Retry"
         )
 
+        const restartBtn = new MenuButton(
+            this.restart,
+            this.box.position.x + marginX / 2,
+            positionY + 140,
+            this.width - marginX,
+            50,
+            "Restart Level"
+        )
+
         const exitBtn = new MenuButton(
             this.exitGame,
             this.box.position.x + marginX / 2,
-            positionY + 160,
+            positionY + 210,
             this.width - marginX,
             50,
             "Exit Game"
@@ -47,6 +57,7 @@ export default class Pause extends Modal {
 
         this.buttonList.add(resumeBtn)
         this.buttonList.add(retryBtn)
+        this.buttonList.add(restartBtn)
         this.buttonList.add(exitBtn)
     }
 
@@ -57,9 +68,23 @@ export default class Pause extends Modal {
     retry() {
         this.close()
 
-        const levels = getLevels(this.game)
+        const levelMetas = getLevelMetas()
 
-        this.game.startLevel(levels[this.game.level.name])
+        this.game.startLevel(levelMetas[this.game.level.name])
+    }
+
+    restart() {
+        this.close()
+
+        const savedItem = localStorage.getItem(this.game.level.name)
+
+        if (savedItem) {
+            localStorage.removeItem(this.game.level.name)
+        }
+
+        const levelMetas = getLevelMetas()
+
+        this.game.startLevel(levelMetas[this.game.level.name])
     }
 
     exitGame() {

@@ -5,13 +5,20 @@ export default class Checkpoint extends Element {
         super(x, y)
 
         this.game = game
+        this.isActive = false
     }
 
     handleCollisionX(player) {
+        if (this.isActive) return
+
+        this.isActive = true
         this.updateRespawnPoint(player)
     }
 
     handleCollisionY(player) {
+        if (this.isActive) return
+
+        this.isActive = true
         this.updateRespawnPoint(player)
     }
 
@@ -22,6 +29,7 @@ export default class Checkpoint extends Element {
         }
 
         this.game.camera.save()
+        this.game.level.write()
     }
 
     draw(ctx) {

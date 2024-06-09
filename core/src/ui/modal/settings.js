@@ -10,7 +10,7 @@ export default class Settings extends Modal {
         const closeButton = new MenuButton(
             this.close,
             this.box.position.x + this.width / 2 - 160 / 2,
-            this.box.position.y + this.height - 50 - 20,
+            this.box.position.y + this.height - 50 - 25,
             160,
             50,
             "Close"

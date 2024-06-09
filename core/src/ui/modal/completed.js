@@ -3,7 +3,7 @@ import Modal from "./modal"
 
 export default class Completed extends Modal {
     constructor(game, canvas) {
-        super("Completed", 300, 300, game, canvas)
+        super("Completed", 300, 310, game, canvas)
         this.game = game
         this.canvas = canvas
 
@@ -41,18 +41,38 @@ export default class Completed extends Modal {
         super.drawBox(ctx)
         super.drawTitle(ctx)
 
+        const oldBestTime =
+            this.game.level.meta.data.best === Number.MAX_SAFE_INTEGER
+                ? this.game.time
+                : this.game.level.meta.data.best
+
+        const newTimeIsBetter =
+            parseFloat(this.game.time) < parseFloat(this.game.level.meta.data.best)
+
+        let newBestTime = newTimeIsBetter ? this.game.time : oldBestTime
+        let time = this.game.time
+
+        if (newBestTime > 99999999) {
+            newBestTime = 99999999
+        }
+
+        if (time > 99999999) {
+            time = 99999999
+        }
+
         ctx.font = "500 24px Montserrat"
+        ctx.textAlign = "left"
         ctx.fillText(
             `💀 ${this.game.player.deaths}`,
-            this.box.position.x + this.width / 2,
-            this.box.position.y + 110
+            this.box.position.x + 30,
+            this.box.position.y + 100
         )
 
-        ctx.fillText(
-            `🕒 ${(this.game.time / 1000).toFixed(1)}s`,
-            this.box.position.x + this.width / 2,
-            this.box.position.y + 160
-        )
+        ctx.fillStyle = newTimeIsBetter ? "#C3FF93" : "white"
+
+        ctx.fillText(`🕒 ${time}s`, this.box.position.x + 30, this.box.position.y + 150)
+
+        ctx.fillText(`🏆 ${newBestTime}s`, this.box.position.x + 30, this.box.position.y + 200)
 
         this.buttonList.draw(ctx)
 

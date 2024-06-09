@@ -1,12 +1,9 @@
-import ElementList from "../element/elementList"
 import SolidBlock from "../element/solidBlock"
 import Spike from "../element/spike"
 import JumpPad from "../element/jumpPad"
 import Checkpoint from "../element/checkpoint"
+import Bubble from "../element/bubble"
+import TemporaryBlock from "../element/temporaryBlock"
+import Goal from "../element/goal"
 
-/**@type {ElementList} */
-export function initElementList2(game) {
-    const elementList = new ElementList()
-
-    return elementList
-}
+export function initElementList2(game, elementList) {}

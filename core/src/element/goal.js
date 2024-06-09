@@ -5,14 +5,27 @@ export default class Goal extends Element {
         super(x, y)
 
         this.game = game
+        this.isActive = false
     }
 
     handleCollisionX(player) {
+        if (this.isActive) return
+
+        this.isActive = true
+
         this.game.completed.open()
+        this.game.level.completed = true
+        this.game.level.write()
     }
 
     handleCollisionY(player) {
+        if (this.isActive) return
+
+        this.isActive = true
+
         this.game.completed.open()
+        this.game.level.completed = true
+        this.game.level.write()
     }
 
     draw(ctx) {

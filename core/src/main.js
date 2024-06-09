@@ -1,5 +1,5 @@
 import Game from "./game"
-import { getLevels } from "./level/levelList"
+import { getLevelMetas } from "./level/levelList"
 import KeyboardListener from "./listener/keyboardListener"
 import { Screen, setCurrentScreen } from "./listener/store"
 
@@ -18,7 +18,7 @@ game.start()
 
 // Outcomment this for debugging and comment game.menu.open()
 // setCurrentScreen(Screen.Game)
-// game.startLevel(getLevels(game)["Level 3"])
+// game.startLevel(getLevelMetas()["Level 3"])
 // game.pause.open()
 
 game.menu.open()
