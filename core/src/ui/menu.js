@@ -5,7 +5,7 @@ import Sprite from "../element/sprite"
 import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
-import { getLevelMetas } from "../level/levelList"
+import { getLevelMetas } from "../level/levelMeta"
 
 export default class Menu {
     constructor(game, canvas) {
@@ -226,7 +226,6 @@ export default class Menu {
     selectLevel(button) {
         this.close()
 
-        setCurrentScreen(Screen.Game)
         this.game.startLevel(button.level)
     }
 }

@@ -1,7 +1,14 @@
 import ElementList from "../element/elementList"
 import Player from "../element/player"
 import LevelEditor from "../element/levelEditor"
-import { getLevelMetas, setLevelElements } from "./levelList"
+import { getLevelMetas } from "./levelMeta"
+import SolidBlock from "../element/solidBlock"
+import Spike from "../element/spike"
+import JumpPad from "../element/jumpPad"
+import TemporaryBlock from "../element/temporaryBlock"
+import MovingPlatform from "../element/movingPlatform"
+import Bubble from "../element/bubble"
+import Checkpoint from "../element/checkpoint"
 
 export default class Level {
     constructor(name, gravity = 0.8, planet, game) {
@@ -15,10 +22,14 @@ export default class Level {
         this.completed = false
 
         this.meta = getLevelMetas()[this.name]
+
+        this.loaded = false
     }
 
-    initLevel(meta) {
-        setLevelElements(this.game, this.elementList)[this.name].init()
+    async initLevel(meta) {
+        //setLevelElements(this.game, this.elementList)[this.name].init()
+
+        await this.parse()
 
         this.elementList.add(new Player(0, 0, this.game, this))
         this.elementList.add(new LevelEditor(this.game, this))
@@ -111,5 +122,52 @@ export default class Level {
         const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${best}`
 
         localStorage.setItem(this.name, newData)
+    }
+
+    async parse() {
+        const response = await fetch(this.meta.src)
+        const levelObj = await response.json()
+
+        for (const checkpoint of levelObj.checkpoints) {
+            this.elementList.add(new Checkpoint(checkpoint.x, checkpoint.y, this.game))
+        }
+
+        for (const jumppad of levelObj.jumppads) {
+            this.elementList.add(new JumpPad(jumppad.x, jumppad.y))
+        }
+
+        for (const solidBlock of levelObj.solidBlocks) {
+            this.elementList.add(
+                new SolidBlock(solidBlock.x, solidBlock.y, solidBlock.t, this.planet)
+            )
+        }
+
+        for (const tempBlock of levelObj.temporaryBlocks) {
+            this.elementList.add(new TemporaryBlock(tempBlock.x, tempBlock.y))
+        }
+
+        for (const spike of levelObj.spikes) {
+            this.elementList.add(new Spike(spike.x, spike.y, spike.w, spike.h, spike.t))
+        }
+
+        for (const bubble of levelObj.bubbles) {
+            this.elementList.add(new Bubble(bubble.x, bubble.y))
+        }
+        for (const movingPlattform of levelObj.movingPlattforms) {
+            this.elementList.add(
+                new MovingPlatform(
+                    movingPlattform.x,
+                    movingPlattform.y,
+                    movingPlattform.w,
+                    movingPlattform.h,
+                    movingPlattform.vx,
+                    movingPlattform.vy,
+                    movingPlattform.mx,
+                    movingPlattform.my,
+                    movingPlattform.traveledX,
+                    movingPlattform.traveledY
+                )
+            )
+        }
     }
 }

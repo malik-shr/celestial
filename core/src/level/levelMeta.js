@@ -1,10 +1,7 @@
-import { initElementList1 } from "./level1"
-import { initElementList2 } from "./level2"
-import { initElementList3 } from "./level3"
-
 class LevelMeta {
-    constructor(name, planet) {
+    constructor(name, src, planet) {
         this.name = name
+        this.src = src
         this.planet = planet
 
         this.data = this.parse()
@@ -55,22 +52,8 @@ class LevelMeta {
 
 export function getLevelMetas() {
     return {
-        "Level 1": new LevelMeta("Level 1", "moon"),
-        "Level 2": new LevelMeta("Level 2", "moon"),
-        "Level 3": new LevelMeta("Level 3", "mars"),
-    }
-}
-
-export function setLevelElements(game, elementlist) {
-    return {
-        "Level 1": {
-            init: () => initElementList1(game, elementlist),
-        },
-        "Level 2": {
-            init: () => initElementList2(game, elementlist),
-        },
-        "Level 3": {
-            init: () => initElementList3(game, elementlist),
-        },
+        "Level 1": new LevelMeta("Level 1", "levels/level1.json", "moon"),
+        "Level 2": new LevelMeta("Level 2", "levels/level2.json", "moon"),
+        "Level 3": new LevelMeta("Level 3", "levels/level3.json", "mars"),
     }
 }

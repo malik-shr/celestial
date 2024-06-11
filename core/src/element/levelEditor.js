@@ -25,7 +25,7 @@ export default class LevelEditor extends Element {
         this.sizeY = 32
         this.speedX = 1
         this.speedY = 0
-        this.sprite = 6
+        this.blockType = 6
         this.spikeType = 1
 
         window.addEventListener("mousemove", (event) => this.handleMouseMove(event))
@@ -79,11 +79,16 @@ export default class LevelEditor extends Element {
             // set the desired blocks
             switch (this.BlockType) {
                 case 1:
+                    if (this.blockType <= 0 || this.blockType > 15) {
+                        console.log("INVALID TYPE")
+                        break
+                    }
+
                     this.game.level.elementList.add(
                         new SolidBlock(
                             this.positionX,
                             this.positionY,
-                            this.sprite,
+                            this.blockType,
                             this.game.level.planet
                         )
                     )
@@ -121,6 +126,11 @@ export default class LevelEditor extends Element {
                             break
                         default:
                     }
+
+                    if (this.spikeType <= 0 || this.spikeType > 4) {
+                        console.log("Invalid Type")
+                        break
+                    }
                     this.game.level.elementList.add(new Spike(x, y, width, height, this.spikeType))
                     break
                 case 5:
@@ -153,7 +163,7 @@ export default class LevelEditor extends Element {
                 )
             )
             if (this.BlockType === 1) {
-                this.sprite = Number(
+                this.blockType = Number(
                     prompt(
                         "Type a number\n1: Oben/links \n2: Oben\n3: Oben/Rechts\n4: Links/Oben/Unten\n5: Links\n6: Nichts\n7: Rechts\n8: Links/Rechts\n9: Links/Unten \n10: Unten\n11: Unten/Rechts\n12: Links/Unten/Rechts\n13: Oben/Links/Unten\n14: Unten/Oben\n15: Oben/Rechts/Unten"
                     )
@@ -199,109 +209,67 @@ export default class LevelEditor extends Element {
     }
 
     leveltoConsole() {
-        let output = ""
+        const obj = {
+            solidBlocks: [],
+            temporaryBlocks: [],
+            jumppads: [],
+            spikes: [],
+            checkpoints: [],
+            bubbles: [],
+            movingPlattforms: [],
+            goal: [],
+        }
+
         for (const elementItem of this.game.level.elementList) {
+            if (elementItem instanceof SolidBlock) {
+                obj.solidBlocks.push({
+                    x: elementItem.position.x,
+                    y: elementItem.position.y,
+                    t: elementItem.type + 1,
+                })
+            }
+            if (elementItem instanceof TemporaryBlock) {
+                obj.temporaryBlocks.push({ x: elementItem.position.x, y: elementItem.position.y })
+            }
             if (elementItem instanceof JumpPad) {
-                output +=
-                    "elementList.add(new JumpPad(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "))" +
-                    "\n"
-            } else if (elementItem instanceof TemporaryBlock) {
-                output +=
-                    "elementList.add(new TemporaryBlock(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "))" +
-                    "\n"
-            } else if (elementItem instanceof SolidBlock) {
-                output +=
-                    "elementList.add(new SolidBlock(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "," +
-                    String(elementItem.type + 1) +
-                    "," +
-                    '"' +
-                    this.game.level.planet +
-                    '"' +
-                    "))" +
-                    "\n"
-            } else if (elementItem instanceof Spike) {
-                output +=
-                    "elementList.add(new Spike(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
-                    "," +
-                    elementItem.type +
-                    "))" +
-                    "\n"
-            } else if (elementItem instanceof Checkpoint) {
-                output +=
-                    "elementList.add(new Checkpoint(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "," +
-                    "game" +
-                    "))" +
-                    "\n"
-            } else if (elementItem instanceof Goal) {
-                output +=
-                    "elementList.add(new Goal(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "," +
-                    "game" +
-                    "))" +
-                    "\n"
-            } else if (elementItem instanceof Bubble) {
-                output +=
-                    "elementList.add(new Bubble(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "))" +
-                    "\n"
-            } else if (elementItem instanceof MovingPlatform) {
-                output +=
-                    "elementList.add(new MovingPlatform(" +
-                    String(elementItem.position.x) +
-                    "," +
-                    String(elementItem.position.y) +
-                    "," +
-                    String(elementItem.width) +
-                    "," +
-                    String(elementItem.height) +
-                    "," +
-                    String(elementItem.velocity.x) +
-                    "," +
-                    String(elementItem.velocity.y) +
-                    "," +
-                    String(elementItem.maxX) +
-                    "," +
-                    String(elementItem.maxY) +
-                    "," +
-                    String(elementItem.traveledX) +
-                    "," +
-                    String(elementItem.traveledY) +
-                    "))" +
-                    "\n"
+                obj.jumppads.push({ x: elementItem.position.x, y: elementItem.position.y })
+            }
+            if (elementItem instanceof Spike) {
+                obj.spikes.push({
+                    x: elementItem.position.x,
+                    y: elementItem.position.y,
+                    w: elementItem.width,
+                    h: elementItem.height,
+                    t: elementItem.type,
+                })
+            }
+            if (elementItem instanceof Checkpoint) {
+                obj.checkpoints.push({ x: elementItem.position.x, y: elementItem.position.y })
+            }
+            if (elementItem instanceof Bubble) {
+                obj.bubbles.push({ x: elementItem.position.x, y: elementItem.position.y })
+            }
+            if (elementItem instanceof MovingPlatform) {
+                obj.movingPlattforms.push({
+                    x: elementItem.position.x,
+                    y: elementItem.position.y,
+                    w: elementItem.width,
+                    h: elementItem.height,
+                    vx: elementItem.velocity.x,
+                    vy: elementItem.velocity.y,
+                    mx: elementItem.maxX,
+                    my: elementItem.maxY,
+                    traveledX: elementItem.traveledX,
+                    traveledY: elementItem.traveledY,
+                })
+            }
+            if (elementItem instanceof Goal) {
+                obj.goal.push({ x: elementItem.position.x, y: elementItem.position.y })
             }
         }
 
-        console.log(output)
-        navigator.clipboard.writeText(output)
+        console.log(obj)
+        navigator.clipboard.writeText(JSON.stringify(obj))
     }
 
     handleMouseMove(event) {

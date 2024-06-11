@@ -1,7 +1,7 @@
 import Level from "./level/level"
 import Camera from "./camera/camera"
 import UILayer from "./ui/uiLayer"
-import { Screen, currentScreen } from "./listener/store"
+import { Screen, currentScreen, setCurrentScreen } from "./listener/store"
 import Menu from "./ui/menu"
 import Pause from "./ui/modal/pause"
 import Sprite from "./element/sprite"
@@ -40,7 +40,7 @@ export default class Game {
         this.raf = window.requestAnimationFrame(this.draw.bind(this))
     }
 
-    startLevel(levelMeta) {
+    async startLevel(levelMeta) {
         if (this.intervalLoop !== null) {
             window.clearInterval(this.intervalLoop)
         }
@@ -48,7 +48,7 @@ export default class Game {
         this.savedTime = 0
 
         this.level = new Level(levelMeta.name, 0.8, levelMeta.planet, this)
-        this.level.initLevel(levelMeta)
+        await this.level.initLevel(levelMeta)
 
         this.completed = new Completed(this, this.canvas)
         this.pause = new Pause(this, this.canvas)
@@ -75,6 +75,8 @@ export default class Game {
         this.level.loadLevel(levelMeta)
 
         this.intervalLoop = window.setInterval(this.loop, 1000 / 40)
+
+        setCurrentScreen(Screen.Game)
     }
 
     stop() {

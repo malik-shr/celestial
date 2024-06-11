@@ -1,5 +1,5 @@
 import Game from "./game"
-import { getLevelMetas } from "./level/levelList"
+import { getLevelMetas } from "./level/levelMeta"
 import KeyboardListener from "./listener/keyboardListener"
 import { Screen, setCurrentScreen } from "./listener/store"
 

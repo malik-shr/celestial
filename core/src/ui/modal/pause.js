@@ -1,4 +1,4 @@
-import { getLevelMetas } from "../../level/levelList"
+import { getLevelMetas } from "../../level/levelMeta"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
