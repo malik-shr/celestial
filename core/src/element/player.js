@@ -72,6 +72,9 @@ export default class Player extends Element {
         this.jumpUpLeft = new Sprite("player/jumpUpLeft.png", this.width, this.height, 70, 65)
         this.airTimeLeft = new Sprite("player/airTimeLeft.png", this.width, this.height, 70, 65)
 
+        this.wallHangLeft = new Sprite("player/wallHangLeft.png", this.width, this.height, 70, 65)
+        this.wallHangRight = new Sprite("player/wallHang.png", this.width, this.height, 70, 65)
+
         this.dashJumpUpRight = new Sprite(
             "player/dashJumpUpRight.png",
             this.width,
@@ -139,6 +142,10 @@ export default class Player extends Element {
                 dashLeft: this.airTimeDashLeft,
                 frames: (this.frameRate = 8),
                 buffer: (this.frameBuffer = 5),
+            },
+            hang: {
+                right: this.wallHangRight,
+                left: this.wallHangLeft,
             },
         }
 
@@ -216,6 +223,9 @@ export default class Player extends Element {
         // console.log("falling: " + this.falling)
         // console.log("Dash: " + this.isDashing)
         // console.log("Movingplatform: " + this.standingOnMovingPlatform)
+        console.log("frames: " + this.currentFrame)
+        console.log("Elapsedframes: " + this.elapsedFrames)
+        console.log("isjumping: " + this.jummping)
 
         ctx.fill()
 
@@ -340,8 +350,8 @@ export default class Player extends Element {
             }
         }
 
-        // enables variable jump, makes it so you fall down quicker if you let go of spacebar mid jump
         if (!keysPressed.get(" ") && this.velocity.y < -this.gravity && this.isJumping === true) {
+            // enables variable jump, makes it so you fall down quicker if you let go of spacebar mid jump
             this.velocity.y = -this.gravity
         }
 
@@ -434,9 +444,18 @@ export default class Player extends Element {
         }
 
         // Check if the player is falling
-        if (this.isGrounded === false && this.velocity.y > 0 && !this.standingOnMovingPlatform)
+        if (
+            this.isGrounded === false &&
+            this.velocity.y > 0 &&
+            !this.standingOnMovingPlatform &&
+            this.collidedLeftCounter > 5 &&
+            this.collidedRightCounter > 5
+        )
             this.falling = true
         else this.falling = false
+
+        // check if player is on the ground
+        if (this.isGrounded) this.jummping = false
 
         // animations
 
@@ -501,6 +520,12 @@ export default class Player extends Element {
             this.currentFrameBuffer = this.sprites.fall.buffer
             this.jummping = false
         }
+
+        // wallHang animation
+        if (this.collidedLeftCounter <= 0 && !this.isGrounded)
+            this.currentSprite = this.sprites.hang.left
+        if (this.collidedRightCounter <= 0 && !this.isGrounded)
+            this.currentSprite = this.sprites.hang.right
 
         // jummping Animation
         if (this.velocity.y <= 0 && !this.isGrounded) {
