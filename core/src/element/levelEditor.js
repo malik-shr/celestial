@@ -221,7 +221,11 @@ export default class LevelEditor extends Element {
         }
 
         for (const elementItem of this.game.level.elementList) {
-            if (elementItem instanceof SolidBlock) {
+            if (
+                elementItem instanceof SolidBlock &&
+                !(elementItem instanceof JumpPad) &&
+                !(elementItem instanceof TemporaryBlock)
+            ) {
                 obj.solidBlocks.push({
                     x: elementItem.position.x,
                     y: elementItem.position.y,

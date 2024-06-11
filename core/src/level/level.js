@@ -9,6 +9,7 @@ import TemporaryBlock from "../element/temporaryBlock"
 import MovingPlatform from "../element/movingPlatform"
 import Bubble from "../element/bubble"
 import Checkpoint from "../element/checkpoint"
+import Goal from "../element/goal"
 
 export default class Level {
     constructor(name, gravity = 0.8, planet, game) {
@@ -153,6 +154,11 @@ export default class Level {
         for (const bubble of levelObj.bubbles) {
             this.elementList.add(new Bubble(bubble.x, bubble.y))
         }
+
+        for (const goal of levelObj.goal) {
+            this.elementList.add(new Goal(goal.x, goal.y, this.game))
+        }
+
         for (const movingPlattform of levelObj.movingPlattforms) {
             this.elementList.add(
                 new MovingPlatform(
