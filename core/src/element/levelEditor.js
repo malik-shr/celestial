@@ -257,8 +257,6 @@ export default class LevelEditor extends Element {
                 obj.movingPlattforms.push({
                     x: elementItem.position.x,
                     y: elementItem.position.y,
-                    w: elementItem.width,
-                    h: elementItem.height,
                     vx: elementItem.velocity.x,
                     vy: elementItem.velocity.y,
                     mx: elementItem.maxX,
