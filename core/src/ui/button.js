@@ -111,6 +111,7 @@ export class LevelButton extends Button {
         if (this.progress > 1) {
             this.clickedFrames = 0
             this.clicked = false
+            this.hover = false
             this.action()
         }
 

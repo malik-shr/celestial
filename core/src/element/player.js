@@ -57,8 +57,8 @@ export default class Player extends Element {
         this.wallclimbCounter = 0
         this.collisionCounter = 0
         this.notGroundedCounter = 0
-        this.WallJumpLeftCounter = 0
-        this.WallJumpRightCounter = 0
+        this.WallJumpLeftCounter = 6
+        this.WallJumpRightCounter = 6
 
         // ------Variables for sprite
         this.isMovingRight = true
@@ -434,10 +434,13 @@ export default class Player extends Element {
         }
 
         // wallHang animation
-        if ((this.collidedLeftCounter <= 0 && !this.isGrounded) || this.WallJumpRightCounter <= 5)
+        if ((this.collidedLeftCounter <= 0 && !this.isGrounded) || this.WallJumpRightCounter <= 5) {
             this.currentSprite = this.sprites.hang.left
-        if ((this.collidedRightCounter <= 0 && !this.isGrounded) || this.WallJumpLeftCounter <= 5)
+        }
+
+        if ((this.collidedRightCounter <= 0 && !this.isGrounded) || this.WallJumpLeftCounter <= 5) {
             this.currentSprite = this.sprites.hang.right
+        }
     }
 
     dash() {
