@@ -29,8 +29,8 @@ export default class Bubble extends Element {
         }
 
         if (this.cooldown < 4) {
-            player.velocity.x *= 0.7
-            player.velocity.y *= 0.7
+            player.velocity.x *= 0.9
+            player.velocity.y *= 0.9
         }
     }
 

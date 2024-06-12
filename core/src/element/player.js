@@ -29,7 +29,7 @@ export default class Player extends Element {
         this.isWallClimbing = false
         this.isDashing = false
         this.isDead = false
-        this.canDash = false
+        this.canDash = true
 
         // collision flags
         this.isGrounded = false
@@ -358,7 +358,6 @@ export default class Player extends Element {
                 this.velocity.y = this.level.gravity
                 this.gravity = 0
                 this.isDashing = true
-                this.canDash = false
                 this.pastDashPositions = []
             }
 
@@ -376,6 +375,7 @@ export default class Player extends Element {
 
             // acceleration
             if (this.dashCounter < 5) {
+                this.canDash = false
                 // right
                 if (
                     this.pressedRight &&
@@ -756,9 +756,54 @@ export default class Player extends Element {
         this.isDead = true
 
         const colors = ["#693a00", "#546d8e", "#ffffff", "#333a42"]
+        this.game.particles = new Particles(this.position.x, this.position.y, colors)
+
+        this.resetValues()
+    }
+
+    resetValues() {
+        // additional velocities
+        this.gravity = 0
+        this.platformVelocity = 0
+        this.platformVelocityX = 0
+        this.platformVelocityY = 0
+
+        // status flags
+        this.isJumping = false
+        this.isWallClimbing = false
         this.isDashing = false
         this.canDash = true
-        this.game.particles = new Particles(this.position.x, this.position.y, colors)
+
+        // collision flags
+        this.isGrounded = false
+        this.standingOnMovingPlatform = false
+        this.collidedDown = false
+        this.collidedUp = false
+        this.collidedRight = false
+        this.collidedLeft = false
+        this.collidedY = false
+        this.collidedX = false
+        this.collidedSpecialObjects = []
+
+        // counters
+        this.dashCounter = 0
+
+        this.collidedDownCounter = 5
+        this.collidedUpCounter = 5
+        this.collidedLeftCounter = 5
+        this.collidedRightCounter = 5
+
+        this.collidingWithPlatformCounter = 0
+
+        this.wallclimbCounter = 0
+        this.collisionCounter = 0
+        this.notGroundedCounter = 0
+        this.WallJumpLeftCounter = 0
+        this.WallJumpRightCounter = 0
+
+        this.currentFrame = 0
+        this.elapsedFrames = 0
+        this.frameBuffer = 4
     }
 
     /** @returns players state at the time of function call */
