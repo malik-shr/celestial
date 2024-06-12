@@ -25,6 +25,21 @@ export default class Game {
         this.keyboardListener = new KeyboardListener(this)
 
         this.pause = null
+
+        window.addEventListener("keyup", (event) => {
+            if (this.pause === null || currentScreen !== Screen.Game || this.completed.isActive) {
+                return
+            }
+
+            if (event.key === "Escape") {
+                if (!this.pause.isActive) {
+                    this.pause.open()
+                    return
+                }
+
+                this.pause.resumeGame()
+            }
+        })
     }
 
     start() {

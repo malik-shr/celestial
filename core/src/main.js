@@ -14,7 +14,7 @@ const game = new Game(canvas, ctx)
 game.start()
 
 // Outcomment this for debugging and comment game.menu.open()
-const ll = new LevelList()
-game.startLevel(ll.get("Level 1"))
+// const ll = new LevelList()
+// game.startLevel(ll.get("Level 1"))
 
 game.menu.open()

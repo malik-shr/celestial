@@ -6,25 +6,6 @@ export default class KeyboardListener {
 
         window.addEventListener("keydown", (event) => this.handleKeyDown(event))
         window.addEventListener("keyup", (event) => this.handleKeyUp(event))
-
-        window.addEventListener("keyup", (event) => {
-            if (
-                this.game.pause === null ||
-                currentScreen !== Screen.Game ||
-                this.game.completed.isActive
-            ) {
-                return
-            }
-
-            if (event.key === "Escape") {
-                if (!this.game.pause.isActive) {
-                    this.game.pause.open()
-                    return
-                }
-
-                this.game.pause.resumeGame()
-            }
-        })
     }
 
     handleKeyDown(event) {

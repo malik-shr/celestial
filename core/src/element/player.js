@@ -555,7 +555,7 @@ export default class Player extends Element {
             }
 
             // top Speed
-            if (this.dashCounter >= 7 && this.dashCounter <= 12) {
+            if (this.dashCounter >= 7 && this.dashCounter < 12) {
                 // right
                 if (
                     this.pressedRight &&
@@ -632,7 +632,7 @@ export default class Player extends Element {
             }
 
             // decceleration (if necessary)
-            if (this.dashCounter > 12) {
+            if (this.dashCounter >= 12) {
                 if (this.pressedRight && this.velocity.x >= 1.34) {
                     this.velocity.x -= 1.34
                 }
