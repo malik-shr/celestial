@@ -164,8 +164,6 @@ export default class Level {
                 new MovingPlatform(
                     movingPlattform.x,
                     movingPlattform.y,
-                    movingPlattform.w,
-                    movingPlattform.h,
                     movingPlattform.vx,
                     movingPlattform.vy,
                     movingPlattform.mx,

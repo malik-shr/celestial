@@ -2,7 +2,7 @@ import Element from "./element"
 
 export default class MovingPlatform extends Element {
     constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, traveledX = 0, traveledY = 0) {
-        super(x, y, 32, 64)
+        super(x, y, 64, 16)
         this.velocity = {
             x: velocityX,
             y: velocityY,

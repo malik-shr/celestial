@@ -75,35 +75,6 @@ export default class Player extends Element {
         this.wallHangLeft = new Sprite("player/wallHangLeft.png", this.width, this.height, 70, 65)
         this.wallHangRight = new Sprite("player/wallHang.png", this.width, this.height, 70, 65)
 
-        this.dashJumpUpRight = new Sprite(
-            "player/dashJumpUpRight.png",
-            this.width,
-            this.height,
-            70,
-            70
-        )
-        this.dashJumpUpLeft = new Sprite(
-            "player/dashJumpUpLeft.png",
-            this.width,
-            this.height,
-            70,
-            70
-        )
-        this.airTimeDashLeft = new Sprite(
-            "player/airTimeDashLeft.png",
-            this.width,
-            this.height,
-            70,
-            70
-        )
-        this.airTimeDashRight = new Sprite(
-            "player/airTimeDashRight.png",
-            this.width,
-            this.height,
-            70,
-            70
-        )
-
         this.playerImage.img.onload = () => {
             this.loaded = true
         }
@@ -129,8 +100,6 @@ export default class Player extends Element {
             jump: {
                 right: this.jumpUp,
                 up: this.jumpUp,
-                dashRight: this.dashJumpUpRight,
-                dashLeft: this.dashJumpUpLeft,
                 left: this.jumpUpLeft,
                 frames: (this.frameRate = 8),
                 buffer: (this.frameBuffer = 2),
@@ -138,8 +107,6 @@ export default class Player extends Element {
             fall: {
                 right: this.airTimeUp,
                 left: this.airTimeLeft,
-                dashRight: this.airTimeDashRight,
-                dashLeft: this.airTimeDashLeft,
                 frames: (this.frameRate = 8),
                 buffer: (this.frameBuffer = 5),
             },
@@ -195,17 +162,19 @@ export default class Player extends Element {
 
         if (!this.currentSprite.loaded) return
 
-        ctx.filter = this.isDashing ? "blur(0.6px)" : "none"
+        const filter = !this.canDash
+            ? "sepia(1) saturate(4) brightness(95%) contrast(1.1) blur(0.6px)"
+            : "none"
+
+        ctx.filter = filter
 
         this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
 
-        ctx.globalAlpha = 0
-
-        ctx.filter = "blur(4px)"
-
         if (this.isDashing) {
+            ctx.globalAlpha = 0
+            ctx.filter = "contrast(0.1) sepia(1) saturate(4) brightness(95%) blur(4px)"
             for (let i = 0; i < this.pastDashPositions.length; i++) {
-                ctx.globalAlpha += 0.035
+                ctx.globalAlpha += 0.045
                 this.currentSprite.draw(ctx, this.currentFrame, 0, this.pastDashPositions[i])
             }
         }
@@ -223,9 +192,9 @@ export default class Player extends Element {
         // console.log("falling: " + this.falling)
         // console.log("Dash: " + this.isDashing)
         // console.log("Movingplatform: " + this.standingOnMovingPlatform)
-        console.log("frames: " + this.currentFrame)
-        console.log("Elapsedframes: " + this.elapsedFrames)
-        console.log("isjumping: " + this.jummping)
+        // console.log("frames: " + this.currentFrame)
+        // console.log("Elapsedframes: " + this.elapsedFrames)
+        // console.log("isjumping: " + this.jummping)
 
         ctx.fill()
 
@@ -391,6 +360,10 @@ export default class Player extends Element {
                 this.isDashing = true
                 this.canDash = false
                 this.pastDashPositions = []
+            }
+
+            if (this.dashCounter === 0) {
+                this.currentFrame = 0
             }
 
             //increase counter
@@ -639,12 +612,11 @@ export default class Player extends Element {
         //falling animation
         if (this.falling) {
             if (this.isMovingRight) {
-                if (this.isDashing) {
-                    this.currentSprite = this.sprites.fall.dashRight
-                } else this.currentSprite = this.sprites.fall.right
-            } else if (this.isDashing) {
-                this.currentSprite = this.sprites.fall.dashLeft
-            } else this.currentSprite = this.sprites.fall.left
+                this.currentSprite = this.sprites.fall.right
+            } else {
+                this.currentSprite = this.sprites.fall.left
+            }
+
             this.currentFrameBuffer = this.sprites.fall.buffer
             this.jummping = false
         }
@@ -652,14 +624,10 @@ export default class Player extends Element {
         // jummping Animation
         if (this.velocity.y <= 0 && !this.isGrounded) {
             if (this.isMovingRight) {
-                if (this.isDashing) {
-                    this.currentSprite = this.sprites.jump.dashRight
-                } else {
-                    this.currentSprite = this.sprites.jump.right
-                }
-            } else if (this.isDashing) {
-                this.currentSprite = this.sprites.jump.dashLeft
-            } else this.currentSprite = this.sprites.jump.left
+                this.currentSprite = this.sprites.jump.right
+            } else {
+                this.currentSprite = this.sprites.jump.left
+            }
 
             this.currentSpriteFrames = this.sprites.jump.frames
             this.currentFrameBuffer = this.sprites.jump.buffer
@@ -788,6 +756,8 @@ export default class Player extends Element {
         this.isDead = true
 
         const colors = ["#693a00", "#546d8e", "#ffffff", "#333a42"]
+        this.isDashing = false
+        this.canDash = true
         this.game.particles = new Particles(this.position.x, this.position.y, colors)
     }
 
