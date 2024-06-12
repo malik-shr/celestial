@@ -54,10 +54,10 @@ export default class MovingPlatform extends Element {
             }
 
             // player x velocity an platform angleichen wenn er auf sie aufkommt
-            if (!this.steppedOn) {
-                player.velocity.x = this.velocity.x
-                player.velocity.y = this.velocity.y
-            }
+            // if (!this.steppedOn) {
+            //     // player.velocity.x = this.velocity.x
+            //     player.velocity.y = this.velocity.y
+            // }
 
             player.standingOnMovingPlatform = true
             player.collidingWithPlatformCounter = 0
