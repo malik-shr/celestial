@@ -451,10 +451,6 @@ export default class Player extends Element {
             this.isDashing
         ) {
             if (!this.isDashing) {
-                this.pressedRight = keysPressed.get("ArrowRight")
-                this.pressedLeft = keysPressed.get("ArrowLeft")
-                this.pressedDown = keysPressed.get("ArrowDown")
-                this.pressedUp = keysPressed.get("ArrowUp")
                 this.velocity.x = 0
                 this.velocity.y = this.level.gravity
                 this.gravity = 0
@@ -466,16 +462,19 @@ export default class Player extends Element {
                 this.currentFrame = 0
             }
 
-            //increase counter
-            this.dashCounter++
+            if (this.dashCounter < 4) {
+                this.pressedRight = keysPressed.get("ArrowRight")
+                this.pressedLeft = keysPressed.get("ArrowLeft")
+                this.pressedDown = keysPressed.get("ArrowDown")
+                this.pressedUp = keysPressed.get("ArrowUp")
 
-            // save positions
-            if (this.dashCounter > 4 && this.dashCounter % 2) {
-                this.pastDashPositions.push(structuredClone(this.position))
+                this.velocity.x = 0
+                this.velocity.y = 0
+                this.gravity = 0
             }
 
             // acceleration
-            if (this.dashCounter < 5) {
+            if (this.dashCounter >= 4 && this.dashCounter < 7) {
                 this.canDash = false
                 // right
                 if (
@@ -556,7 +555,7 @@ export default class Player extends Element {
             }
 
             // top Speed
-            if (this.dashCounter >= 5 && this.dashCounter <= 10) {
+            if (this.dashCounter >= 7 && this.dashCounter <= 12) {
                 // right
                 if (
                     this.pressedRight &&
@@ -627,8 +626,13 @@ export default class Player extends Element {
                 }
             }
 
+            // save positions
+            if (this.dashCounter >= 7 && this.dashCounter % 2) {
+                this.pastDashPositions.push(structuredClone(this.position))
+            }
+
             // decceleration (if necessary)
-            if (this.dashCounter > 10) {
+            if (this.dashCounter > 12) {
                 if (this.pressedRight && this.velocity.x >= 1.34) {
                     this.velocity.x -= 1.34
                 }
@@ -636,6 +640,9 @@ export default class Player extends Element {
                     this.velocity.x += 1.34
                 }
             }
+
+            //increase counter
+            this.dashCounter++
 
             // stop dash after N frames and reset Dash State
             if (this.dashCounter > 16) {
