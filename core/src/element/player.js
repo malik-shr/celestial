@@ -46,10 +46,10 @@ export default class Player extends Element {
         this.dashCounter = 0
         this.deadCounter = 0
 
-        this.collidedDownCounter = 0
-        this.collidedUpCounter = 0
-        this.collidedLeftCounter = 0
-        this.collidedRightCounter = 0
+        this.collidedDownCounter = 5
+        this.collidedUpCounter = 5
+        this.collidedLeftCounter = 5
+        this.collidedRightCounter = 5
 
         this.collidingWithPlatformCounter = 0
 
@@ -253,13 +253,23 @@ export default class Player extends Element {
         // when jumping on jump-pad and holding space you jump twice as high
         // when moving to the right or left and meanwhile dashing the player holds the dash speed (15) even after the dash
 
-        const maxSpeedX = 6
+        const maxSpeedX = 5
         const terminalVelocity = 20
 
-        // gravity (with terminal velocity)
-        if (this.velocity.y < terminalVelocity) {
+        // gravity (with terminal velocity) and wallslide
+        if (
+            (this.velocity.y < terminalVelocity &&
+                !(this.collidedLeftCounter <= 1 || this.collidedRightCounter <= 1)) ||
+            this.velocity.y < 0
+        ) {
             this.velocity.y += this.level.gravity
             this.gravity += this.level.gravity
+        } else if (
+            this.velocity.y < terminalVelocity / 4 &&
+            (this.collidedLeftCounter <= 1 || this.collidedRightCounter <= 1)
+        ) {
+            this.velocity.y += this.level.gravity / 2
+            this.gravity += this.level.gravity / 2
         }
 
         // entschleunigung wenn man weder nach rechts noch nach links drückt und nicht dasht und nicht auf einer moving plattform steht und nicht walljumped
@@ -328,29 +338,34 @@ export default class Player extends Element {
             keysPressed.get(" ") &&
             this.letGoOfSpace
         ) {
-            if (this.collidedLeftCounter <= 5 && this.WallJumpLeftCounter > 20) {
+            if (this.collidedLeftCounter <= 5 && this.WallJumpLeftCounter > 30) {
                 this.velocity.y = -10
                 this.velocity.x = 5
                 this.WallJumpLeft = true
                 this.WallJumpLeftCounter = 0
-                this.WallJumpRightCounter = 20
+                this.WallJumpRightCounter = 30
                 this.isDashing = false
                 this.dashCounter = 0
                 this.isMovingRight = true
             }
-            if (this.collidedRightCounter <= 5 && this.WallJumpRightCounter > 20) {
+            if (this.collidedRightCounter <= 5 && this.WallJumpRightCounter > 30) {
                 this.velocity.y = -10
                 this.velocity.x = -5
                 this.WallJumpRight = true
                 this.WallJumpRightCounter = 0
-                this.WallJumpLeftCounter = 20
+                this.WallJumpLeftCounter = 30
                 this.isDashing = false
                 this.dashCounter = 0
                 this.isMovingRight = false
             }
         }
 
-        if (!keysPressed.get(" ") && this.velocity.y < -this.gravity && this.isJumping === true) {
+        if (
+            !keysPressed.get(" ") &&
+            this.velocity.y < -this.gravity &&
+            this.isJumping === true &&
+            !this.isDashing
+        ) {
             // enables variable jump, makes it so you fall down quicker if you let go of spacebar mid jump
             this.velocity.y = -this.gravity
         }
@@ -388,41 +403,153 @@ export default class Player extends Element {
 
             // acceleration
             if (this.dashCounter < 5) {
-                if (this.pressedRight) {
+                // right
+                if (
+                    this.pressedRight &&
+                    !this.pressedLeft &&
+                    !this.pressedDown &&
+                    !this.pressedUp
+                ) {
                     this.game.camera.shake(-2, 0)
-                    this.velocity.x += 0.1
-                    this.velocity.y -= this.level.gravity
+                    this.velocity.x = -1
+                    this.velocity.y = 0
+                    this.gravity = 0
                 }
-                if (this.pressedLeft) {
+                // left
+                if (
+                    !this.pressedRight &&
+                    this.pressedLeft &&
+                    !this.pressedDown &&
+                    !this.pressedUp
+                ) {
                     this.game.camera.shake(2, 0)
-                    this.velocity.x -= 0.1
-                    this.velocity.y -= this.level.gravity
+                    this.velocity.x = -1
+                    this.velocity.y = 0
+                    this.gravity = 0
                 }
-                if (this.pressedDown) {
+                // down
+                if (
+                    !this.pressedRight &&
+                    !this.pressedLeft &&
+                    this.pressedDown &&
+                    !this.pressedUp
+                ) {
                     this.game.camera.shake(0, 2)
-                    this.velocity.y = 0.1 * this.dashCounter
+                    this.velocity.x = 0
+                    this.velocity.y = -1
+                    this.gravity = 0
                 }
-                if (this.pressedUp) {
+                // up
+                if (
+                    !this.pressedRight &&
+                    !this.pressedLeft &&
+                    !this.pressedDown &&
+                    this.pressedUp
+                ) {
                     this.game.camera.shake(0, -2)
-                    this.velocity.y = -0.1 * this.dashCounter
+                    this.velocity.x = 0
+                    this.velocity.y = 1
+                    this.gravity = 0
+                }
+                // up and right
+                if (this.pressedRight && !this.pressedLeft && !this.pressedDown && this.pressedUp) {
+                    this.game.camera.shake(-2, 2)
+                    this.velocity.x = -1
+                    this.velocity.y = 1
+                    this.gravity = 0
+                }
+                // up and left
+                if (!this.pressedRight && this.pressedLeft && !this.pressedDown && this.pressedUp) {
+                    this.game.camera.shake(2, 2)
+                    this.velocity.x = -1
+                    this.velocity.y = 1
+                    this.gravity = 0
+                }
+                // down and right
+                if (this.pressedRight && !this.pressedLeft && this.pressedDown && !this.pressedUp) {
+                    this.game.camera.shake(-2, -2)
+                    this.velocity.x = -1
+                    this.velocity.y = -1
+                    this.gravity = 0
+                }
+                // down and left
+                if (!this.pressedRight && this.pressedLeft && this.pressedDown && !this.pressedUp) {
+                    this.game.camera.shake(2, 2)
+                    this.velocity.x = 1
+                    this.velocity.y = -1
+                    this.gravity = 0
                 }
             }
 
             // top Speed
             if (this.dashCounter >= 5 && this.dashCounter <= 10) {
-                if (this.pressedRight) {
+                // right
+                if (
+                    this.pressedRight &&
+                    !this.pressedLeft &&
+                    !this.pressedDown &&
+                    !this.pressedUp
+                ) {
                     this.velocity.x = 14
                     this.velocity.y -= this.level.gravity
+                    this.gravity -= this.level.gravity
                 }
-                if (this.pressedLeft) {
+                // left
+                if (
+                    !this.pressedRight &&
+                    this.pressedLeft &&
+                    !this.pressedDown &&
+                    !this.pressedUp
+                ) {
                     this.velocity.x = -14
                     this.velocity.y -= this.level.gravity
+                    this.gravity -= this.level.gravity
                 }
-                if (this.pressedDown) {
-                    this.velocity.y = 7
+                // down
+                if (
+                    !this.pressedRight &&
+                    !this.pressedLeft &&
+                    this.pressedDown &&
+                    !this.pressedUp
+                ) {
+                    this.velocity.x = 0
+                    this.velocity.y = 10
+                    this.gravity = 10
                 }
-                if (this.pressedUp) {
+                // up
+                if (
+                    !this.pressedRight &&
+                    !this.pressedLeft &&
+                    !this.pressedDown &&
+                    this.pressedUp
+                ) {
+                    this.velocity.x = 0
+                    this.velocity.y = -10
+                    this.gravity = -10
+                }
+                // up and right
+                if (this.pressedRight && !this.pressedLeft && !this.pressedDown && this.pressedUp) {
+                    this.velocity.x = 14
                     this.velocity.y = -7
+                    this.gravity = -7
+                }
+                // up and left
+                if (!this.pressedRight && this.pressedLeft && !this.pressedDown && this.pressedUp) {
+                    this.velocity.x = -14
+                    this.velocity.y = -7
+                    this.gravity = -7
+                }
+                // down and right
+                if (this.pressedRight && !this.pressedLeft && this.pressedDown && !this.pressedUp) {
+                    this.velocity.x = 14
+                    this.velocity.y = 7
+                    this.gravity = 7
+                }
+                // down and left
+                if (!this.pressedRight && this.pressedLeft && this.pressedDown && !this.pressedUp) {
+                    this.velocity.x = -14
+                    this.velocity.y = 7
+                    this.gravity = 7
                 }
             }
 
@@ -440,6 +567,7 @@ export default class Player extends Element {
             if (this.dashCounter > 16) {
                 this.isDashing = false
                 this.dashCounter = 0
+                this.gravity = 0
             }
         }
 
@@ -521,12 +649,6 @@ export default class Player extends Element {
             this.jummping = false
         }
 
-        // wallHang animation
-        if (this.collidedLeftCounter <= 0 && !this.isGrounded)
-            this.currentSprite = this.sprites.hang.left
-        if (this.collidedRightCounter <= 0 && !this.isGrounded)
-            this.currentSprite = this.sprites.hang.right
-
         // jummping Animation
         if (this.velocity.y <= 0 && !this.isGrounded) {
             if (this.isMovingRight) {
@@ -543,6 +665,12 @@ export default class Player extends Element {
             this.currentFrameBuffer = this.sprites.jump.buffer
             this.jummping = true
         }
+
+        // wallHang animation
+        if ((this.collidedLeftCounter <= 0 && !this.isGrounded) || this.WallJumpRightCounter <= 5)
+            this.currentSprite = this.sprites.hang.left
+        if ((this.collidedRightCounter <= 0 && !this.isGrounded) || this.WallJumpLeftCounter <= 5)
+            this.currentSprite = this.sprites.hang.right
     }
 
     // Override

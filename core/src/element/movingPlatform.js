@@ -33,11 +33,16 @@ export default class MovingPlatform extends Element {
 
             player.velocity.y = this.velocity.y
             player.gravity = 0
+            player.notGroundedCounter = 0
             player.isGrounded = true
             player.isJumping = false
             player.collidedDown = true
             player.canDash = true
             player.WallclimbCounter = 0
+
+            this.WallJumpRightCounter = 50
+            this.WallJumpLeftCounter = 50
+            player.collidedDownCounter = 0
 
             // do additional collision logic
 
@@ -78,6 +83,7 @@ export default class MovingPlatform extends Element {
             }
             player.gravity = 0
             player.collidedUp = true
+            player.collidedUpCounter = 0
             player.isJumping = false
 
             // do additional collision logic
