@@ -1,7 +1,6 @@
 import ElementList from "../element/elementList"
 import Player from "../element/player"
 import LevelEditor from "../element/levelEditor"
-import { getLevelMetas } from "./levelMeta"
 import SolidBlock from "../element/solidBlock"
 import Spike from "../element/spike"
 import JumpPad from "../element/jumpPad"
@@ -10,62 +9,59 @@ import MovingPlatform from "../element/movingPlatform"
 import Bubble from "../element/bubble"
 import Checkpoint from "../element/checkpoint"
 import Goal from "../element/goal"
+import Particles from "../element/particle"
 
 export default class Level {
-    constructor(name, gravity = 0.8, planet, game) {
-        this.name = name
-        this.gravity = gravity
-        this.planet = planet
+    constructor(meta, planet, game) {
+        this.meta = meta
         this.game = game
+
+        this.name = meta.name
+        this.planet = planet
+        this.gravity = 0.8
 
         this.elementList = new ElementList()
 
         this.completed = false
-
-        this.meta = getLevelMetas()[this.name]
-
-        this.loaded = false
     }
 
-    async initLevel(meta) {
-        //setLevelElements(this.game, this.elementList)[this.name].init()
-
+    async initLevel() {
         await this.parse()
 
-        this.elementList.add(new Player(0, 0, this.game, this))
+        this.elementList.add(new Player(0, 0, this.game))
         this.elementList.add(new LevelEditor(this.game, this))
     }
 
-    loadLevel(meta) {
+    loadLevel() {
         const player = this.getPlayer()
 
         if (
-            meta.data.respawnPoint.x !== Number.MAX_SAFE_INTEGER &&
-            meta.data.respawnPoint.y !== Number.MAX_SAFE_INTEGER
+            this.meta.data.respawnPoint.x !== Number.MAX_SAFE_INTEGER &&
+            this.meta.data.respawnPoint.y !== Number.MAX_SAFE_INTEGER
         ) {
-            player.respawnPoint.x = meta.data.respawnPoint.x
-            player.respawnPoint.y = meta.data.respawnPoint.y
+            player.respawnPoint.x = this.meta.data.respawnPoint.x
+            player.respawnPoint.y = this.meta.data.respawnPoint.y
 
-            player.position.x = meta.data.respawnPoint.x
-            player.position.y = meta.data.respawnPoint.y - this.gravity
+            player.position.x = this.meta.data.respawnPoint.x
+            player.position.y = this.meta.data.respawnPoint.y - this.gravity
         }
 
         if (
-            meta.data.cameraPos.x !== Number.MAX_SAFE_INTEGER &&
-            meta.data.cameraPos.y !== Number.MAX_SAFE_INTEGER &&
-            meta.data.bgLayerPos.x !== Number.MAX_SAFE_INTEGER &&
-            meta.data.bgLayerPos.y !== Number.MAX_SAFE_INTEGER
+            this.meta.data.cameraPos.x !== Number.MAX_SAFE_INTEGER &&
+            this.meta.data.cameraPos.y !== Number.MAX_SAFE_INTEGER &&
+            this.meta.data.bgLayerPos.x !== Number.MAX_SAFE_INTEGER &&
+            this.meta.data.bgLayerPos.y !== Number.MAX_SAFE_INTEGER
         ) {
-            this.game.camera.position.x = meta.data.cameraPos.x
-            this.game.camera.position.y = meta.data.cameraPos.y
+            this.game.camera.position.x = this.meta.data.cameraPos.x
+            this.game.camera.position.y = this.meta.data.cameraPos.y
 
-            this.game.camera.bgLayer.position.x = meta.data.bgLayerPos.x
-            this.game.camera.bgLayer.position.y = meta.data.bgLayerPos.y
+            this.game.camera.bgLayer.position.x = this.meta.data.bgLayerPos.x
+            this.game.camera.bgLayer.position.y = this.meta.data.bgLayerPos.y
 
             this.game.camera.save()
         }
 
-        this.game.savedTime = meta.data.time
+        this.game.savedTime = this.meta.data.time
     }
 
     getPlayer() {
@@ -76,6 +72,12 @@ export default class Level {
         }
 
         return null
+    }
+
+    clean() {
+        this.elementList = this.elementList.filter((element) => {
+            return !(element instanceof Particles && !element.isActive)
+        })
     }
 
     write() {
@@ -152,7 +154,7 @@ export default class Level {
         }
 
         for (const bubble of levelObj.bubbles) {
-            this.elementList.add(new Bubble(bubble.x, bubble.y))
+            this.elementList.add(new Bubble(bubble.x, bubble.y, this.game))
         }
 
         for (const goal of levelObj.goal) {

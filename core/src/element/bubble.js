@@ -1,9 +1,12 @@
+import Particles from "./particle"
 import Element from "./element"
 import Sprite from "./sprite"
 
 export default class Bubble extends Element {
-    constructor(x, y) {
+    constructor(x, y, game) {
         super(x, y)
+
+        this.game = game
 
         this.collided = false
         this.cooldown = 0
@@ -16,6 +19,12 @@ export default class Bubble extends Element {
             ++this.cooldown
         }
 
+        if (this.cooldown === 1) {
+            this.game.level.elementList.add(
+                new Particles(this.position.x, this.position.y, ["#ffe854", "#ffc10e"], 0)
+            )
+        }
+
         if (this.cooldown === 70) {
             this.cooldown = 0
             this.collided = false
@@ -23,6 +32,14 @@ export default class Bubble extends Element {
     }
 
     handleCollisionY(player) {
+        this.handleCollision(player)
+    }
+
+    handleCollisionX(player) {
+        this.handleCollision(player)
+    }
+
+    handleCollision(player) {
         if (!this.collided) {
             this.collided = true
             player.canDash = true
@@ -34,20 +51,8 @@ export default class Bubble extends Element {
         }
     }
 
-    handleCollisionX(player) {
-        if (!this.collided) {
-            this.collided = true
-            player.canDash = true
-        }
-
-        if (this.cooldown < 4) {
-            player.velocity.x *= 0.7
-            player.velocity.y *= 0.7
-        }
-    }
-
     draw(ctx) {
-        if (this.cooldown > 20) return
+        if (this.collided) return
 
         this.sprite.draw(ctx, 0, 0, this.position)
         // ctx.beginPath()

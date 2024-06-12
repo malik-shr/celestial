@@ -1,10 +1,11 @@
-import { getLevelMetas } from "../../level/levelMeta"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
 export default class Pause extends Modal {
-    constructor(game, canvas) {
+    constructor(levelList, game, canvas) {
         super("Pause", 300, 370, game, canvas)
+
+        this.levelList = levelList
 
         this.resumeGame = this.resumeGame.bind(this)
         this.retry = this.retry.bind(this)
@@ -69,9 +70,7 @@ export default class Pause extends Modal {
     retry() {
         this.close()
 
-        const levelMetas = getLevelMetas()
-
-        this.game.startLevel(levelMetas[this.game.level.name])
+        this.game.startLevel(this.levelList.get(this.game.level.name))
     }
 
     restart() {
@@ -89,9 +88,7 @@ export default class Pause extends Modal {
             )
         }
 
-        const levelMetas = getLevelMetas()
-
-        this.game.startLevel(levelMetas[this.game.level.name])
+        this.game.startLevel(this.levelList.get(this.game.level.name))
     }
 
     exitGame() {

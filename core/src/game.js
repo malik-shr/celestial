@@ -6,6 +6,8 @@ import Menu from "./ui/menu"
 import Pause from "./ui/modal/pause"
 import Sprite from "./element/sprite"
 import Completed from "./ui/modal/completed"
+import LevelList from "./level/levellist"
+import KeyboardListener from "./listener/keyboardListener"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -16,23 +18,13 @@ export default class Game {
         this.intervalLoop = null
         this.level = null
 
-        this.menu = new Menu(this, this.canvas)
+        this.levelList = new LevelList()
+
+        this.menu = new Menu(this.levelList, this, this.canvas)
+
+        this.keyboardListener = new KeyboardListener(this)
 
         this.pause = null
-
-        window.addEventListener("keyup", (event) => {
-            if (this.pause === null || currentScreen !== Screen.Game || this.completed.isActive)
-                return
-
-            if (event.key === "Escape") {
-                if (!this.pause.isActive) {
-                    this.pause.open()
-                    return
-                }
-
-                this.pause.resumeGame()
-            }
-        })
     }
 
     start() {
@@ -47,11 +39,11 @@ export default class Game {
 
         this.savedTime = 0
 
-        this.level = new Level(levelMeta.name, 0.8, levelMeta.planet, this)
+        this.level = new Level(levelMeta, levelMeta.planet, this)
         await this.level.initLevel(levelMeta)
 
         this.completed = new Completed(this, this.canvas)
-        this.pause = new Pause(this, this.canvas)
+        this.pause = new Pause(this.levelList, this, this.canvas)
 
         this.player = this.level.getPlayer()
 
@@ -69,8 +61,6 @@ export default class Game {
         this.bg1 = new Sprite("bg/bg.png", 1024, 640, 1024, 640)
         this.dimmed = new Sprite("bg/dimmed.png", 1024, 640, 1024, 640)
         this.bg2 = new Sprite("bg/bg_layer_top.png", 1024 * 2, 640 * 2, 1024 * 2, 640 * 2)
-
-        this.particles = null
 
         this.level.loadLevel(levelMeta)
 
@@ -96,6 +86,8 @@ export default class Game {
 
         this.camera.pan()
         this.camera.checkShaking()
+
+        this.level.clean()
     }
 
     draw() {
@@ -137,9 +129,6 @@ export default class Game {
 
             this.uiLayer.drawLayer(this.ctx)
 
-            if (this.particles !== null) {
-                this.particles.draw(this.ctx)
-            }
             // DEBUG
             //this.camera.draw(this.ctx)
 

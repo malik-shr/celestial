@@ -5,12 +5,13 @@ import Sprite from "../element/sprite"
 import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
-import { getLevelMetas } from "../level/levelMeta"
 
 export default class Menu {
-    constructor(game, canvas) {
+    constructor(levelList, game, canvas) {
         this.canvas = canvas
         this.game = game
+
+        this.levelList = levelList
 
         this.isActive = false
 
@@ -51,27 +52,25 @@ export default class Menu {
 
         this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
 
-        this.levelMetas = getLevelMetas()
-
         const level1Btn = new LevelButton(
             () => this.selectLevel(level1Btn),
             400,
             320,
-            this.levelMetas["Level 1"]
+            this.levelList.get("Level 1")
         )
 
         const level2Btn = new LevelButton(
             () => this.selectLevel(level2Btn),
             480,
             320,
-            this.levelMetas["Level 2"]
+            this.levelList.get("Level 2")
         )
 
         const level3Btn = new LevelButton(
             () => this.selectLevel(level3Btn),
             550,
             320,
-            this.levelMetas["Level 3"]
+            this.levelList.get("Level 3")
         )
 
         this.planetList.moon.buttonList.add(level1Btn)
@@ -190,11 +189,9 @@ export default class Menu {
     }
 
     updateButtonMeta() {
-        const newMetaData = getLevelMetas()
-
         for (const key of this.planetKeys) {
             for (const button of this.planetList[key].buttonList.buttons) {
-                button.level = newMetaData[button.level.name]
+                button.level = this.levelList.get(button.level.name)
             }
         }
     }

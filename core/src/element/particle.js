@@ -1,15 +1,26 @@
-export class Particle {
-    constructor(x, y, color) {
+import Element from "./element"
+
+class Particle {
+    constructor(x, y, color, size) {
         this.position = {
             x: x,
             y: y,
         }
-        this.size = 6
+
+        this.sizes = {
+            0: { speedX: Math.random() * 1 - 0.75, speedY: Math.random() * 1.5 - 0.75, size: 4 },
+            1: { speedX: Math.random() * 1.5 - 0.75, speedY: Math.random() * 1.5 - 0.75, size: 6 },
+            2: { speedX: Math.random() * 1.5 - 0.75, speedY: Math.random() * 1.5 - 0.75, size: 6 },
+        }
+
+        this.data = this.sizes[size]
 
         this.speed = {
-            x: Math.random() * 1.5 - 0.75,
-            y: Math.random() * 1.5 - 0.75,
+            x: this.data.speedX,
+            y: this.data.speedY,
         }
+        this.size = this.data.size
+
         this.color = color
     }
     update() {
@@ -26,12 +37,15 @@ export class Particle {
     }
 }
 
-export default class Particles {
-    constructor(x, y, colors) {
+export default class Particles extends Element {
+    constructor(x, y, colors, size) {
+        super(x, y)
         this.particles = []
         this.particleFrame = 0
         this.isActive = true
         this.particleCounter = 0
+
+        this.size = size
 
         this.colors = colors
 
@@ -42,9 +56,9 @@ export default class Particles {
 
         this.isActive = true
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < size * 7 + 6; i++) {
             this.particles.push(
-                new Particle(this.position.x, this.position.y, this.getRandomColor())
+                new Particle(this.position.x, this.position.y, this.getRandomColor(), this.size)
             )
         }
     }
@@ -63,7 +77,7 @@ export default class Particles {
             if (particle.size <= 0.1) {
                 this.particles.splice(index, 1)
                 this.particles.push(
-                    new Particle(this.position.x, this.position.y, this.getRandomColor())
+                    new Particle(this.position.x, this.position.y, this.getRandomColor(), this.size)
                 )
             }
         })
@@ -73,5 +87,15 @@ export default class Particles {
         const index = Math.floor(Math.random() * this.colors.length)
 
         return this.colors[index]
+    }
+
+    action() {}
+
+    handleCollisionY(player) {
+        return
+    }
+
+    handleCollisionX(player) {
+        return
     }
 }

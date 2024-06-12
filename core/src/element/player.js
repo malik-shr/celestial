@@ -1,14 +1,15 @@
 import Element from "./element"
 import { keysPressed } from "../listener/store"
 import Sprite from "./sprite"
-import Particles from "../ui/particle"
+import Particles from "./particle"
 
 export default class Player extends Element {
-    constructor(x, y, game, level) {
+    constructor(x, y, game) {
         super(x, y, 32, 38)
 
         this.game = game
-        this.level = level
+        this.level = game.level
+
         this.previous = null
 
         this.velocity = {
@@ -340,6 +341,106 @@ export default class Player extends Element {
         }
 
         // Dash if shift is pressed and you can dash and at least one direction is pressed or you are already dashing
+        this.dash()
+
+        // Check if the player is falling
+        if (
+            this.isGrounded === false &&
+            this.velocity.y > 0 &&
+            !this.standingOnMovingPlatform &&
+            this.collidedLeftCounter > 5 &&
+            this.collidedRightCounter > 5
+        )
+            this.falling = true
+        else this.falling = false
+
+        // check if player is on the ground
+        if (this.isGrounded) this.jummping = false
+
+        // animations
+
+        // Sprite animation for standing still
+        if (this.velocity.x === 0 && this.isGrounded) {
+            if (this.isMovingRight) {
+                this.currentSprite = this.sprites.stand.right
+            } else {
+                this.currentSprite = this.sprites.stand.left
+            }
+        }
+
+        // sprite animation for moving left on the ground when pressing the left key
+        if (
+            keysPressed.get("ArrowLeft") &&
+            this.isGrounded &&
+            this.falling === false &&
+            this.WallJumpLeftCounter > 5
+        ) {
+            this.currentSprite = this.sprites.run.left
+            this.currentSpriteFrames = this.sprites.run.frames
+            this.currentFrameBuffer = this.sprites.run.buffer
+        }
+
+        // sprite animation for moving right on the ground when pressing the right key
+        if (
+            keysPressed.get("ArrowRight") &&
+            this.isGrounded &&
+            this.falling === false &&
+            this.WallJumpRightCounter > 5
+        ) {
+            this.currentSprite = this.sprites.run.right
+            this.currentSpriteFrames = this.sprites.run.frames
+            this.currentFrameBuffer = this.sprites.run.buffer
+        }
+
+        if (this.isGrounded && this.dashCounter > 40) {
+            this.isDashing = false
+        }
+
+        // player stands still when both left and right key are pressed
+        if (keysPressed.get("ArrowLeft") && keysPressed.get("ArrowRight")) {
+            if (this.jummping) {
+                this.currentSprite = this.sprites.jump.right
+                this.currentSpriteFrames = this.sprites.jump.frames
+                this.currentFrameBuffer = this.sprites.jump.buffer
+            } else if (this.falling) {
+                this.currentSprite = this.sprites.fall.right
+                this.currentFrameBuffer = this.sprites.fall.buffer
+            } else this.currentSprite = this.sprites.stand.right
+        }
+
+        //falling animation
+        if (this.falling) {
+            if (this.isMovingRight) {
+                this.currentSprite = this.sprites.fall.right
+            } else {
+                this.currentSprite = this.sprites.fall.left
+            }
+
+            this.currentFrameBuffer = this.sprites.fall.buffer
+            this.jummping = false
+        }
+
+        // jummping Animation
+        if (this.velocity.y <= 0 && !this.isGrounded) {
+            if (this.isMovingRight) {
+                this.currentSprite = this.sprites.jump.right
+            } else {
+                this.currentSprite = this.sprites.jump.left
+            }
+
+            this.currentSpriteFrames = this.sprites.jump.frames
+            this.currentFrameBuffer = this.sprites.jump.buffer
+            this.jummping = true
+        }
+
+        // wallHang animation
+        if ((this.collidedLeftCounter <= 0 && !this.isGrounded) || this.WallJumpRightCounter <= 5)
+            this.currentSprite = this.sprites.hang.left
+        if ((this.collidedRightCounter <= 0 && !this.isGrounded) || this.WallJumpLeftCounter <= 5)
+            this.currentSprite = this.sprites.hang.right
+    }
+
+    dash() {
         if (
             (keysPressed.get("Shift") &&
                 this.canDash &&
@@ -543,102 +644,6 @@ export default class Player extends Element {
                 this.gravity = 0
             }
         }
-
-        // Check if the player is falling
-        if (
-            this.isGrounded === false &&
-            this.velocity.y > 0 &&
-            !this.standingOnMovingPlatform &&
-            this.collidedLeftCounter > 5 &&
-            this.collidedRightCounter > 5
-        )
-            this.falling = true
-        else this.falling = false
-
-        // check if player is on the ground
-        if (this.isGrounded) this.jummping = false
-
-        // animations
-
-        // Sprite animation for standing still
-        if (this.velocity.x === 0 && this.isGrounded) {
-            if (this.isMovingRight) {
-                this.currentSprite = this.sprites.stand.right
-            } else {
-                this.currentSprite = this.sprites.stand.left
-            }
-        }
-
-        // sprite animation for moving left on the ground when pressing the left key
-        if (
-            keysPressed.get("ArrowLeft") &&
-            this.isGrounded &&
-            this.falling === false &&
-            this.WallJumpLeftCounter > 5
-        ) {
-            this.currentSprite = this.sprites.run.left
-            this.currentSpriteFrames = this.sprites.run.frames
-            this.currentFrameBuffer = this.sprites.run.buffer
-        }
-
-        // sprite animation for moving right on the ground when pressing the right key
-        if (
-            keysPressed.get("ArrowRight") &&
-            this.isGrounded &&
-            this.falling === false &&
-            this.WallJumpRightCounter > 5
-        ) {
-            this.currentSprite = this.sprites.run.right
-            this.currentSpriteFrames = this.sprites.run.frames
-            this.currentFrameBuffer = this.sprites.run.buffer
-        }
-
-        if (this.isGrounded && this.dashCounter > 40) {
-            this.isDashing = false
-        }
-
-        // player stands still when both left and right key are pressed
-        if (keysPressed.get("ArrowLeft") && keysPressed.get("ArrowRight")) {
-            if (this.jummping) {
-                this.currentSprite = this.sprites.jump.right
-                this.currentSpriteFrames = this.sprites.jump.frames
-                this.currentFrameBuffer = this.sprites.jump.buffer
-            } else if (this.falling) {
-                this.currentSprite = this.sprites.fall.right
-                this.currentFrameBuffer = this.sprites.fall.buffer
-            } else this.currentSprite = this.sprites.stand.right
-        }
-
-        //falling animation
-        if (this.falling) {
-            if (this.isMovingRight) {
-                this.currentSprite = this.sprites.fall.right
-            } else {
-                this.currentSprite = this.sprites.fall.left
-            }
-
-            this.currentFrameBuffer = this.sprites.fall.buffer
-            this.jummping = false
-        }
-
-        // jummping Animation
-        if (this.velocity.y <= 0 && !this.isGrounded) {
-            if (this.isMovingRight) {
-                this.currentSprite = this.sprites.jump.right
-            } else {
-                this.currentSprite = this.sprites.jump.left
-            }
-
-            this.currentSpriteFrames = this.sprites.jump.frames
-            this.currentFrameBuffer = this.sprites.jump.buffer
-            this.jummping = true
-        }
-
-        // wallHang animation
-        if ((this.collidedLeftCounter <= 0 && !this.isGrounded) || this.WallJumpRightCounter <= 5)
-            this.currentSprite = this.sprites.hang.left
-        if ((this.collidedRightCounter <= 0 && !this.isGrounded) || this.WallJumpLeftCounter <= 5)
-            this.currentSprite = this.sprites.hang.right
     }
 
     // Override
@@ -756,7 +761,7 @@ export default class Player extends Element {
         this.isDead = true
 
         const colors = ["#693a00", "#546d8e", "#ffffff", "#333a42"]
-        this.game.particles = new Particles(this.position.x, this.position.y, colors)
+        this.level.elementList.add(new Particles(this.position.x, this.position.y, colors, 2))
 
         this.resetValues()
     }

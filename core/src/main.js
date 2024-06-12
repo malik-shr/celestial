@@ -1,6 +1,6 @@
 import Game from "./game"
-import { getLevelMetas } from "./level/levelMeta"
-import KeyboardListener from "./listener/keyboardListener"
+import Level from "./level/level"
+import LevelList from "./level/levellist"
 
 const canvas = window.document.querySelector("canvas")
 canvas.addEventListener("contextmenu", (event) => event.preventDefault())
@@ -11,12 +11,10 @@ canvas.height = 640
 
 const game = new Game(canvas, ctx)
 
-new KeyboardListener()
-
 game.start()
 
 // Outcomment this for debugging and comment game.menu.open()
-game.startLevel(getLevelMetas()["Level 1"])
-//game.completed.open()
+const ll = new LevelList()
+game.startLevel(ll.get("Level 1"))
 
-//game.menu.open()
+game.menu.open()

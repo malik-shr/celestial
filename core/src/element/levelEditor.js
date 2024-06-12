@@ -13,7 +13,7 @@ import Bubble from "./bubble"
 
 export default class LevelEditor extends Element {
     constructor(game, level) {
-        super(0, 0, 32, 32)
+        super(0, 0)
         this.game = game
         this.level = level
 
