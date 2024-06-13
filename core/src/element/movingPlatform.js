@@ -1,5 +1,5 @@
 import Element from "./element"
-
+import Sprite from "./sprite"
 export default class MovingPlatform extends Element {
     constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, traveledX = 0, traveledY = 0) {
         super(x, y, 64, 16)
@@ -16,6 +16,7 @@ export default class MovingPlatform extends Element {
 
         this.isActive = 0
         this.steppedOn = false
+        this.sprite = new Sprite("floating.png", this.width, this.height, 128, 32)
     }
 
     checkCollision(element) {}
@@ -180,10 +181,11 @@ export default class MovingPlatform extends Element {
     }
 
     draw(ctx) {
-        ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        ctx.fillStyle = "cyan"
-        ctx.fill()
-        ctx.closePath()
+        this.sprite.draw(ctx, 0, 0, this.position)
+        // ctx.beginPath()
+        // ctx.rect(this.position.x, this.position.y, this.width, this.height)
+        // ctx.fillStyle = "cyan"
+        // ctx.fill()
+        // ctx.closePath()
     }
 }
