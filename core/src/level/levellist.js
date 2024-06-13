@@ -82,9 +82,9 @@ export default class LevelList {
 
             new LevelMeta("Level 3", "levels/level3.json", "mars", 400, 320),
             new LevelMeta("Level 4", "levels/level4.json", "mars", 480, 360),
-            new LevelMeta("Level 5", "levels/level4.json", "mars", 560, 300),
+            new LevelMeta("Level 5", "levels/level5.json", "mars", 560, 300),
 
-            new LevelMeta("Level 6", "levels/level4.json", "saturn", 400, 320),
+            new LevelMeta("Level 6", "levels/level6.json", "saturn", 400, 320),
         ]
     }
 }
