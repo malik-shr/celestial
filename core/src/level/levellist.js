@@ -78,13 +78,15 @@ export default class LevelList {
     refresh() {
         this.levelMetas = [
             new LevelMeta("Level 1", "levels/level1.json", "moon", 400, 320),
-            new LevelMeta("Level 2", "levels/level2.json", "moon", 480, 320),
+            new LevelMeta("Level 2", "levels/level2.json", "moon", 500, 280),
+            new LevelMeta("Level 3", "levels/level3.json", "moon", 580, 360),
 
-            new LevelMeta("Level 3", "levels/level3.json", "mars", 400, 320),
-            new LevelMeta("Level 4", "levels/level4.json", "mars", 480, 360),
-            new LevelMeta("Level 5", "levels/level5.json", "mars", 560, 300),
+            new LevelMeta("Level 4", "levels/level4.json", "mars", 400, 320),
+            new LevelMeta("Level 5", "levels/level5.json", "mars", 480, 360),
+            new LevelMeta("Level 6", "levels/level6.json", "mars", 560, 300),
 
-            new LevelMeta("Level 6", "levels/level6.json", "saturn", 400, 320),
+            new LevelMeta("Level 7", "levels/level7.json", "saturn", 400, 320),
+            new LevelMeta("Level 8", "levels/level8.json", "saturn", 500, 250),
         ]
     }
 }
