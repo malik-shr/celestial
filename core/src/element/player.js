@@ -478,7 +478,7 @@ export default class Player extends Element {
                 this.currentFrame = 0
             }
 
-            if (this.dashCounter < 10) {
+            if (this.dashCounter < 8) {
                 if (this.wasGrounded) {
                     this.collidedDownCounter = 0
                 }
