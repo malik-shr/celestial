@@ -442,6 +442,10 @@ export default class Player extends Element {
         if ((this.collidedRightCounter <= 0 && !this.isGrounded) || this.WallJumpLeftCounter <= 5) {
             this.currentSprite = this.sprites.hang.right
         }
+
+        if (!keysPressed.get("Shift")) {
+            this.letGoOfShift = true
+        }
     }
 
     dash() {
@@ -453,7 +457,8 @@ export default class Player extends Element {
                 (keysPressed.get("ArrowRight") ||
                     keysPressed.get("ArrowLeft") ||
                     keysPressed.get("ArrowDown") ||
-                    keysPressed.get("ArrowUp"))) ||
+                    keysPressed.get("ArrowUp")) &&
+                this.letGoOfShift) ||
             this.isDashing
         ) {
             if (!this.isDashing) {
@@ -465,6 +470,7 @@ export default class Player extends Element {
                 this.isDashing = true
                 this.canDash = false
                 this.isJumping = false
+                this.letGoOfShift = false
                 this.pastDashPositions = []
             }
 
