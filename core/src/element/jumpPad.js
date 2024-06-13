@@ -66,7 +66,7 @@ export default class JumpPad extends SolidBlock {
     }
     updateFrames() {
         this.elapsedFrames++
-        if (this.elapsedFrames % 3 === 0) {
+        if (this.elapsedFrames % 4 === 0) {
             if (this.isActive) {
                 // Only iterate once when jumping
                 if (this.currentFrame < 8 - 1) {
