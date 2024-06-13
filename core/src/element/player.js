@@ -176,7 +176,7 @@ export default class Player extends Element {
             ctx.globalAlpha = 0
             ctx.filter = "contrast(0.1) sepia(1) saturate(4) brightness(95%) blur(4px)"
             for (let i = 0; i < this.pastDashPositions.length; i++) {
-                ctx.globalAlpha += 0.05
+                ctx.globalAlpha += 0.07
                 this.currentSprite.draw(ctx, this.currentFrame, 0, this.pastDashPositions[i])
             }
         }
