@@ -1,8 +1,15 @@
 class LevelMeta {
-    constructor(name, src, planet) {
+    constructor(name, src, planet, x, y) {
         this.name = name
         this.src = src
         this.planet = planet
+
+        this.button = {
+            position: {
+                x: x,
+                y: y,
+            },
+        }
 
         this.data = this.parse()
     }
@@ -63,11 +70,21 @@ export default class LevelList {
         return this.levelMetas.find((item) => item.name === name)
     }
 
+    getLevelPlanets(planet) {
+        this.refresh()
+        return this.levelMetas.filter((item) => item.planet === planet)
+    }
+
     refresh() {
         this.levelMetas = [
-            new LevelMeta("Level 1", "levels/level1.json", "moon"),
-            new LevelMeta("Level 2", "levels/level2.json", "moon"),
-            new LevelMeta("Level 3", "levels/level3.json", "mars"),
+            new LevelMeta("Level 1", "levels/level1.json", "moon", 400, 320),
+            new LevelMeta("Level 2", "levels/level2.json", "moon", 480, 320),
+
+            new LevelMeta("Level 3", "levels/level3.json", "mars", 400, 320),
+            new LevelMeta("Level 4", "levels/level4.json", "mars", 480, 360),
+            new LevelMeta("Level 5", "levels/level4.json", "mars", 560, 300),
+
+            new LevelMeta("Level 6", "levels/level4.json", "saturn", 400, 320),
         ]
     }
 }

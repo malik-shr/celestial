@@ -81,10 +81,10 @@ export class TransparentButton extends Button {
 }
 
 export class LevelButton extends Button {
-    constructor(action, x, y, level) {
+    constructor(action, x, y, meta) {
         super(action, x, y, 30, 30, "")
 
-        this.level = level
+        this.meta = meta
 
         this.strokeScale = 0
 
@@ -144,11 +144,11 @@ export class LevelButton extends Button {
         }
 
         let bestTime =
-            this.level.data.best === Number.MAX_SAFE_INTEGER ? "-" : this.level.data.best + "s"
+            this.meta.data.best === Number.MAX_SAFE_INTEGER ? "-" : this.meta.data.best + "s"
 
         if (
-            this.level.data.best !== Number.MAX_SAFE_INTEGER &&
-            parseFloat(this.level.data.best) > 99999999
+            this.meta.data.best !== Number.MAX_SAFE_INTEGER &&
+            parseFloat(this.meta.data.best) > 99999999
         ) {
             bestTime = 99999999 + "s"
         }
@@ -195,7 +195,7 @@ export class LevelButton extends Button {
             ctx.textAlign = "center"
             ctx.textBaseline = "middle"
 
-            ctx.fillText(this.level.name, box.x + box.width / 2, box.y + 20)
+            ctx.fillText(this.meta.name, box.x + box.width / 2, box.y + 20)
 
             ctx.font = "500 18px Montserrat"
             ctx.textAlign = "left"

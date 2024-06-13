@@ -73,10 +73,18 @@ export default class Menu {
             this.levelList.get("Level 3")
         )
 
-        this.planetList.moon.buttonList.add(level1Btn)
-        this.planetList.moon.buttonList.add(level2Btn)
-
-        this.planetList.mars.buttonList.add(level3Btn)
+        for (const planet of this.planetKeys) {
+            for (const meta of this.levelList.getLevelPlanets(planet)) {
+                this.planetList[planet].buttonList.add(
+                    new LevelButton(
+                        () => this.selectLevel(meta),
+                        meta.button.position.x,
+                        meta.button.position.y,
+                        meta
+                    )
+                )
+            }
+        }
 
         this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
         this.activePlanet.buttonList.isActive = true
@@ -191,7 +199,7 @@ export default class Menu {
     updateButtonMeta() {
         for (const key of this.planetKeys) {
             for (const button of this.planetList[key].buttonList.buttons) {
-                button.level = this.levelList.get(button.level.name)
+                button.meta = this.levelList.get(button.meta.name)
             }
         }
     }
@@ -220,9 +228,9 @@ export default class Menu {
         this.close()
     }
 
-    selectLevel(button) {
+    selectLevel(meta) {
         this.close()
 
-        this.game.startLevel(button.level)
+        this.game.startLevel(meta)
     }
 }
