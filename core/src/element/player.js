@@ -176,7 +176,7 @@ export default class Player extends Element {
             ctx.globalAlpha = 0
             ctx.filter = "contrast(0.1) sepia(1) saturate(4) brightness(95%) blur(4px)"
             for (let i = 0; i < this.pastDashPositions.length; i++) {
-                ctx.globalAlpha += 0.045
+                ctx.globalAlpha += 0.05
                 this.currentSprite.draw(ctx, this.currentFrame, 0, this.pastDashPositions[i])
             }
         }
@@ -310,7 +310,7 @@ export default class Player extends Element {
             this.letGoOfSpace
         ) {
             if (this.collidedLeftCounter <= 5 && this.WallJumpLeftCounter > 30) {
-                this.velocity.y = -10
+                this.velocity.y = -10.5
                 this.velocity.x = 5
                 this.WallJumpLeft = true
                 this.WallJumpLeftCounter = 0
@@ -320,7 +320,7 @@ export default class Player extends Element {
                 this.isMovingRight = true
             }
             if (this.collidedRightCounter <= 5 && this.WallJumpRightCounter > 30) {
-                this.velocity.y = -10
+                this.velocity.y = -10.5
                 this.velocity.x = -5
                 this.WallJumpRight = true
                 this.WallJumpRightCounter = 0
@@ -490,7 +490,7 @@ export default class Player extends Element {
                 this.gravity = 0
             }
 
-            if (this.dashCounter > 4 && this.dashCounter < 8) {
+            if (this.dashCounter > 4 && this.dashCounter <= 6) {
                 // right
                 if (
                     this.pressedRight &&
@@ -623,7 +623,7 @@ export default class Player extends Element {
             }
 
             // decceleration (if necessary)
-            if (this.dashCounter >= 10) {
+            if (this.dashCounter >= 10 && this.dashCounter <= 14) {
                 if (this.dashCounter === 10) {
                     this.tempVelocity = this.velocity.x
                 }
@@ -639,7 +639,7 @@ export default class Player extends Element {
             this.dashCounter++
 
             // stop dash after N frames and reset Dash State
-            if (this.dashCounter > 14) {
+            if (this.dashCounter > 16) {
                 this.isDashing = false
                 this.dashCounter = 0
                 this.gravity = 0

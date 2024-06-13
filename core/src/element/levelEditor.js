@@ -134,7 +134,9 @@ export default class LevelEditor extends Element {
                     this.game.level.elementList.add(new Spike(x, y, width, height, this.spikeType))
                     break
                 case 5:
-                    this.game.level.elementList.add(new Bubble(this.positionX, this.positionY))
+                    this.game.level.elementList.add(
+                        new Bubble(this.positionX, this.positionY, this.game)
+                    )
                     break
                 case 6:
                     this.game.level.elementList.add(
