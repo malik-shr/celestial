@@ -79,7 +79,7 @@ export default class LevelEditor extends Element {
             // set the desired blocks
             switch (this.BlockType) {
                 case 1:
-                    if (this.blockType <= 0 || this.blockType > 15) {
+                    if (this.blockType <= 0 || this.blockType > 16) {
                         console.log("INVALID TYPE")
                         break
                     }
@@ -167,7 +167,7 @@ export default class LevelEditor extends Element {
             if (this.BlockType === 1) {
                 this.blockType = Number(
                     prompt(
-                        "Type a number\n1: Oben/links \n2: Oben\n3: Oben/Rechts\n4: Links/Oben/Unten\n5: Links\n6: Nichts\n7: Rechts\n8: Links/Rechts\n9: Links/Unten \n10: Unten\n11: Unten/Rechts\n12: Links/Unten/Rechts\n13: Oben/Links/Unten\n14: Unten/Oben\n15: Oben/Rechts/Unten"
+                        "Type a number\n1: Oben/links \n2: Oben\n3: Oben/Rechts\n4: Links/Oben/Unten\n5: Links\n6: Nichts\n7: Rechts\n8: Links/Rechts\n9: Links/Unten \n10: Unten\n11: Unten/Rechts\n12: Links/Unten/Rechts\n13: Oben/Links/Unten\n14: Unten/Oben\n15: Oben/Rechts/Unten\n 16 Alles"
                     )
                 )
             }
