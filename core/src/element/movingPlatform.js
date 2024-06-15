@@ -1,12 +1,14 @@
 import Element from "./element"
 import Sprite from "./sprite"
 export default class MovingPlatform extends Element {
-    constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY) {
+    constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, type) {
         super(x, y, 64, 16)
         this.velocity = {
             x: velocityX,
             y: velocityY,
         }
+
+        this.type = type
 
         this.startPosition = { x: x, y: y }
         this.startVelocity = { x: velocityX, y: velocityY }
@@ -160,7 +162,7 @@ export default class MovingPlatform extends Element {
     }
 
     action() {
-        if (!this.activated) return
+        if (!this.activated && this.type === 1) return
         this.isActive -= 1
 
         if (this.traveledX >= this.maxX) {
@@ -190,8 +192,6 @@ export default class MovingPlatform extends Element {
         this.activated = false
         this.traveledX = 0
         this.traveledY = 0
-
-        this.velocity.x = 0
 
         this.velocity = structuredClone(this.startVelocity)
         this.position = structuredClone(this.startPosition)

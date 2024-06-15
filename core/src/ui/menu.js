@@ -40,9 +40,9 @@ export default class Menu {
         const helpButton = new MenuButton(this.openHelp, 880, 40, 50, 50, "?", 34)
 
         /** @type {SlideButton} */
-        this.nextBtn = new TransparentButton(this.selectNext, 1024 - 180 - 80, 360, 75, 65, "🡲")
+        this.nextBtn = new TransparentButton(this.selectNext, 1024 - 180 - 80, 360, 75, 65, "➡")
         /** @type {SlideButton} */
-        this.prevBtn = new TransparentButton(this.selectPrev, 180, 360, 75, 65, "🡰")
+        this.prevBtn = new TransparentButton(this.selectPrev, 180, 360, 75, 65, "⬅")
 
         this.mainList.add(helpButton)
         this.mainList.add(settingsBtn)
@@ -211,7 +211,6 @@ export default class Menu {
         this.close()
 
         const meta = this.levelList.get(name)
-        console.log(meta)
 
         this.game.startLevel(meta)
     }

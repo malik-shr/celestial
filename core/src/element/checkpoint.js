@@ -9,17 +9,19 @@ export default class Checkpoint extends Element {
     }
 
     handleCollisionX(player) {
-        if (this.isActive) return
-
-        this.isActive = true
-        this.updateRespawnPoint(player)
+        this.handleCollision(player)
     }
 
     handleCollisionY(player) {
+        this.handleCollision(player)
+    }
+
+    handleCollision(player) {
         if (this.isActive) return
 
         this.isActive = true
         this.updateRespawnPoint(player)
+        this.game.level.elementList.setPrevCheckpoints(this)
     }
 
     updateRespawnPoint(player) {
