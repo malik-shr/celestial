@@ -257,14 +257,14 @@ export default class LevelEditor extends Element {
             }
             if (elementItem instanceof MovingPlatform) {
                 obj.movingPlattforms.push({
-                    x: elementItem.position.x,
-                    y: elementItem.position.y,
+                    x: elementItem.startPosition.x,
+                    y: elementItem.startPosition.y,
                     vx: elementItem.velocity.x,
                     vy: elementItem.velocity.y,
                     mx: elementItem.maxX,
                     my: elementItem.maxY,
-                    traveledX: elementItem.traveledX,
-                    traveledY: elementItem.traveledY,
+                    traveledX: 0,
+                    traveledY: 0,
                 })
             }
             if (elementItem instanceof Goal) {

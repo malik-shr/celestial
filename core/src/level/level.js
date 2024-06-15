@@ -169,9 +169,7 @@ export default class Level {
                     movingPlattform.vx,
                     movingPlattform.vy,
                     movingPlattform.mx,
-                    movingPlattform.my,
-                    movingPlattform.traveledX,
-                    movingPlattform.traveledY
+                    movingPlattform.my
                 )
             )
         }

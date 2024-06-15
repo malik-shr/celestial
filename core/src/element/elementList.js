@@ -1,3 +1,4 @@
+import MovingPlatform from "./movingPlatform"
 import Player from "./player"
 
 export default class ElementList extends Array {
@@ -23,6 +24,14 @@ export default class ElementList extends Array {
             if (this.elementItem instanceof Player) {
                 elementItem.checkCollision(element)
                 break
+            }
+        }
+    }
+
+    resetMovingPlattforms() {
+        for (const elementItem of this) {
+            if (elementItem instanceof MovingPlatform) {
+                elementItem.reset()
             }
         }
     }

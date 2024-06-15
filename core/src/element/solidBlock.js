@@ -7,11 +7,20 @@ export default class SolidBlock extends Element {
 
         this.type = type - 1
 
-        this.sprite = new Sprite("tileset_moon.png", this.width, this.height, 48, 49)
+        this.sprite = new Sprite("moon/tileset_moon.png", this.width, this.height, 32, 32)
 
         switch (planet) {
             case "mars":
-                this.sprite = new Sprite("tileset_mars.png", this.width, this.height, 48, 49)
+                this.sprite = new Sprite("mars/tileset_mars.png", this.width, this.height, 32, 32)
+                break
+            case "saturn":
+                this.sprite = new Sprite(
+                    "saturn/tileset_saturn.png",
+                    this.width,
+                    this.height,
+                    32,
+                    32
+                )
                 break
             default:
         }
