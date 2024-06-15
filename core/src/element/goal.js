@@ -1,4 +1,5 @@
 import Element from "./element"
+import Sprite from "./sprite"
 
 export default class Goal extends Element {
     constructor(x, y, game) {
@@ -6,6 +7,8 @@ export default class Goal extends Element {
 
         this.game = game
         this.isActive = false
+        this.endGoal = new Sprite("finish.png", this.width, this.height, 70, 70)
+        this.currentSprite = this.endGoal
     }
 
     handleCollisionX(player) {
@@ -27,10 +30,6 @@ export default class Goal extends Element {
     }
 
     draw(ctx) {
-        ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        ctx.fillStyle = "blue"
-        ctx.fill()
-        ctx.closePath()
+        this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
     }
 }
