@@ -9,16 +9,14 @@ export default class Goal extends Element {
     }
 
     handleCollisionX(player) {
-        if (this.isActive) return
-
-        this.isActive = true
-
-        this.game.completed.open()
-        this.game.level.completed = true
-        this.game.level.write()
+        this.handleCollision()
     }
 
     handleCollisionY(player) {
+        this.handleCollision()
+    }
+
+    handleCollision() {
         if (this.isActive) return
 
         this.isActive = true

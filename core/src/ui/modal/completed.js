@@ -32,6 +32,8 @@ export default class Completed extends Modal {
     draw(ctx) {
         super.updateFrames()
 
+        const meta = this.game.levelList.get(this.game.level.name)
+
         ctx.beginPath()
         ctx.save()
 
@@ -43,12 +45,9 @@ export default class Completed extends Modal {
         super.drawTitle(ctx)
 
         const oldBestTime =
-            this.game.level.meta.data.best === Number.MAX_SAFE_INTEGER
-                ? this.game.time
-                : this.game.level.meta.data.best
+            meta.data.best === Number.MAX_SAFE_INTEGER ? this.game.time : meta.data.best
 
-        const newTimeIsBetter =
-            parseFloat(this.game.time) < parseFloat(this.game.level.meta.data.best)
+        const newTimeIsBetter = parseFloat(this.game.time) <= parseFloat(meta.data.best)
 
         let newBestTime = newTimeIsBetter ? this.game.time : oldBestTime
         let time = this.game.time

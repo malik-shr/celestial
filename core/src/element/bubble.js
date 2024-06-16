@@ -15,6 +15,8 @@ export default class Bubble extends Element {
     }
 
     action() {
+        if (!this.collided) return
+
         if (this.collided) {
             ++this.cooldown
         }
@@ -23,6 +25,10 @@ export default class Bubble extends Element {
             this.game.level.elementList.add(
                 new Particles(this.position.x, this.position.y, ["#ffe854", "#ffc10e"], 0)
             )
+        }
+
+        if (this.cooldown < 10) {
+            this.game.player.gravity = 0
         }
 
         if (this.cooldown === 70) {
@@ -43,11 +49,6 @@ export default class Bubble extends Element {
         if (!this.collided) {
             this.collided = true
             player.canDash = true
-        }
-
-        if (this.cooldown < 4) {
-            player.velocity.x *= 0.9
-            player.velocity.y *= 0.9
         }
     }
 

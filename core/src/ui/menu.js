@@ -40,9 +40,9 @@ export default class Menu {
         const helpButton = new MenuButton(this.openHelp, 880, 40, 50, 50, "?", 34)
 
         /** @type {SlideButton} */
-        this.nextBtn = new TransparentButton(this.selectNext, 1024 - 180 - 80, 360, 75, 65, "🡲")
+        this.nextBtn = new TransparentButton(this.selectNext, 1024 - 180 - 80, 360, 75, 65, "➡")
         /** @type {SlideButton} */
-        this.prevBtn = new TransparentButton(this.selectPrev, 180, 360, 75, 65, "🡰")
+        this.prevBtn = new TransparentButton(this.selectPrev, 180, 360, 75, 65, "⬅")
 
         this.mainList.add(helpButton)
         this.mainList.add(settingsBtn)
@@ -52,32 +52,11 @@ export default class Menu {
 
         this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
 
-        const level1Btn = new LevelButton(
-            () => this.selectLevel(level1Btn),
-            400,
-            320,
-            this.levelList.get("Level 1")
-        )
-
-        const level2Btn = new LevelButton(
-            () => this.selectLevel(level2Btn),
-            480,
-            320,
-            this.levelList.get("Level 2")
-        )
-
-        const level3Btn = new LevelButton(
-            () => this.selectLevel(level3Btn),
-            550,
-            320,
-            this.levelList.get("Level 3")
-        )
-
         for (const planet of this.planetKeys) {
             for (const meta of this.levelList.getLevelPlanets(planet)) {
                 this.planetList[planet].buttonList.add(
                     new LevelButton(
-                        () => this.selectLevel(meta),
+                        () => this.selectLevel(meta.name),
                         meta.button.position.x,
                         meta.button.position.y,
                         meta
@@ -228,8 +207,10 @@ export default class Menu {
         this.close()
     }
 
-    selectLevel(meta) {
+    selectLevel(name) {
         this.close()
+
+        const meta = this.levelList.get(name)
 
         this.game.startLevel(meta)
     }

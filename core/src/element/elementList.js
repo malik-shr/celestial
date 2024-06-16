@@ -1,3 +1,5 @@
+import Checkpoint from "./checkpoint"
+import MovingPlatform from "./movingPlatform"
 import Player from "./player"
 
 export default class ElementList extends Array {
@@ -23,6 +25,38 @@ export default class ElementList extends Array {
             if (this.elementItem instanceof Player) {
                 elementItem.checkCollision(element)
                 break
+            }
+        }
+    }
+
+    resetMovingPlattforms() {
+        for (const elementItem of this) {
+            if (elementItem instanceof MovingPlatform) {
+                elementItem.reset()
+            }
+        }
+    }
+
+    getHighestX() {
+        if (this.length === 0) return 0
+
+        let max = this[0].position.x
+
+        for (const elementItem of this) {
+            if (elementItem.position.x > max) {
+                max = elementItem.position.x
+            }
+        }
+
+        return max
+    }
+
+    setPrevCheckpoints(checkpoint) {
+        for (const elementItem of this) {
+            if (elementItem instanceof Checkpoint) {
+                if (elementItem.position.x < checkpoint.position.x) {
+                    elementItem.isActive = true
+                }
             }
         }
     }

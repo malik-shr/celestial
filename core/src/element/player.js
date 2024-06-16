@@ -756,21 +756,21 @@ export default class Player extends Element {
         this.velocity.y = 0
 
         if (this.deadCounter === 30) {
-            ++this.deaths
             this.position = structuredClone(this.respawnPoint)
             this.game.camera.load()
             this.isDead = false
             this.deadCounter = 0
+
+            this.resetValues()
         }
     }
 
     die() {
+        ++this.deaths
         this.isDead = true
 
         const colors = ["#693a00", "#546d8e", "#ffffff", "#333a42"]
         this.level.elementList.add(new Particles(this.position.x, this.position.y, colors, 2))
-
-        this.resetValues()
     }
 
     resetValues() {
@@ -816,6 +816,8 @@ export default class Player extends Element {
         this.currentFrame = 0
         this.elapsedFrames = 0
         this.frameBuffer = 4
+
+        this.game.level.elementList.resetMovingPlattforms()
     }
 
     /** @returns players state at the time of function call */

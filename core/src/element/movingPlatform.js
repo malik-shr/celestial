@@ -1,21 +1,27 @@
 import Element from "./element"
 import Sprite from "./sprite"
 export default class MovingPlatform extends Element {
-    constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, traveledX = 0, traveledY = 0) {
+    constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, type) {
         super(x, y, 64, 16)
         this.velocity = {
             x: velocityX,
             y: velocityY,
         }
 
-        this.traveledX = traveledX
-        this.traveledY = traveledY
+        this.type = type
+
+        this.startPosition = { x: x, y: y }
+        this.startVelocity = { x: velocityX, y: velocityY }
+
+        this.traveledX = 0
+        this.traveledY = 0
 
         this.maxX = maxX
         this.maxY = maxY
 
         this.isActive = 0
         this.steppedOn = false
+        this.activated = false
         this.sprite = new Sprite("floating.png", this.width, this.height, 128, 32)
     }
 
@@ -29,6 +35,7 @@ export default class MovingPlatform extends Element {
             player.previous.position.y - player.previous.velocity.y - 1 <=
             this.position.y - player.height - this.velocity.y
         ) {
+            this.activated = true
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
             player.position.y = this.position.y - player.height
 
@@ -155,6 +162,7 @@ export default class MovingPlatform extends Element {
     }
 
     action() {
+        if (!this.activated && this.type === 1) return
         this.isActive -= 1
 
         if (this.traveledX >= this.maxX) {
@@ -178,6 +186,15 @@ export default class MovingPlatform extends Element {
         if (this.isActive < 0) {
             this.steppedOn = false
         }
+    }
+
+    reset() {
+        this.activated = false
+        this.traveledX = 0
+        this.traveledY = 0
+
+        this.velocity = structuredClone(this.startVelocity)
+        this.position = structuredClone(this.startPosition)
     }
 
     draw(ctx) {

@@ -79,7 +79,7 @@ export default class LevelEditor extends Element {
             // set the desired blocks
             switch (this.BlockType) {
                 case 1:
-                    if (this.blockType <= 0 || this.blockType > 15) {
+                    if (this.blockType <= 0 || this.blockType > 16) {
                         console.log("INVALID TYPE")
                         break
                     }
@@ -101,14 +101,28 @@ export default class LevelEditor extends Element {
                             this.speedX,
                             this.speedY,
                             this.maxDistanceX,
-                            this.maxDistanceY
+                            this.maxDistanceY,
+                            1
                         )
                     )
                     break
                 case 3:
-                    this.game.level.elementList.add(new JumpPad(this.positionX, this.positionY))
+                    this.game.level.elementList.add(
+                        new MovingPlatform(
+                            this.positionX,
+                            this.positionY,
+                            this.speedX,
+                            this.speedY,
+                            this.maxDistanceX,
+                            this.maxDistanceY,
+                            2
+                        )
+                    )
                     break
                 case 4:
+                    this.game.level.elementList.add(new JumpPad(this.positionX, this.positionY))
+                    break
+                case 5:
                     switch (this.spikeType) {
                         case 1:
                             y += 32 - 24
@@ -133,22 +147,22 @@ export default class LevelEditor extends Element {
                     }
                     this.game.level.elementList.add(new Spike(x, y, width, height, this.spikeType))
                     break
-                case 5:
+                case 6:
                     this.game.level.elementList.add(
                         new Bubble(this.positionX, this.positionY, this.game)
                     )
                     break
-                case 6:
+                case 7:
                     this.game.level.elementList.add(
                         new TemporaryBlock(this.positionX, this.positionY)
                     )
                     break
-                case 7:
+                case 8:
                     this.game.level.elementList.add(
                         new Checkpoint(this.positionX, this.positionY, this.game)
                     )
                     break
-                case 8:
+                case 9:
                     this.game.level.elementList.add(
                         new Goal(this.positionX, this.positionY, this.game)
                     )
@@ -161,17 +175,17 @@ export default class LevelEditor extends Element {
             this.sizeY = 32
             this.BlockType = Number(
                 prompt(
-                    "Type a number\n1: SolidBlock \n2: MovingPlatform\n3: JumpPad\n4: Spike\n5: Bubble\n6: Temporary Block\n7: Checkpoint\n8: Goal"
+                    "Type a number\n1: SolidBlock \n2: MovingPlatform\n3: MovingPlatform2\n4: JumpPad\n5: Spike\n6: Bubble\n7: Temporary Block\n8: Checkpoint\n9: Goal"
                 )
             )
             if (this.BlockType === 1) {
                 this.blockType = Number(
                     prompt(
-                        "Type a number\n1: Oben/links \n2: Oben\n3: Oben/Rechts\n4: Links/Oben/Unten\n5: Links\n6: Nichts\n7: Rechts\n8: Links/Rechts\n9: Links/Unten \n10: Unten\n11: Unten/Rechts\n12: Links/Unten/Rechts\n13: Oben/Links/Unten\n14: Unten/Oben\n15: Oben/Rechts/Unten"
+                        "Type a number\n1: Oben/links \n2: Oben\n3: Oben/Rechts\n4: Links/Oben/Unten\n5: Links\n6: Nichts\n7: Rechts\n8: Links/Rechts\n9: Links/Unten \n10: Unten\n11: Unten/Rechts\n12: Links/Unten/Rechts\n13: Oben/Links/Unten\n14: Unten/Oben\n15: Oben/Rechts/Unten\n 16 Alles"
                     )
                 )
             }
-            if (this.BlockType === 2) {
+            if (this.BlockType === 2 || this.BlockType === 3) {
                 this.sizeX = 64
                 this.sizeY = 16
                 this.speedX = Number(prompt("Speed X"))
@@ -257,14 +271,15 @@ export default class LevelEditor extends Element {
             }
             if (elementItem instanceof MovingPlatform) {
                 obj.movingPlattforms.push({
-                    x: elementItem.position.x,
-                    y: elementItem.position.y,
+                    x: elementItem.startPosition.x,
+                    y: elementItem.startPosition.y,
                     vx: elementItem.velocity.x,
                     vy: elementItem.velocity.y,
                     mx: elementItem.maxX,
                     my: elementItem.maxY,
-                    traveledX: elementItem.traveledX,
-                    traveledY: elementItem.traveledY,
+                    traveledX: 0,
+                    traveledY: 0,
+                    t: elementItem.type,
                 })
             }
             if (elementItem instanceof Goal) {
