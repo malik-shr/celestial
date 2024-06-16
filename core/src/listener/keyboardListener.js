@@ -1,4 +1,4 @@
-import { currentScreen, keysPressed } from "./store"
+import { Screen, currentScreen, keysPressed } from "./store"
 
 export default class KeyboardListener {
     constructor(game) {
@@ -6,6 +6,8 @@ export default class KeyboardListener {
 
         window.addEventListener("keydown", (event) => this.handleKeyDown(event))
         window.addEventListener("keyup", (event) => this.handleKeyUp(event))
+
+        window.addEventListener("keyup", (event) => this.openPause(event))
     }
 
     handleKeyDown(event) {
@@ -18,5 +20,24 @@ export default class KeyboardListener {
         if (!keysPressed.has(event.key)) return
 
         keysPressed.set(event.key, false)
+    }
+
+    openPause(event) {
+        if (
+            this.game.pause === null ||
+            currentScreen !== Screen.Game ||
+            this.game.completed.isActive
+        ) {
+            return
+        }
+
+        if (event.key === "Escape") {
+            if (!this.game.pause.isActive) {
+                this.game.pause.open()
+                return
+            }
+
+            this.game.pause.resumeGame()
+        }
     }
 }

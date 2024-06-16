@@ -27,10 +27,6 @@ export default class Bubble extends Element {
             )
         }
 
-        if (this.cooldown < 10) {
-            this.game.player.gravity = 0
-        }
-
         if (this.cooldown === 70) {
             this.cooldown = 0
             this.collided = false

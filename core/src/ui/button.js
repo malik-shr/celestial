@@ -15,8 +15,18 @@ export default class Button {
 }
 
 export class MenuButton extends Button {
-    constructor(action, x, y, width, height, text, fontSize = 22) {
+    constructor(action, x, y, width, height, text, fontSize = 22, type = 1) {
         super(action, x, y, width, height)
+
+        this.bgColor = "rgba(240,240,240,1)"
+        this.bgHover = "rgba(200,200,200,1)"
+        this.color = "black"
+
+        if (type === 2) {
+            this.bgColor = "#ff5252"
+            this.bgHover = "#ff7b7b"
+            this.color = "white"
+        }
 
         this.text = text
         this.fontSize = fontSize
@@ -25,7 +35,7 @@ export class MenuButton extends Button {
     draw(ctx) {
         ctx.beginPath()
 
-        ctx.fillStyle = this.hover ? "rgba(200,200,200,1)" : "rgba(240,240,240,1)"
+        ctx.fillStyle = this.hover ? this.bgHover : this.bgColor
 
         ctx.roundRect(
             this.rect.position.x,
@@ -36,7 +46,7 @@ export class MenuButton extends Button {
         )
         ctx.fill()
 
-        ctx.fillStyle = "black"
+        ctx.fillStyle = this.color
         ctx.font = `600 ${this.fontSize}px Montserrat`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
@@ -81,9 +91,10 @@ export class TransparentButton extends Button {
 }
 
 export class LevelButton extends Button {
-    constructor(action, x, y, meta) {
+    constructor(action, x, y, menu, meta) {
         super(action, x, y, 30, 30, "")
 
+        this.menu = menu
         this.meta = meta
 
         this.strokeScale = 0
@@ -136,6 +147,8 @@ export class LevelButton extends Button {
     }
 
     drawHoverBox(ctx) {
+        if (this.menu.settings.isActive || this.menu.help.isActive) return
+
         const box = {
             x: this.rect.position.x + 40,
             y: this.rect.position.y - 130,

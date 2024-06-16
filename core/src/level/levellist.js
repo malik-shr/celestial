@@ -17,10 +17,6 @@ class LevelMeta {
     parse() {
         const item = localStorage.getItem(this.name)
 
-        if (this.name === "Level 1") {
-            console.log(item)
-        }
-
         if (!item) {
             return {
                 respawnPoint: {

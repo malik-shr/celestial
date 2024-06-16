@@ -26,7 +26,7 @@ export default class Menu {
         this.openHelp = this.openHelp.bind(this)
 
         this.help = new Help(this.game, this.canvas)
-        this.settings = new Settings(this.game, this.canvas)
+        this.settings = new Settings(this.game, this, this.canvas)
 
         this.bg = new Sprite("bg/bg_menu.png", 1024, 640, 1024, 640)
 
@@ -59,6 +59,7 @@ export default class Menu {
                         () => this.selectLevel(meta.name),
                         meta.button.position.x,
                         meta.button.position.y,
+                        this,
                         meta
                     )
                 )
