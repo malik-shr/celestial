@@ -79,12 +79,11 @@ export default class Pause extends Modal {
         const savedItem = localStorage.getItem(this.game.level.name)
 
         if (savedItem) {
-            const data = savedItem.split(",")
+            const storage = savedItem.split(",")
+
             localStorage.setItem(
                 this.game.level.name,
-                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${
-                    Number.MAX_SAFE_INTEGER
-                },${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${0},${data[7]}`
+                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},0,0,${storage[8]}`
             )
         }
 

@@ -117,7 +117,7 @@ export class LevelButton extends Button {
             this.clickedFrames = 0
         }
 
-        this.progress = this.clickedFrames / 40
+        this.progress = this.clickedFrames / 30
 
         if (this.progress > 1) {
             this.clickedFrames = 0
@@ -127,7 +127,7 @@ export class LevelButton extends Button {
         }
 
         if (this.increaseSize && this.strokeScale < 1) {
-            this.strokeScale += 1 / 40
+            this.strokeScale += 1 / 30
 
             if (this.strokeScale >= 1) {
                 this.strokeScale = 1
@@ -136,7 +136,7 @@ export class LevelButton extends Button {
         }
 
         if (!this.increaseSize && this.strokeScale > 0) {
-            this.strokeScale -= 1 / 40
+            this.strokeScale -= 1 / 30
 
             // Rounding Point
             if (this.strokeScale < 0) {
@@ -227,7 +227,25 @@ export class LevelButton extends Button {
 
         ctx.beginPath()
 
-        ctx.fillStyle = this.hover ? "#e9ecef" : "#f8f9fa"
+        let primaryColor = ""
+        let secondaryColor = ""
+        let hoverColor = ""
+
+        if (this.meta.data.completed) {
+            primaryColor = "#C3FF93"
+            secondaryColor = "#95d067"
+            hoverColor = "#b3ef84"
+        } else if (this.meta.unlocked) {
+            primaryColor = "#f8f9fa"
+            secondaryColor = "#adb5bd"
+            hoverColor = "#e9ecef"
+        } else {
+            primaryColor = "#adb5bd"
+            secondaryColor = "#8a9097"
+            hoverColor = "#9ba2aa"
+        }
+
+        ctx.fillStyle = this.hover ? hoverColor : primaryColor
 
         ctx.arc(
             this.circleCenter.x,
@@ -239,8 +257,11 @@ export class LevelButton extends Button {
         )
         ctx.fill()
 
-        ctx.strokeStyle = "#adb5bd"
-        ctx.lineWidth = this.hover ? 2 + this.strokeScale * 3 - 1 : 2 + this.strokeScale * 3
+        ctx.strokeStyle = secondaryColor
+        ctx.lineWidth = 3
+        if (this.meta.unlocked) {
+            ctx.lineWidth = this.hover ? 2 + this.strokeScale * 3 - 1 : 2 + this.strokeScale * 3
+        }
         ctx.stroke()
         ctx.closePath()
 

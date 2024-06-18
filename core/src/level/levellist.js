@@ -11,6 +11,7 @@ class LevelMeta {
             },
         }
 
+        this.unlocked = false
         this.data = this.parse()
     }
 
@@ -32,29 +33,33 @@ class LevelMeta {
                     y: Number.MAX_SAFE_INTEGER,
                 },
                 time: 0,
+                tuturialIndex: 0,
                 best: Number.MAX_SAFE_INTEGER,
                 completed: false,
             }
         }
 
-        const data = item.split(",")
+        const storage = item.split(",")
+
+        console.log(storage[8])
 
         return {
             respawnPoint: {
-                x: parseFloat(data[0]),
-                y: parseFloat(data[1]),
+                x: parseFloat(storage[0]),
+                y: parseFloat(storage[1]),
             },
             cameraPos: {
-                x: parseFloat(data[2]),
-                y: parseFloat(data[3]),
+                x: parseFloat(storage[2]),
+                y: parseFloat(storage[3]),
             },
             bgLayerPos: {
-                x: parseFloat(data[4]),
-                y: parseFloat(data[5]),
+                x: parseFloat(storage[4]),
+                y: parseFloat(storage[5]),
             },
-            time: parseFloat(data[6]),
-            best: parseFloat(data[7]),
-            completed: parseFloat(data[7]) === Number.MAX_SAFE_INTEGER ? false : true,
+            time: parseFloat(storage[6]),
+            tuturialIndex: parseInt(storage[7]),
+            best: parseFloat(storage[8]),
+            completed: parseFloat(storage[8]) === Number.MAX_SAFE_INTEGER ? false : true,
         }
     }
 }
@@ -88,5 +93,18 @@ export default class LevelList {
             new LevelMeta("Level 7", "levels/level7.json", "saturn", 400, 320),
             new LevelMeta("Level 8", "levels/level8.json", "saturn", 500, 350),
         ]
+
+        let previousUnlocked = true
+        for (const levelMeta of this.levelMetas) {
+            if (previousUnlocked) {
+                levelMeta.unlocked = true
+            }
+
+            if (levelMeta.data.completed) {
+                previousUnlocked = true
+            } else {
+                previousUnlocked = false
+            }
+        }
     }
 }

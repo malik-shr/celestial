@@ -1,6 +1,7 @@
 import Checkpoint from "./checkpoint"
 import MovingPlatform from "./movingPlatform"
 import Player from "./player"
+import Tuturial from "./tuturial"
 
 export default class ElementList extends Array {
     constructor() {
@@ -59,6 +60,19 @@ export default class ElementList extends Array {
                 }
             }
         }
+    }
+
+    getAmountTuturial() {
+        let count = 0
+
+        for (const elementItem of this) {
+            if (elementItem instanceof Tuturial) {
+                console.log(elementItem)
+                ++count
+            }
+        }
+
+        return count
     }
 
     action() {

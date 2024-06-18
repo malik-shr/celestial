@@ -15,5 +15,9 @@ export default class Element {
 
     action() {}
 
+    handleCollisionY(player) {}
+
+    handleCollisionX(player) {}
+
     draw(ctx) {}
 }

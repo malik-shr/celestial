@@ -63,6 +63,7 @@ export default class Game {
         this.bg2 = new Sprite("bg/bg_layer_top.png", 1024 * 2, 640 * 2, 1024 * 2, 640 * 2)
 
         this.level.loadLevel(levelMeta)
+        this.level.insertTuturialBlocks()
 
         this.intervalLoop = window.setInterval(this.loop, 1000 / 40)
 

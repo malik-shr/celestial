@@ -10,6 +10,7 @@ import Bubble from "../element/bubble"
 import Checkpoint from "../element/checkpoint"
 import Goal from "../element/goal"
 import Particles from "../element/particle"
+import Tuturial from "../element/tuturial"
 
 export default class Level {
     constructor(meta, planet, game) {
@@ -21,6 +22,8 @@ export default class Level {
         this.gravity = 0.7
 
         this.elementList = new ElementList()
+        this.tuturials = []
+        this.tuturialIndex = 0
 
         this.completed = false
     }
@@ -62,6 +65,7 @@ export default class Level {
         }
 
         this.game.savedTime = this.meta.data.time
+        this.tuturialIndex = this.meta.data.tuturialIndex
     }
 
     getPlayer() {
@@ -72,6 +76,40 @@ export default class Level {
         }
 
         return null
+    }
+
+    insertTuturialBlocks() {
+        const amountTuturials = this.elementList.getAmountTuturial()
+
+        if (amountTuturials === 0) return
+
+        while (this.tuturials.length !== amountTuturials) {
+            let min = Number.MAX_SAFE_INTEGER
+            let tuturialItem = null
+
+            for (const elementItem of this.elementList) {
+                if (!(elementItem instanceof Tuturial) || this.alreadyChecked(elementItem)) continue
+
+                if (elementItem.position.x < min) {
+                    min = elementItem.position.x
+                    tuturialItem = elementItem
+                }
+            }
+
+            if (tuturialItem !== null) {
+                this.tuturials.push(tuturialItem)
+            }
+        }
+
+        this.tuturials[this.tuturialIndex].isActive = true
+    }
+
+    alreadyChecked(item) {
+        for (const tuturialItem of this.tuturials) {
+            if (tuturialItem === item) return true
+        }
+
+        return false
     }
 
     clean() {
@@ -93,7 +131,7 @@ export default class Level {
 
         if (prev) {
             const data = prev.split(",")
-            best = data[7]
+            best = data[8]
         }
 
         const cameraPos = {
@@ -107,6 +145,7 @@ export default class Level {
         }
 
         let time = this.game.time
+        let tuturialIndex = this.tuturialIndex
 
         if (this.completed) {
             respawnPoint.x = Number.MAX_SAFE_INTEGER
@@ -116,13 +155,14 @@ export default class Level {
             bgLayer.x = Number.MAX_SAFE_INTEGER
             bgLayer.y = Number.MAX_SAFE_INTEGER
             time = 0
+            tuturialIndex = 0
         }
 
         if (this.completed && parseFloat(this.game.time) < parseFloat(best)) {
             best = this.game.time
         }
 
-        const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${best}`
+        const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${tuturialIndex},${best}`
 
         localStorage.setItem(this.name, newData)
     }
@@ -155,6 +195,12 @@ export default class Level {
 
         for (const bubble of levelObj.bubbles) {
             this.elementList.add(new Bubble(bubble.x, bubble.y, this.game))
+        }
+
+        if (levelObj.tuturials) {
+            for (const tuturial of levelObj.tuturials) {
+                this.elementList.add(new Tuturial(tuturial.x, tuturial.y, tuturial.txt, this.game))
+            }
         }
 
         for (const goal of levelObj.goal) {

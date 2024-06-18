@@ -90,12 +90,4 @@ export default class Particles extends Element {
     }
 
     action() {}
-
-    handleCollisionY(player) {
-        return
-    }
-
-    handleCollisionX(player) {
-        return
-    }
 }
