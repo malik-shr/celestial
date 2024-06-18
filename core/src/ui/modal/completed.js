@@ -31,15 +31,13 @@ export default class Completed extends Modal {
     }
 
     draw(ctx) {
+        super.drawDimmed(ctx)
         super.updateFrames()
 
         const meta = this.game.levelList.get(this.game.level.name)
 
         ctx.beginPath()
         ctx.save()
-
-        ctx.fillStyle = `rgba(0,0,0,${this.scale * 0.5})`
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
         super.scaleBox(ctx)
         super.drawBox(ctx)

@@ -159,7 +159,7 @@ export default class Menu {
     draw(ctx) {
         this.updateAnimationIndex()
         this.bg.draw(ctx, 0, 0, { x: 0, y: 0 })
-        this.logo.draw(ctx, 0, 0, { x: this.canvas.width / 2 - this.logo.width / 2, y: -50 })
+        this.logo.draw(ctx, 0, 0, { x: this.canvas.width / 2 - this.logo.width / 2, y: -40 })
 
         this.planets.draw(ctx, this.animationIndex, 0, { x: 0, y: 90 })
 

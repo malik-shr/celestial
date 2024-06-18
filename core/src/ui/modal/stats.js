@@ -4,7 +4,7 @@ import Modal from "./modal"
 
 export default class Stats extends Modal {
     constructor(levelList, game, canvas) {
-        super("Stats", 400, 350, game, canvas)
+        super("Stats", 400, 340, game, canvas)
 
         this.levelList = levelList
         this.stats = levelList.stats
@@ -41,6 +41,7 @@ export default class Stats extends Modal {
     }
 
     draw(ctx) {
+        super.drawDimmed(ctx)
         super.updateFrames(10)
 
         ctx.beginPath()

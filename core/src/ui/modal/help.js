@@ -3,7 +3,7 @@ import Modal from "./modal"
 
 export default class Help extends Modal {
     constructor(game, canvas) {
-        super("Controls", 400, 450, game, canvas)
+        super("Controls", 350, 410, game, canvas)
 
         this.close = this.close.bind(this)
 
@@ -50,6 +50,7 @@ export default class Help extends Modal {
     }
 
     draw(ctx) {
+        super.drawDimmed(ctx)
         super.updateFrames(10)
 
         ctx.beginPath()
@@ -59,10 +60,8 @@ export default class Help extends Modal {
         super.drawBox(ctx)
         super.drawTitle(ctx)
 
-        const firstCol = this.box.position.x + 50
+        const firstCol = this.box.position.x + 40
         const firstRow = this.box.position.y + 100
-
-        const secondCol = this.box.position.x + this.width / 2
 
         this.drawText(ctx, "Move Left", { x: firstCol, y: firstRow })
         this.drawText(ctx, "Arrow Left", { x: firstCol + 150, y: firstRow }, 140, 25)

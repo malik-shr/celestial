@@ -21,7 +21,7 @@ export class MenuButton extends Button {
         super(action, x, y, width, height)
 
         this.bgColor = "#e3e3d2"
-        this.bgHover = "#c6c6a3"
+        this.bgHover = "#d1d1b5"
         this.color = "#160912"
 
         if (type === 2) {
@@ -77,7 +77,7 @@ export class TransparentButton extends Button {
 
         ctx.fill()
 
-        ctx.fillStyle = this.isActive ? (this.hover ? "#c6c6a3" : "#e3e3d2") : "#495057"
+        ctx.fillStyle = this.isActive ? (this.hover ? "#d1d1b5" : "#e3e3d2") : "#495057"
         ctx.font = `800 86px Montserrat`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
@@ -119,7 +119,7 @@ export class LevelButton extends Button {
             this.clickedFrames = 0
         }
 
-        this.progress = this.clickedFrames / 30
+        this.progress = this.clickedFrames / 25
 
         if (this.progress > 1) {
             this.clickedFrames = 0
@@ -129,7 +129,7 @@ export class LevelButton extends Button {
         }
 
         if (this.increaseSize && this.strokeScale < 1) {
-            this.strokeScale += 1 / 30
+            this.strokeScale += 1 / 25
 
             if (this.strokeScale >= 1) {
                 this.strokeScale = 1
@@ -138,7 +138,7 @@ export class LevelButton extends Button {
         }
 
         if (!this.increaseSize && this.strokeScale > 0) {
-            this.strokeScale -= 1 / 30
+            this.strokeScale -= 1 / 25
 
             // Rounding Point
             if (this.strokeScale < 0) {

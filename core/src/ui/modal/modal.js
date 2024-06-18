@@ -75,5 +75,14 @@ export default class Modal {
         ctx.fillStyle = "#205974"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
+
+        ctx.strokeStyle = "#487394"
+        ctx.lineWidth = 5
+        ctx.stroke()
+    }
+
+    drawDimmed(ctx) {
+        ctx.fillStyle = `rgba(0,0,0,${this.scale * 0.5})`
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
     }
 }
