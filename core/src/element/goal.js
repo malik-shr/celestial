@@ -30,6 +30,6 @@ export default class Goal extends Element {
     }
 
     draw(ctx) {
-        this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
+        this.sprite.draw(ctx, this.currentFrame, 0, this.position)
     }
 }
