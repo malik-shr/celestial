@@ -10,6 +10,7 @@ import TemporaryBlock from "./temporaryBlock"
 import Spike from "./spike"
 import Goal from "./goal"
 import Bubble from "./bubble"
+import Tuturial from "./tuturial"
 
 export default class LevelEditor extends Element {
     constructor(game, level) {
@@ -25,8 +26,10 @@ export default class LevelEditor extends Element {
         this.sizeY = 32
         this.speedX = 1
         this.speedY = 0
+
         this.blockType = 6
         this.spikeType = 1
+        this.tuturialText = ""
 
         window.addEventListener("mousemove", (event) => this.handleMouseMove(event))
         window.addEventListener("mousedown", (event) => this.handleMouseDown(event))
@@ -164,6 +167,11 @@ export default class LevelEditor extends Element {
                     break
                 case 9:
                     this.game.level.elementList.add(
+                        new Tuturial(this.positionX, this.positionY, this.tuturialText, this.game)
+                    )
+                    break
+                case 10:
+                    this.game.level.elementList.add(
                         new Goal(this.positionX, this.positionY, this.game)
                     )
                     break
@@ -175,7 +183,7 @@ export default class LevelEditor extends Element {
             this.sizeY = 32
             this.BlockType = Number(
                 prompt(
-                    "Type a number\n1: SolidBlock \n2: MovingPlatform\n3: MovingPlatform2\n4: JumpPad\n5: Spike\n6: Bubble\n7: Temporary Block\n8: Checkpoint\n9: Goal"
+                    "Type a number\n1: SolidBlock \n2: MovingPlatform\n3: MovingPlatform2\n4: JumpPad\n5: Spike\n6: Bubble\n7: Temporary Block\n8: Checkpoint\n9: Tuturial\n10 Goal"
                 )
             )
             if (this.BlockType === 1) {
@@ -193,10 +201,13 @@ export default class LevelEditor extends Element {
                 this.maxDistanceX = Number(prompt("maxDistanceX"))
                 this.maxDistanceY = Number(prompt("maxDistanceY"))
             }
-            if (this.BlockType === 4) {
+            if (this.BlockType === 5) {
                 this.spikeType = Number(
                     prompt("Type a number\n1: oben \n2: links\n3: rechts\n4: unten\n")
                 )
+            }
+            if (this.BlockType === 9) {
+                this.tuturialText = prompt("Type text\n")
             }
         }
 
@@ -233,6 +244,7 @@ export default class LevelEditor extends Element {
             checkpoints: [],
             bubbles: [],
             movingPlattforms: [],
+            tuturials: [],
             goal: [],
         }
 
@@ -282,6 +294,15 @@ export default class LevelEditor extends Element {
                     t: elementItem.type,
                 })
             }
+
+            if (elementItem instanceof Tuturial) {
+                obj.tuturials.push({
+                    x: elementItem.position.x,
+                    y: elementItem.position.y,
+                    txt: elementItem.text,
+                })
+            }
+
             if (elementItem instanceof Goal) {
                 obj.goal.push({ x: elementItem.position.x, y: elementItem.position.y })
             }
@@ -323,13 +344,5 @@ export default class LevelEditor extends Element {
             ctx.fill()
             ctx.closePath()
         }
-    }
-
-    handleCollisionY(player) {
-        return
-    }
-
-    handleCollisionX(player) {
-        return
     }
 }
