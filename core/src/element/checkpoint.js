@@ -41,5 +41,6 @@ export default class Checkpoint extends Element {
         ctx.beginPath()
         this.sprite.draw(ctx, 0, 0, this.position)
         ctx.closePath()
+
     }
 }

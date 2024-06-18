@@ -30,8 +30,6 @@ export default class Goal extends Element {
     }
 
     draw(ctx) {
-        ctx.beginPath()
-        this.sprite.draw(ctx, 0, 0, this.position)
-        ctx.closePath()
+        this.currentSprite.draw(ctx, this.currentFrame, 0, this.position)
     }
 }
