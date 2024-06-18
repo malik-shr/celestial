@@ -193,7 +193,7 @@ export default class LevelEditor extends Element {
                 this.maxDistanceX = Number(prompt("maxDistanceX"))
                 this.maxDistanceY = Number(prompt("maxDistanceY"))
             }
-            if (this.BlockType === 4) {
+            if (this.BlockType === 5) {
                 this.spikeType = Number(
                     prompt("Type a number\n1: oben \n2: links\n3: rechts\n4: unten\n")
                 )
