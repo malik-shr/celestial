@@ -3,7 +3,7 @@ import Modal from "./modal"
 
 export default class Settings extends Modal {
     constructor(game, menu, canvas) {
-        super("Settings", 300, 300, game, canvas)
+        super("Settings", 300, 250, game, canvas)
 
         this.menu = menu
 
@@ -15,7 +15,7 @@ export default class Settings extends Modal {
         const clearButton = new MenuButton(
             this.clearLocalStorage,
             this.box.position.x + marginX / 2,
-            this.box.position.y + this.height - 50 - 25 - 100,
+            this.box.position.y + this.height - 50 - 25 - 80,
             this.width - marginX,
             50,
             "Reset Progress",
@@ -54,6 +54,7 @@ export default class Settings extends Modal {
     }
 
     draw(ctx) {
+        super.drawDimmed(ctx)
         super.updateFrames(10)
 
         ctx.beginPath()

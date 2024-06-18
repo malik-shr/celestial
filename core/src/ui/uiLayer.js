@@ -1,3 +1,5 @@
+import { toTime } from "../utils"
+
 export default class UILayer {
     constructor(game) {
         this.game = game
@@ -9,7 +11,7 @@ export default class UILayer {
     }
 
     drawLayer(ctx) {
-        ctx.fillStyle = "white"
+        ctx.fillStyle = "#e3e3d2"
         ctx.font = "14px Montserrat"
         ctx.textAlign = "center"
 
@@ -21,7 +23,7 @@ export default class UILayer {
 
         ctx.textAlign = "right"
         ctx.fillText(
-            this.game.time,
+            toTime(parseFloat(this.game.time)),
             490 + Math.abs(this.game.camera.position.x),
             20 - Math.abs(this.game.camera.position.y)
         )
