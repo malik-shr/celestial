@@ -20,7 +20,7 @@ export default class Level {
 
         this.name = meta.name
         this.planet = planet
-        this.gravity = 0.7
+        this.gravity = 0.8
 
         this.elementList = new ElementList()
         this.tuturials = []
