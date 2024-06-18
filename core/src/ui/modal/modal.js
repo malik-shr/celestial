@@ -51,7 +51,7 @@ export default class Modal {
     }
 
     drawTitle(ctx) {
-        ctx.fillStyle = "white"
+        ctx.fillStyle = "#e3e3d2"
         ctx.font = "800 28px Montserrat"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
@@ -72,7 +72,7 @@ export default class Modal {
     }
 
     drawBox(ctx) {
-        ctx.fillStyle = "#487394"
+        ctx.fillStyle = "#205974"
         ctx.roundRect(this.box.position.x, this.box.position.y, this.width, this.height, [15])
         ctx.fill()
     }

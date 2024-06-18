@@ -1,72 +1,27 @@
-class LevelMeta {
-    constructor(name, src, planet, x, y) {
-        this.name = name
-        this.src = src
-        this.planet = planet
-
-        this.button = {
-            position: {
-                x: x,
-                y: y,
-            },
-        }
-
-        this.unlocked = false
-        this.data = this.parse()
-    }
-
-    parse() {
-        const item = localStorage.getItem(this.name)
-
-        if (!item) {
-            return {
-                respawnPoint: {
-                    x: Number.MAX_SAFE_INTEGER,
-                    y: Number.MAX_SAFE_INTEGER,
-                },
-                cameraPos: {
-                    x: Number.MAX_SAFE_INTEGER,
-                    y: Number.MAX_SAFE_INTEGER,
-                },
-                bgLayer: {
-                    x: Number.MAX_SAFE_INTEGER,
-                    y: Number.MAX_SAFE_INTEGER,
-                },
-                time: 0,
-                tuturialIndex: 0,
-                best: Number.MAX_SAFE_INTEGER,
-                completed: false,
-            }
-        }
-
-        const storage = item.split(",")
-
-        console.log(storage[8])
-
-        return {
-            respawnPoint: {
-                x: parseFloat(storage[0]),
-                y: parseFloat(storage[1]),
-            },
-            cameraPos: {
-                x: parseFloat(storage[2]),
-                y: parseFloat(storage[3]),
-            },
-            bgLayerPos: {
-                x: parseFloat(storage[4]),
-                y: parseFloat(storage[5]),
-            },
-            time: parseFloat(storage[6]),
-            tuturialIndex: parseInt(storage[7]),
-            best: parseFloat(storage[8]),
-            completed: parseFloat(storage[8]) === Number.MAX_SAFE_INTEGER ? false : true,
-        }
-    }
-}
+import LevelMeta from "./LevelMeta"
 
 export default class LevelList {
     constructor() {
         this.levelMetas = []
+
+        this.stats = {
+            moon: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+            mars: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+            saturn: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+            overall: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+        }
     }
 
     get(name) {
@@ -82,16 +37,16 @@ export default class LevelList {
 
     refresh() {
         this.levelMetas = [
-            new LevelMeta("Level 1", "levels/level1.json", "moon", 400, 310),
-            new LevelMeta("Level 2", "levels/level2.json", "moon", 500, 280),
-            new LevelMeta("Level 3", "levels/level3.json", "moon", 580, 360),
+            new LevelMeta("Level 1", "levels/level1.json", "moon", 400, 340),
+            new LevelMeta("Level 2", "levels/level2.json", "moon", 500, 310),
+            new LevelMeta("Level 3", "levels/level3.json", "moon", 580, 400),
 
-            new LevelMeta("Level 4", "levels/level4.json", "mars", 400, 320),
-            new LevelMeta("Level 5", "levels/level5.json", "mars", 490, 390),
-            new LevelMeta("Level 6", "levels/level6.json", "mars", 580, 380),
+            new LevelMeta("Level 4", "levels/level4.json", "mars", 400, 350),
+            new LevelMeta("Level 5", "levels/level5.json", "mars", 480, 430),
+            new LevelMeta("Level 6", "levels/level6.json", "mars", 580, 400),
 
-            new LevelMeta("Level 7", "levels/level7.json", "saturn", 400, 320),
-            new LevelMeta("Level 8", "levels/level8.json", "saturn", 500, 350),
+            new LevelMeta("Level 7", "levels/level7.json", "saturn", 400, 350),
+            new LevelMeta("Level 8", "levels/level8.json", "saturn", 500, 380),
         ]
 
         let previousUnlocked = true
@@ -106,5 +61,58 @@ export default class LevelList {
                 previousUnlocked = false
             }
         }
+    }
+
+    refreshStats() {
+        this.refresh()
+        const planets = ["moon", "mars", "saturn"]
+
+        this.stats = {
+            moon: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+            mars: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+            saturn: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+            overall: {
+                totalBestTime: 0,
+                averageTime: 0,
+            },
+        }
+
+        if (this.shouldShowStats()) {
+            for (const planet of planets) {
+                for (const levelMeta of this.getLevelPlanets(planet)) {
+                    this.stats[planet].totalBestTime += parseFloat(levelMeta.data.best)
+                    this.stats.overall.totalBestTime += parseFloat(levelMeta.data.best)
+                }
+            }
+
+            let totalLevelCount = 0
+
+            for (const planet of planets) {
+                this.stats[planet].averageTime =
+                    this.stats[planet].totalBestTime / this.getLevelPlanets(planet).length
+                totalLevelCount += this.getLevelPlanets(planet).length
+            }
+
+            this.stats.overall.averageTime = this.stats.overall.totalBestTime / totalLevelCount
+        }
+    }
+
+    shouldShowStats() {
+        for (const levelMeta of this.levelMetas) {
+            if (!levelMeta.data.completed) {
+                return false
+            }
+        }
+
+        return true
     }
 }

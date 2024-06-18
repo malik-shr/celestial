@@ -11,7 +11,7 @@ export default class Bubble extends Element {
         this.collided = false
         this.cooldown = 0
 
-        this.sprite = new Sprite("bubble.png", 32, 32, 70, 70)
+        this.sprite = new Sprite("bubble.png", 32, 32, 32, 32)
     }
 
     action() {

@@ -11,6 +11,7 @@ import Checkpoint from "../element/checkpoint"
 import Goal from "../element/goal"
 import Particles from "../element/particle"
 import Tuturial from "../element/tuturial"
+import Sprite from "../element/sprite"
 
 export default class Level {
     constructor(meta, planet, game) {
@@ -24,6 +25,28 @@ export default class Level {
         this.elementList = new ElementList()
         this.tuturials = []
         this.tuturialIndex = 0
+
+        let bgSrc = ""
+        let bgTopSrc = ""
+
+        switch (planet) {
+            case "moon":
+                bgSrc = "moon/bg.png"
+                bgTopSrc = "moon/bg_top.png"
+                break
+            case "mars":
+                bgSrc = "mars/bg.png"
+                bgTopSrc = "mars/bg_top.png"
+                break
+            case "saturn":
+                bgSrc = "saturn/bg.png"
+                bgTopSrc = "saturn/bg_top.png"
+                break
+            default:
+        }
+
+        this.bgTop = new Sprite(bgTopSrc, 1024 * 2, 640 * 2, 1024 * 2, 640 * 2)
+        this.bg = new Sprite(bgSrc, 1024, 640, 1024, 640)
 
         this.completed = false
     }
@@ -49,6 +72,8 @@ export default class Level {
             player.position.y = this.meta.data.respawnPoint.y - this.gravity
         }
 
+        player.deaths = this.meta.data.deaths
+
         if (
             this.meta.data.cameraPos.x !== Number.MAX_SAFE_INTEGER &&
             this.meta.data.cameraPos.y !== Number.MAX_SAFE_INTEGER &&
@@ -66,6 +91,30 @@ export default class Level {
 
         this.game.savedTime = this.meta.data.time
         this.tuturialIndex = this.meta.data.tuturialIndex
+
+        this.insertTuturialBlocks()
+    }
+
+    drawBackground(ctx) {
+        this.bg.draw(ctx, 0, 0, {
+            x: 0,
+            y: 0,
+        })
+
+        const highestX = Math.ceil(this.elementList.getHighestX() / 2048)
+
+        for (let i = 0; i < highestX; i++) {
+            this.bgTop.draw(
+                ctx,
+                0,
+                0,
+                {
+                    x: 2048 * i - Math.abs(this.game.camera.bgLayer.position.x),
+                    y: 0,
+                },
+                5
+            )
+        }
     }
 
     getPlayer() {
@@ -131,7 +180,7 @@ export default class Level {
 
         if (prev) {
             const data = prev.split(",")
-            best = data[8]
+            best = data[9]
         }
 
         const cameraPos = {
@@ -146,6 +195,7 @@ export default class Level {
 
         let time = this.game.time
         let tuturialIndex = this.tuturialIndex
+        let deaths = this.game.player.deaths
 
         if (this.completed) {
             respawnPoint.x = Number.MAX_SAFE_INTEGER
@@ -155,6 +205,7 @@ export default class Level {
             bgLayer.x = Number.MAX_SAFE_INTEGER
             bgLayer.y = Number.MAX_SAFE_INTEGER
             time = 0
+            deaths = 0
             tuturialIndex = 0
         }
 
@@ -162,7 +213,7 @@ export default class Level {
             best = this.game.time
         }
 
-        const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${tuturialIndex},${best}`
+        const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${deaths},${tuturialIndex},${best}`
 
         localStorage.setItem(this.name, newData)
     }

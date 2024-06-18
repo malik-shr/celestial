@@ -83,7 +83,7 @@ export default class Pause extends Modal {
 
             localStorage.setItem(
                 this.game.level.name,
-                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},0,0,${storage[8]}`
+                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},0,0,0,${storage[9]}`
             )
         }
 

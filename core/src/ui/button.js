@@ -1,3 +1,5 @@
+import { toTime } from "../utils"
+
 export default class Button {
     constructor(action, x, y, width, height) {
         this.rect = {
@@ -18,14 +20,14 @@ export class MenuButton extends Button {
     constructor(action, x, y, width, height, text, fontSize = 22, type = 1) {
         super(action, x, y, width, height)
 
-        this.bgColor = "rgba(240,240,240,1)"
-        this.bgHover = "rgba(200,200,200,1)"
-        this.color = "black"
+        this.bgColor = "#e3e3d2"
+        this.bgHover = "#c6c6a3"
+        this.color = "#160912"
 
         if (type === 2) {
             this.bgColor = "#ff5252"
             this.bgHover = "#ff7b7b"
-            this.color = "white"
+            this.color = "#e3e3d2"
         }
 
         this.text = text
@@ -75,7 +77,7 @@ export class TransparentButton extends Button {
 
         ctx.fill()
 
-        ctx.fillStyle = this.isActive ? (this.hover ? "#adb5bd" : "#f8f9fa") : "#495057"
+        ctx.fillStyle = this.isActive ? (this.hover ? "#c6c6a3" : "#e3e3d2") : "#495057"
         ctx.font = `800 86px Montserrat`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
@@ -147,7 +149,9 @@ export class LevelButton extends Button {
     }
 
     drawHoverBox(ctx) {
-        if (this.menu.settings.isActive || this.menu.help.isActive) return
+        if (this.menu.settings.isActive || this.menu.help.isActive || this.menu.stats.isActive) {
+            return
+        }
 
         const box = {
             x: this.rect.position.x + 40,
@@ -156,15 +160,10 @@ export class LevelButton extends Button {
             height: 90,
         }
 
-        let bestTime =
-            this.meta.data.best === Number.MAX_SAFE_INTEGER ? "-" : this.meta.data.best + "s"
-
-        if (
-            this.meta.data.best !== Number.MAX_SAFE_INTEGER &&
-            parseFloat(this.meta.data.best) > 99999999
-        ) {
-            bestTime = 99999999 + "s"
-        }
+        const bestTime =
+            this.meta.data.best === Number.MAX_SAFE_INTEGER
+                ? "-"
+                : toTime(parseFloat(this.meta.data.best))
 
         if (!this.hover) {
             this.hoverTick = 0
@@ -203,7 +202,7 @@ export class LevelButton extends Button {
             ctx.stroke()
             ctx.fill()
 
-            ctx.fillStyle = "white"
+            ctx.fillStyle = "#e3e3d2"
             ctx.font = "600 20px Montserrat"
             ctx.textAlign = "center"
             ctx.textBaseline = "middle"
@@ -227,22 +226,14 @@ export class LevelButton extends Button {
 
         ctx.beginPath()
 
-        let primaryColor = ""
-        let secondaryColor = ""
-        let hoverColor = ""
+        let primaryColor = "#adb5bd"
+        let secondaryColor = "#8a9097"
+        let hoverColor = "#9ba2aa"
 
-        if (this.meta.data.completed) {
-            primaryColor = "#C3FF93"
-            secondaryColor = "#95d067"
-            hoverColor = "#b3ef84"
-        } else if (this.meta.unlocked) {
+        if (this.meta.unlocked) {
             primaryColor = "#f8f9fa"
             secondaryColor = "#adb5bd"
             hoverColor = "#e9ecef"
-        } else {
-            primaryColor = "#adb5bd"
-            secondaryColor = "#8a9097"
-            hoverColor = "#9ba2aa"
         }
 
         ctx.fillStyle = this.hover ? hoverColor : primaryColor

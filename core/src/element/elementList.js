@@ -67,7 +67,6 @@ export default class ElementList extends Array {
 
         for (const elementItem of this) {
             if (elementItem instanceof Tuturial) {
-                console.log(elementItem)
                 ++count
             }
         }
