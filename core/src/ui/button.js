@@ -20,9 +20,9 @@ export class MenuButton extends Button {
     constructor(action, x, y, width, height, text, fontSize = 22, type = 1) {
         super(action, x, y, width, height)
 
-        this.bgColor = "#e3e3d2"
-        this.bgHover = "#d1d1b5"
-        this.color = "#160912"
+        this.bgColor = "#487394"
+        this.bgHover = "#6c8fa9"
+        this.color = "#e3e3d2"
 
         if (type === 2) {
             this.bgColor = "#ff5252"

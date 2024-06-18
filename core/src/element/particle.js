@@ -56,7 +56,7 @@ export default class Particles extends Element {
 
         this.isActive = true
 
-        for (let i = 0; i < size * 7 + 6; i++) {
+        for (let i = 0; i < size * 7 + 15; i++) {
             this.particles.push(
                 new Particle(this.position.x, this.position.y, this.getRandomColor(), this.size)
             )
