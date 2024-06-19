@@ -52,16 +52,6 @@ export default class ElementList extends Array {
         return max
     }
 
-    setPrevCheckpoints(checkpoint) {
-        for (const elementItem of this) {
-            if (elementItem instanceof Checkpoint) {
-                if (elementItem.position.x < checkpoint.position.x) {
-                    elementItem.isActive = true
-                }
-            }
-        }
-    }
-
     getAmountTutorial() {
         let count = 0
 

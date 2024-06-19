@@ -4,6 +4,15 @@ export function toTime(seconds) {
     return date.toISOString().substr(11, 10)
 }
 
+export function drawText(ctx, text, position, style = "left") {
+    ctx.fillStyle = "#e3e3d2"
+    ctx.font = "500 18px Montserrat"
+    ctx.textAlign = style
+    ctx.textBaseline = "middle"
+
+    ctx.fillText(text, position.x, position.y)
+}
+
 // https://stackoverflow.com/a/30137201
 export function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     const paragraphs = text.split("\n")
