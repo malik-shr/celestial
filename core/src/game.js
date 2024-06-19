@@ -57,11 +57,6 @@ export default class Game {
 
         this.time = 0
 
-        //this.shootingStar = new Sprite("shooting-star.png", 32, 64, 32, 64)
-        this.bg1 = new Sprite("bg/bg.png", 1024, 640, 1024, 640)
-        this.dimmed = new Sprite("bg/dimmed.png", 1024, 640, 1024, 640)
-        this.bg2 = new Sprite("bg/bg_layer_top.png", 1024 * 2, 640 * 2, 1024 * 2, 640 * 2)
-
         this.level.loadLevel(levelMeta)
 
         this.intervalLoop = window.setInterval(this.loop, 1000 / 40)
@@ -100,23 +95,7 @@ export default class Game {
         if (currentScreen === Screen.Game) {
             this.ctx.save()
 
-            this.bg1.draw(this.ctx, 0, 0, {
-                x: 0,
-                y: 0,
-            })
-
-            for (let i = 0; i < 6; i++) {
-                this.bg2.draw(
-                    this.ctx,
-                    0,
-                    0,
-                    {
-                        x: 1000 * i - Math.abs(this.camera.bgLayer.position.x),
-                        y: 0,
-                    },
-                    5
-                )
-            }
+            this.level.drawBackground(this.ctx)
 
             this.ctx.scale(2, 2)
 

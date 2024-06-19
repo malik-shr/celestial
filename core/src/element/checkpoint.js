@@ -1,4 +1,5 @@
 import Element from "./element"
+import Sprite from "./sprite"
 
 export default class Checkpoint extends Element {
     constructor(x, y, game) {
@@ -6,6 +7,8 @@ export default class Checkpoint extends Element {
 
         this.game = game
         this.isActive = false
+
+        this.sprite = new Sprite("checkpoint.png", 32, 32, 32, 32)
     }
 
     handleCollisionX(player) {
@@ -36,9 +39,8 @@ export default class Checkpoint extends Element {
 
     draw(ctx) {
         ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        ctx.fillStyle = "yellow"
-        ctx.fill()
+        this.sprite.draw(ctx, 0, 0, this.position)
         ctx.closePath()
+
     }
 }

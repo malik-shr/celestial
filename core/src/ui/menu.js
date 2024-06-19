@@ -5,6 +5,7 @@ import Sprite from "../element/sprite"
 import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
+import Stats from "./modal/stats"
 
 export default class Menu {
     constructor(levelList, game, canvas) {
@@ -24,33 +25,38 @@ export default class Menu {
         this.selectNext = this.selectNext.bind(this)
         this.openSettings = this.openSettings.bind(this)
         this.openHelp = this.openHelp.bind(this)
+        this.openStats = this.openStats.bind(this)
 
         this.help = new Help(this.game, this.canvas)
+        this.stats = new Stats(this.levelList, this.game, this.canvas)
         this.settings = new Settings(this.game, this, this.canvas)
 
-        this.bg = new Sprite("bg/bg_menu.png", 1024, 640, 1024, 640)
+        this.bg = new Sprite("menu/bg.png", 1024, 640, 1024, 640)
+        this.logo = new Sprite("menu/logo.png", 448, 280, 1024, 640)
 
         this.planetList = getPlanets(canvas)
-
         this.planetKeys = Object.keys(this.planetList)
+
         this.currentPlanetIndex = 0
         this.animationIndex = 0
 
-        const settingsBtn = new MenuButton(this.openSettings, 950, 40, 50, 50, "⚙️", 34)
-        const helpButton = new MenuButton(this.openHelp, 880, 40, 50, 50, "?", 34)
+        const statsButton = new MenuButton(this.openStats, 24, 30, 50, 50, "📊", 34)
+        const helpButton = new MenuButton(this.openHelp, 880, 30, 50, 50, "?", 34)
+        const settingsBtn = new MenuButton(this.openSettings, 950, 30, 50, 50, "⚙️", 34)
 
         /** @type {SlideButton} */
-        this.nextBtn = new TransparentButton(this.selectNext, 1024 - 180 - 80, 360, 75, 65, "➡")
+        this.nextBtn = new TransparentButton(this.selectNext, 1024 - 180 - 80, 380, 75, 65, "➡")
         /** @type {SlideButton} */
-        this.prevBtn = new TransparentButton(this.selectPrev, 180, 360, 75, 65, "⬅")
+        this.prevBtn = new TransparentButton(this.selectPrev, 180, 380, 75, 65, "⬅")
 
+        this.mainList.add(statsButton)
         this.mainList.add(helpButton)
         this.mainList.add(settingsBtn)
 
         this.mainList.add(this.nextBtn)
         this.mainList.add(this.prevBtn)
 
-        this.planets = new Sprite("bg/planets.png", 1024, 640, 1024, 640)
+        this.planets = new Sprite("menu/planets.png", 1024, 640, 1024, 640)
 
         for (const planet of this.planetKeys) {
             for (const meta of this.levelList.getLevelPlanets(planet)) {
@@ -129,6 +135,7 @@ export default class Menu {
     closeModals() {
         this.help.close()
         this.settings.close()
+        this.stats.close()
     }
 
     updateAnimationIndex() {
@@ -152,8 +159,9 @@ export default class Menu {
     draw(ctx) {
         this.updateAnimationIndex()
         this.bg.draw(ctx, 0, 0, { x: 0, y: 0 })
+        this.logo.draw(ctx, 0, 0, { x: this.canvas.width / 2 - this.logo.width / 2, y: -40 })
 
-        this.planets.draw(ctx, this.animationIndex, 0, { x: 0, y: 60 })
+        this.planets.draw(ctx, this.animationIndex, 0, { x: 0, y: 90 })
 
         this.mainList.draw(ctx)
         if (this.animationIndex === this.currentPlanetIndex) {
@@ -162,6 +170,7 @@ export default class Menu {
 
         this.settings.draw(ctx)
         this.help.draw(ctx)
+        this.stats.draw(ctx)
     }
 
     open() {
@@ -174,6 +183,7 @@ export default class Menu {
 
         this.resetPlanetButtons()
         this.activePlanet.buttonList.isActive = true
+        this.levelList.refreshStats()
     }
 
     updateButtonMeta() {
@@ -201,6 +211,11 @@ export default class Menu {
     openHelp() {
         this.closeModals()
         this.help.open()
+    }
+
+    openStats() {
+        this.closeModals()
+        this.stats.open()
     }
 
     startGame() {

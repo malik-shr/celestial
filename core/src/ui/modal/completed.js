@@ -1,3 +1,4 @@
+import { toTime } from "../../utils"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 
@@ -30,15 +31,13 @@ export default class Completed extends Modal {
     }
 
     draw(ctx) {
+        super.drawDimmed(ctx)
         super.updateFrames()
 
         const meta = this.game.levelList.get(this.game.level.name)
 
         ctx.beginPath()
         ctx.save()
-
-        ctx.fillStyle = `rgba(0,0,0,${this.scale * 0.5})`
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
         super.scaleBox(ctx)
         super.drawBox(ctx)
@@ -49,16 +48,8 @@ export default class Completed extends Modal {
 
         const newTimeIsBetter = parseFloat(this.game.time) <= parseFloat(meta.data.best)
 
-        let newBestTime = newTimeIsBetter ? this.game.time : oldBestTime
-        let time = this.game.time
-
-        if (newBestTime > 99999999) {
-            newBestTime = 99999999
-        }
-
-        if (time > 99999999) {
-            time = 99999999
-        }
+        const newBestTime = newTimeIsBetter ? this.game.time : oldBestTime
+        const time = this.game.time
 
         ctx.font = "500 24px Montserrat"
         ctx.textAlign = "left"
@@ -68,11 +59,19 @@ export default class Completed extends Modal {
             this.box.position.y + 100
         )
 
-        ctx.fillStyle = newTimeIsBetter ? "#C3FF93" : "white"
+        ctx.fillStyle = newTimeIsBetter ? "#C3FF93" : "#e3e3d2"
 
-        ctx.fillText(`🕒 ${time}s`, this.box.position.x + 30, this.box.position.y + 150)
+        ctx.fillText(
+            `🕒 ${toTime(parseFloat(time))}`,
+            this.box.position.x + 30,
+            this.box.position.y + 150
+        )
 
-        ctx.fillText(`🏆 ${newBestTime}s`, this.box.position.x + 30, this.box.position.y + 200)
+        ctx.fillText(
+            `🏆 ${toTime(parseFloat(newBestTime))}`,
+            this.box.position.x + 30,
+            this.box.position.y + 200
+        )
 
         this.buttonList.draw(ctx)
 

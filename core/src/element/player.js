@@ -241,6 +241,12 @@ export default class Player extends Element {
         ) {
             this.velocity.y += this.level.gravity / 2
             this.gravity += this.level.gravity / 2
+        } else if (
+            this.velocity.y > terminalVelocity / 4 &&
+            (this.collidedLeftCounter <= 1 || this.collidedRightCounter <= 1)
+        ) {
+            this.velocity.y = terminalVelocity / 4
+            this.gravity = terminalVelocity / 4
         }
 
         // entschleunigung wenn man weder nach rechts noch nach links drückt und nicht dasht und nicht auf einer moving plattform steht und nicht walljumped
@@ -276,7 +282,10 @@ export default class Player extends Element {
 
         // Right Movement
         if (keysPressed.get("ArrowRight")) {
-            if (this.velocity.x < maxSpeedX && this.WallJumpRightCounter > 5) {
+            if (
+                this.velocity.x < maxSpeedX + this.platformVelocityX &&
+                this.WallJumpRightCounter > 5
+            ) {
                 this.velocity.x += maxSpeedX / 4
                 this.isMovingRight = true
             }
@@ -284,7 +293,10 @@ export default class Player extends Element {
 
         // Left Movement
         if (keysPressed.get("ArrowLeft")) {
-            if (this.velocity.x > -maxSpeedX && this.WallJumpLeftCounter > 5) {
+            if (
+                this.velocity.x > -maxSpeedX + this.platformVelocityX &&
+                this.WallJumpLeftCounter > 5
+            ) {
                 this.velocity.x -= maxSpeedX / 4
                 this.isMovingRight = false
             }

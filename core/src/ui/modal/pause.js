@@ -79,12 +79,11 @@ export default class Pause extends Modal {
         const savedItem = localStorage.getItem(this.game.level.name)
 
         if (savedItem) {
-            const data = savedItem.split(",")
+            const storage = savedItem.split(",")
+
             localStorage.setItem(
                 this.game.level.name,
-                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${
-                    Number.MAX_SAFE_INTEGER
-                },${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${0},${data[7]}`
+                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},0,0,0,${storage[9]}`
             )
         }
 
@@ -112,13 +111,11 @@ export default class Pause extends Modal {
     }
 
     draw(ctx) {
+        super.drawDimmed(ctx)
         super.updateFrames()
 
         ctx.beginPath()
         ctx.save()
-
-        ctx.fillStyle = `rgba(0,0,0,${this.scale * 0.5})`
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
         super.scaleBox(ctx)
         super.drawBox(ctx)
