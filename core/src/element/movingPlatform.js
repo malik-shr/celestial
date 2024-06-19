@@ -13,6 +13,10 @@ export default class MovingPlatform extends Element {
         this.startPosition = { x: x, y: y }
         this.startVelocity = { x: velocityX, y: velocityY }
 
+        if (this.type == 1) {
+            this.velocity = { x: 0, y: 0 }
+        }
+
         this.traveledX = 0
         this.traveledY = 0
 
@@ -35,6 +39,9 @@ export default class MovingPlatform extends Element {
             player.previous.position.y - player.previous.velocity.y - 1 <=
             this.position.y - player.height - this.velocity.y
         ) {
+            if (this.activated === false && this.type == 1) {
+                this.velocity = structuredClone(this.startVelocity)
+            }
             this.activated = true
             // set the player above this object, reset the velocities, relevant flags and relevant counters and set collidedDown to true
             player.position.y = this.position.y - player.height
@@ -162,6 +169,7 @@ export default class MovingPlatform extends Element {
     }
 
     action() {
+        console.log(this.traveledX)
         if (!this.activated && this.type === 1) return
         this.isActive -= 1
 
@@ -194,6 +202,11 @@ export default class MovingPlatform extends Element {
         this.traveledY = 0
 
         this.velocity = structuredClone(this.startVelocity)
+
+        if (this.type == 1) {
+            this.velocity = { x: 0, y: 0 }
+        }
+
         this.position = structuredClone(this.startPosition)
     }
 

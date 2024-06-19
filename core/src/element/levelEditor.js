@@ -183,7 +183,7 @@ export default class LevelEditor extends Element {
             this.sizeY = 32
             this.BlockType = Number(
                 prompt(
-                    "Type a number\n1: SolidBlock \n2: MovingPlatform\n3: MovingPlatform2\n4: JumpPad\n5: Spike\n6: Bubble\n7: Temporary Block\n8: Checkpoint\n9: Tuturial\n10 Goal"
+                    "Type a number\n1: SolidBlock \n2: MovingPlatform, moving when stepped on\n3: MovingPlatform, always moving\n4: JumpPad\n5: Spike\n6: Bubble\n7: Temporary Block\n8: Checkpoint\n9: Tuturial\n10 Goal"
                 )
             )
             if (this.BlockType === 1) {
