@@ -105,6 +105,8 @@ export default class LevelEditor extends Element {
                             this.speedY,
                             this.maxDistanceX,
                             this.maxDistanceY,
+                            0,
+                            0,
                             1
                         )
                     )
@@ -118,6 +120,8 @@ export default class LevelEditor extends Element {
                             this.speedY,
                             this.maxDistanceX,
                             this.maxDistanceY,
+                            0,
+                            0,
                             2
                         )
                     )
@@ -281,16 +285,29 @@ export default class LevelEditor extends Element {
             if (elementItem instanceof Bubble) {
                 obj.bubbles.push({ x: elementItem.position.x, y: elementItem.position.y })
             }
-            if (elementItem instanceof MovingPlatform) {
+            if (elementItem instanceof MovingPlatform && elementItem.type == 1) {
                 obj.movingPlattforms.push({
                     x: elementItem.startPosition.x,
                     y: elementItem.startPosition.y,
-                    vx: elementItem.velocity.x,
-                    vy: elementItem.velocity.y,
+                    vx: elementItem.startVelocity.x,
+                    vy: elementItem.startVelocity.y,
                     mx: elementItem.maxX,
                     my: elementItem.maxY,
                     traveledX: 0,
                     traveledY: 0,
+                    t: elementItem.type,
+                })
+            }
+            if (elementItem instanceof MovingPlatform && elementItem.type == 2) {
+                obj.movingPlattforms.push({
+                    x: elementItem.position.x,
+                    y: elementItem.position.y,
+                    vx: elementItem.velocity.x,
+                    vy: elementItem.velocity.y,
+                    mx: elementItem.maxX,
+                    my: elementItem.maxY,
+                    traveledX: elementItem.traveledX,
+                    traveledY: elementItem.traveledY,
                     t: elementItem.type,
                 })
             }

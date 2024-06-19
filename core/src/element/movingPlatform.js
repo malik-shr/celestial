@@ -1,7 +1,7 @@
 import Element from "./element"
 import Sprite from "./sprite"
 export default class MovingPlatform extends Element {
-    constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, type) {
+    constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, traveledX, traveledY, type) {
         super(x, y, 64, 16)
         this.velocity = {
             x: velocityX,
@@ -13,12 +13,12 @@ export default class MovingPlatform extends Element {
         this.startPosition = { x: x, y: y }
         this.startVelocity = { x: velocityX, y: velocityY }
 
+        this.traveledX = traveledX
+        this.traveledY = traveledY
+
         if (this.type == 1) {
             this.velocity = { x: 0, y: 0 }
         }
-
-        this.traveledX = 0
-        this.traveledY = 0
 
         this.maxX = maxX
         this.maxY = maxY
@@ -169,7 +169,6 @@ export default class MovingPlatform extends Element {
     }
 
     action() {
-        console.log(this.traveledX)
         if (!this.activated && this.type === 1) return
         this.isActive -= 1
 
@@ -197,17 +196,13 @@ export default class MovingPlatform extends Element {
     }
 
     reset() {
-        this.activated = false
-        this.traveledX = 0
-        this.traveledY = 0
-
-        this.velocity = structuredClone(this.startVelocity)
-
         if (this.type == 1) {
+            this.position = structuredClone(this.startPosition)
             this.velocity = { x: 0, y: 0 }
+            this.activated = false
+            this.traveledX = 0
+            this.traveledY = 0
         }
-
-        this.position = structuredClone(this.startPosition)
     }
 
     draw(ctx) {
