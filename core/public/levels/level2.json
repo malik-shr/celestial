@@ -7279,16 +7279,6 @@
     ],
     "movingPlattforms": [
         {
-            "x": 604,
-            "y": -96,
-            "vx": -4,
-            "vy": 0,
-            "mx": 320,
-            "my": 0,
-            "traveledX": 100,
-            "traveledY": 0
-        },
-        {
             "x": 2240,
             "y": 160,
             "vx": 0,
@@ -7317,6 +7307,17 @@
             "my": 0,
             "traveledX": 0,
             "traveledY": 0
+        },
+        {
+            "x": 384,
+            "y": -96,
+            "vx": 4,
+            "vy": 0,
+            "mx": 320,
+            "my": 0,
+            "traveledX": 0,
+            "traveledY": 0,
+            "t": 2
         }
     ],
     "goal": [

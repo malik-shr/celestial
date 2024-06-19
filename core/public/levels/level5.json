@@ -11304,13 +11304,14 @@
     "movingPlattforms": [
         {
             "x": 288,
-            "y": -639,
+            "y": -704,
             "vx": 0,
-            "vy": -5,
+            "vy": 6,
             "mx": 0,
             "my": 320,
             "traveledX": 0,
-            "traveledY": 255
+            "traveledY": 0,
+            "t": 2
         }
     ],
     "goal": [
