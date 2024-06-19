@@ -34,7 +34,7 @@ export default class LevelMeta {
                 },
                 time: 0,
                 deaths: 0,
-                tuturialIndex: 0,
+                tutorialIndex: 0,
                 best: Number.MAX_SAFE_INTEGER,
                 completed: false,
             }
@@ -57,7 +57,7 @@ export default class LevelMeta {
             },
             time: parseFloat(storage[6]),
             deaths: parseInt(storage[7]),
-            tuturialIndex: parseInt(storage[8]),
+            tutorialIndex: parseInt(storage[8]),
             best: parseFloat(storage[9]),
             completed: parseFloat(storage[9]) === Number.MAX_SAFE_INTEGER ? false : true,
         }

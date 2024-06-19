@@ -10,7 +10,7 @@ import Bubble from "../element/bubble"
 import Checkpoint from "../element/checkpoint"
 import Goal from "../element/goal"
 import Particles from "../element/particle"
-import Tuturial from "../element/tuturial"
+import Tutorial from "../element/tutorial"
 import Sprite from "../element/sprite"
 
 export default class Level {
@@ -23,8 +23,8 @@ export default class Level {
         this.gravity = 0.8
 
         this.elementList = new ElementList()
-        this.tuturials = []
-        this.tuturialIndex = 0
+        this.tutorials = []
+        this.tutorialIndex = 0
 
         let bgSrc = ""
         let bgTopSrc = ""
@@ -90,9 +90,9 @@ export default class Level {
         }
 
         this.game.savedTime = this.meta.data.time
-        this.tuturialIndex = this.meta.data.tuturialIndex
+        this.tutorialIndex = this.meta.data.tutorialIndex
 
-        this.insertTuturialBlocks()
+        this.insertTutorialBlocks()
     }
 
     drawBackground(ctx) {
@@ -127,38 +127,31 @@ export default class Level {
         return null
     }
 
-    insertTuturialBlocks() {
-        const amountTuturials = this.elementList.getAmountTuturial()
+    insertTutorialBlocks() {
+        const amountTutorials = this.elementList.getAmountTutorial()
 
-        if (amountTuturials === 0) return
+        if (amountTutorials === 0) return
 
-        while (this.tuturials.length !== amountTuturials) {
+        while (this.tutorials.length !== amountTutorials) {
             let min = Number.MAX_SAFE_INTEGER
-            let tuturialItem = null
+            let tutorialItem = null
 
             for (const elementItem of this.elementList) {
-                if (!(elementItem instanceof Tuturial) || this.alreadyChecked(elementItem)) continue
+                if (!(elementItem instanceof Tutorial) || this.tutorials.includes(elementItem))
+                    continue
 
-                if (elementItem.position.x < min) {
-                    min = elementItem.position.x
-                    tuturialItem = elementItem
+                if (elementItem.index < min) {
+                    min = elementItem.index
+                    tutorialItem = elementItem
                 }
             }
 
-            if (tuturialItem !== null) {
-                this.tuturials.push(tuturialItem)
+            if (tutorialItem !== null) {
+                this.tutorials.push(tutorialItem)
             }
         }
 
-        this.tuturials[this.tuturialIndex].isActive = true
-    }
-
-    alreadyChecked(item) {
-        for (const tuturialItem of this.tuturials) {
-            if (tuturialItem === item) return true
-        }
-
-        return false
+        this.tutorials[this.tutorialIndex].isActive = true
     }
 
     clean() {
@@ -194,7 +187,7 @@ export default class Level {
         }
 
         let time = this.game.time
-        let tuturialIndex = this.tuturialIndex
+        let tutorialIndex = this.tutorialIndex
         let deaths = this.game.player.deaths
 
         if (this.completed) {
@@ -206,14 +199,14 @@ export default class Level {
             bgLayer.y = Number.MAX_SAFE_INTEGER
             time = 0
             deaths = 0
-            tuturialIndex = 0
+            tutorialIndex = 0
         }
 
         if (this.completed && parseFloat(this.game.time) < parseFloat(best)) {
             best = this.game.time
         }
 
-        const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${deaths},${tuturialIndex},${best}`
+        const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${deaths},${tutorialIndex},${best}`
 
         localStorage.setItem(this.name, newData)
     }
@@ -248,12 +241,6 @@ export default class Level {
             this.elementList.add(new Bubble(bubble.x, bubble.y, this.game))
         }
 
-        if (levelObj.tuturials) {
-            for (const tuturial of levelObj.tuturials) {
-                this.elementList.add(new Tuturial(tuturial.x, tuturial.y, tuturial.txt, this.game))
-            }
-        }
-
         for (const goal of levelObj.goal) {
             this.elementList.add(new Goal(goal.x, goal.y, this.game))
         }
@@ -272,6 +259,14 @@ export default class Level {
                     movingPlattform.t
                 )
             )
+        }
+
+        if (levelObj.tutorials) {
+            for (const tutorial of levelObj.tutorials) {
+                this.elementList.add(
+                    new Tutorial(tutorial.x, tutorial.y, tutorial.txt, tutorial.i, this.game)
+                )
+            }
         }
     }
 }
