@@ -11,7 +11,10 @@ export default class Bubble extends Element {
         this.collided = false
         this.cooldown = 0
 
-        this.sprite = new Sprite("bubble.png", 32, 32, 64, 64)
+        this.currentFrame = 0
+        this.elapsedFrames = 0
+
+        this.sprite = new Sprite("bubble.png", 32, 32, 70, 70)
     }
 
     action() {
@@ -54,8 +57,17 @@ export default class Bubble extends Element {
     }
 
     draw(ctx) {
+        this.updateFrames()
         if (this.collided) return
 
-        this.sprite.draw(ctx, 0, 0, this.position)
+        this.sprite.draw(ctx, this.currentFrame, 0, this.position)
+    }
+
+    updateFrames() {
+        this.elapsedFrames++
+        if (this.elapsedFrames % 21 === 0) {
+            if (this.currentFrame < 3 - 1) this.currentFrame++
+            else this.currentFrame = 0
+        }
     }
 }
