@@ -3,7 +3,7 @@ import Sprite from "./sprite"
 
 export default class Goal extends Element {
     constructor(x, y, game) {
-        super(x, y)
+        super(x, y, 32, 96)
 
         this.game = game
         this.isActive = false
