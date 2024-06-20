@@ -132,6 +132,8 @@ export default class Player extends Element {
     action() {
         this.checkDeath()
 
+        console.log(this.velocity.x)
+
         if (!this.isDead) {
             this.updateFrames()
             this.changeVelocities()
@@ -641,7 +643,7 @@ export default class Player extends Element {
             }
 
             // decceleration (if necessary)
-            if (this.dashCounter >= 10 && this.dashCounter <= 14) {
+            if (this.dashCounter >= 10 && this.dashCounter <= 16) {
                 if (this.dashCounter === 10) {
                     this.tempVelocity = this.velocity.x
                 }
