@@ -5,6 +5,9 @@ export default class TemporaryBlock extends SolidBlock {
     constructor(x, y) {
         super(x, y)
 
+        this.width = 32
+        this.height = 16
+
         this.isActive = false
         this.removeBlock = false
         this.onBlockCounter = 0

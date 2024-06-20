@@ -45,94 +45,89 @@ export default class Stats extends Modal {
         const firstCol = this.box.position.x + 40
         const firstRow = this.box.position.y + 60
 
-        if (this.levelList.shouldShowStats()) {
-            drawText(ctx, "Time", { x: firstCol + 140, y: firstRow + 40 }, "center")
-            drawText(ctx, "ØTime", { x: firstCol + 260, y: firstRow + 40 }, "center")
+        drawText(ctx, "Time", { x: firstCol + 140, y: firstRow + 40 }, "center")
+        drawText(ctx, "ØTime", { x: firstCol + 260, y: firstRow + 40 }, "center")
 
-            drawText(ctx, "Moon", { x: firstCol, y: firstRow + 70 })
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.moon.totalBestTime),
-                { x: firstCol + 140, y: firstRow + 70 },
-                "center"
-            )
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.moon.averageTime),
-                { x: firstCol + 260, y: firstRow + 70 },
-                "center"
-            )
+        drawText(ctx, "Moon", { x: firstCol, y: firstRow + 70 })
+        drawText(
+            ctx,
+            this.levelList.shouldShowStatsPlanet("moon")
+                ? toTime(this.levelList.stats.moon.totalBestTime)
+                : "-",
+            { x: firstCol + 140, y: firstRow + 70 },
+            "center"
+        )
+        drawText(
+            ctx,
+            this.levelList.shouldShowStatsPlanet("moon")
+                ? toTime(this.levelList.stats.moon.averageTime)
+                : "-",
+            { x: firstCol + 260, y: firstRow + 70 },
+            "center"
+        )
 
-            drawText(ctx, "Mars", { x: firstCol, y: firstRow + 100 })
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.mars.totalBestTime),
-                { x: firstCol + 140, y: firstRow + 100 },
-                "center"
-            )
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.mars.averageTime),
-                { x: firstCol + 260, y: firstRow + 100 },
-                "center"
-            )
+        drawText(ctx, "Mars", { x: firstCol, y: firstRow + 100 })
+        drawText(
+            ctx,
+            this.levelList.shouldShowStatsPlanet("mars")
+                ? toTime(this.levelList.stats.mars.totalBestTime)
+                : "-",
+            { x: firstCol + 140, y: firstRow + 100 },
+            "center"
+        )
+        drawText(
+            ctx,
+            this.levelList.shouldShowStatsPlanet("mars")
+                ? toTime(this.levelList.stats.mars.averageTime)
+                : "-",
+            { x: firstCol + 260, y: firstRow + 100 },
+            "center"
+        )
 
-            drawText(ctx, "Saturn", { x: firstCol, y: firstRow + 130 })
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.saturn.totalBestTime),
-                { x: firstCol + 140, y: firstRow + 130 },
-                "center"
-            )
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.saturn.averageTime),
-                { x: firstCol + 260, y: firstRow + 130 },
-                "center"
-            )
+        drawText(ctx, "Saturn", { x: firstCol, y: firstRow + 130 })
+        drawText(
+            ctx,
+            this.levelList.shouldShowStatsPlanet("saturn")
+                ? toTime(this.levelList.stats.saturn.totalBestTime)
+                : "-",
+            { x: firstCol + 140, y: firstRow + 130 },
+            "center"
+        )
+        drawText(
+            ctx,
+            this.levelList.shouldShowStatsPlanet("saturn")
+                ? toTime(this.levelList.stats.saturn.averageTime)
+                : "-",
+            { x: firstCol + 260, y: firstRow + 130 },
+            "center"
+        )
 
-            ctx.beginPath()
-            ctx.strokeStyle = "#ced4da"
-            ctx.moveTo(this.box.position.x + 40, firstRow + 150)
-            ctx.lineTo(this.box.position.x + this.width - 40, firstRow + 150)
-            ctx.lineWidth = 2
-            ctx.stroke()
-            ctx.fill()
-            ctx.closePath()
+        ctx.beginPath()
+        ctx.strokeStyle = "#ced4da"
+        ctx.moveTo(this.box.position.x + 40, firstRow + 150)
+        ctx.lineTo(this.box.position.x + this.width - 40, firstRow + 150)
+        ctx.lineWidth = 2
+        ctx.stroke()
+        ctx.fill()
+        ctx.closePath()
 
-            drawText(ctx, "Overall", { x: firstCol, y: firstRow + 170 })
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.overall.totalBestTime),
-                { x: firstCol + 140, y: firstRow + 170 },
-                "center"
-            )
-            drawText(
-                ctx,
-                toTime(this.levelList.stats.overall.averageTime),
-                { x: firstCol + 260, y: firstRow + 170 },
-                "center"
-            )
-        } else {
-            drawText(
-                ctx,
-                "You have to complete all levels",
-                {
-                    x: this.box.position.x + this.width / 2,
-                    y: firstRow + 40,
-                },
-                "center"
-            )
-            drawText(
-                ctx,
-                "to see your stats",
-                {
-                    x: this.box.position.x + this.width / 2,
-                    y: firstRow + 70,
-                },
-                "center"
-            )
-        }
+        drawText(ctx, "Overall", { x: firstCol, y: firstRow + 170 })
+        drawText(
+            ctx,
+            this.levelList.shouldShowStats()
+                ? toTime(this.levelList.stats.overall.totalBestTime)
+                : "-",
+            { x: firstCol + 140, y: firstRow + 170 },
+            "center"
+        )
+        drawText(
+            ctx,
+            this.levelList.shouldShowStats()
+                ? toTime(this.levelList.stats.overall.averageTime)
+                : "-",
+            { x: firstCol + 260, y: firstRow + 170 },
+            "center"
+        )
 
         this.buttonList.draw(ctx)
 

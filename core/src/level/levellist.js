@@ -86,28 +86,40 @@ export default class LevelList {
             },
         }
 
-        if (this.shouldShowStats()) {
-            for (const planet of planets) {
+        for (const planet of planets) {
+            if (this.shouldShowStatsPlanet(planet)) {
                 for (const levelMeta of this.getLevelPlanets(planet)) {
                     this.stats[planet].totalBestTime += parseFloat(levelMeta.data.best)
                     this.stats.overall.totalBestTime += parseFloat(levelMeta.data.best)
                 }
             }
-
-            let totalLevelCount = 0
-
-            for (const planet of planets) {
-                this.stats[planet].averageTime =
-                    this.stats[planet].totalBestTime / this.getLevelPlanets(planet).length
-                totalLevelCount += this.getLevelPlanets(planet).length
-            }
-
-            this.stats.overall.averageTime = this.stats.overall.totalBestTime / totalLevelCount
         }
+
+        let totalLevelCount = 0
+
+        for (const planet of planets) {
+            this.stats[planet].averageTime =
+                this.stats[planet].totalBestTime / this.getLevelPlanets(planet).length
+            totalLevelCount += this.getLevelPlanets(planet).length
+        }
+
+        this.stats.overall.averageTime = this.stats.overall.totalBestTime / totalLevelCount
     }
 
     shouldShowStats() {
         for (const levelMeta of this.levelMetas) {
+            if (!levelMeta.data.completed) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    shouldShowStatsPlanet(planet) {
+        const planetMetas = this.getLevelPlanets(planet)
+
+        for (const levelMeta of planetMetas) {
             if (!levelMeta.data.completed) {
                 return false
             }
