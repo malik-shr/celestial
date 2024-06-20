@@ -9,6 +9,7 @@ export default class Player extends Element {
 
         this.game = game
         this.level = game.level
+        this.godmode = false
 
         this.previous = null
 
@@ -130,17 +131,22 @@ export default class Player extends Element {
     }
 
     action() {
-        this.checkDeath()
-
-        console.log(this.velocity.x)
-
-        if (!this.isDead) {
-            this.updateFrames()
-            this.changeVelocities()
+        if (keysPressed.get("s")) {
+            this.godmode = !this.godmode
         }
+        if (this.godmode === false) {
+            this.checkDeath()
 
-        if (this.position.y > 308 && !this.isDead) {
-            this.die()
+            if (!this.isDead) {
+                this.updateFrames()
+                this.changeVelocities()
+            }
+
+            if (this.position.y > 308 && !this.isDead) {
+                this.die()
+            }
+        } else {
+            this.changeVelocitiesGodmode()
         }
 
         // apply velocities
@@ -227,7 +233,7 @@ export default class Player extends Element {
         // when moving to the right or left and meanwhile dashing the player holds the dash speed (15) even after the dash
 
         const maxSpeedX = 5
-        const terminalVelocity = 20
+        const terminalVelocity = 16
 
         // gravity (with terminal velocity) and wallslide
         if (
@@ -667,42 +673,65 @@ export default class Player extends Element {
         }
     }
 
+    changeVelocitiesGodmode() {
+        if (keysPressed.get("ArrowRight")) {
+            this.velocity.x = 5
+        }
+        if (keysPressed.get("ArrowLeft")) {
+            this.velocity.x = -5
+        }
+        if (keysPressed.get("ArrowUp")) {
+            this.velocity.y = -5
+        }
+        if (keysPressed.get("ArrowDown")) {
+            this.velocity.y = 5
+        }
+        if (!keysPressed.get("ArrowRight") && !keysPressed.get("ArrowLeft")) {
+            this.velocity.x = 0
+        }
+        if (!keysPressed.get("ArrowUp") && !keysPressed.get("ArrowDown")) {
+            this.velocity.y = 0
+        }
+    }
+
     // Override
     checkCollision() {
-        this.resetCollisionState()
+        if (this.godmode === false) {
+            this.resetCollisionState()
 
-        this.previous = this.clone()
+            this.previous = this.clone()
 
-        for (const elementItem of this.level.elementList) {
-            if (this.isColliding(this, elementItem)) {
-                elementItem.handleCollisionY(this)
-            }
-        }
-
-        for (const elementItem of this.level.elementList) {
-            if (this.isColliding(this, elementItem)) {
-                elementItem.handleCollisionX(this)
-            }
-        }
-
-        // if collided vertically AND horizontally, revert the vertical collision handling and check it again
-        if (
-            ((this.collidedUp === true || this.collidedDown === true) &&
-                this.collidedRight === true) ||
-            this.collidedLeft === true
-        ) {
-            this.revertYCollision()
-
-            // revert specific collision logic (like that of the jumppad)
-            if (this.collidedSpecialObjects.length > 0) {
-                // von hinten nach vorne im array
-                for (let i = this.collidedSpecialObjects.length - 1; i >= 0; i--) {
-                    this.collidedSpecialObjects[i].revertYCollision(this)
+            for (const elementItem of this.level.elementList) {
+                if (this.isColliding(this, elementItem)) {
+                    elementItem.handleCollisionY(this)
                 }
             }
 
-            // check it again
-            this.checkYCollision()
+            for (const elementItem of this.level.elementList) {
+                if (this.isColliding(this, elementItem)) {
+                    elementItem.handleCollisionX(this)
+                }
+            }
+
+            // if collided vertically AND horizontally, revert the vertical collision handling and check it again
+            if (
+                ((this.collidedUp === true || this.collidedDown === true) &&
+                    this.collidedRight === true) ||
+                this.collidedLeft === true
+            ) {
+                this.revertYCollision()
+
+                // revert specific collision logic (like that of the jumppad)
+                if (this.collidedSpecialObjects.length > 0) {
+                    // von hinten nach vorne im array
+                    for (let i = this.collidedSpecialObjects.length - 1; i >= 0; i--) {
+                        this.collidedSpecialObjects[i].revertYCollision(this)
+                    }
+                }
+
+                // check it again
+                this.checkYCollision()
+            }
         }
     }
 
