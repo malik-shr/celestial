@@ -9,7 +9,7 @@ export default class TemporaryBlock extends SolidBlock {
         this.removeBlock = false
         this.onBlockCounter = 0
 
-        this.sprite = new Sprite("temporary_block.png", 32, 32, 32, 32)
+        this.sprite = new Sprite("temporary_block.png", 32, 16, 32, 16)
     }
 
     action() {
@@ -64,10 +64,6 @@ export default class TemporaryBlock extends SolidBlock {
     draw(ctx) {
         if (this.removeBlock) return
 
-        ctx.beginPath()
-        ctx.rect(this.position.x, this.position.y, this.width, this.height)
-        ctx.fillStyle = "red"
-        ctx.fill()
-        ctx.closePath()
+        this.sprite.draw(ctx, 0, 0, this.position)
     }
 }

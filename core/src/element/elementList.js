@@ -1,7 +1,7 @@
 import Checkpoint from "./checkpoint"
 import MovingPlatform from "./movingPlatform"
 import Player from "./player"
-import Tuturial from "./tuturial"
+import Tutorial from "./tutorial"
 
 export default class ElementList extends Array {
     constructor() {
@@ -52,21 +52,11 @@ export default class ElementList extends Array {
         return max
     }
 
-    setPrevCheckpoints(checkpoint) {
-        for (const elementItem of this) {
-            if (elementItem instanceof Checkpoint) {
-                if (elementItem.position.x < checkpoint.position.x) {
-                    elementItem.isActive = true
-                }
-            }
-        }
-    }
-
-    getAmountTuturial() {
+    getAmountTutorial() {
         let count = 0
 
         for (const elementItem of this) {
-            if (elementItem instanceof Tuturial) {
+            if (elementItem instanceof Tutorial) {
                 ++count
             }
         }

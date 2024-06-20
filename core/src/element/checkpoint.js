@@ -24,7 +24,6 @@ export default class Checkpoint extends Element {
 
         this.isActive = true
         this.updateRespawnPoint(player)
-        this.game.level.elementList.setPrevCheckpoints(this)
     }
 
     updateRespawnPoint(player) {
@@ -41,6 +40,5 @@ export default class Checkpoint extends Element {
         ctx.beginPath()
         this.sprite.draw(ctx, 0, 0, this.position)
         ctx.closePath()
-
     }
 }
