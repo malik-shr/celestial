@@ -75,8 +75,8 @@ export default class Player extends Element {
         this.jumpUpLeft = new Sprite("player/jumpUpLeft.png", this.width, this.height, 70, 65)
         this.airTimeLeft = new Sprite("player/airTimeLeft.png", this.width, this.height, 70, 65)
 
-        this.wallHangLeft = new Sprite("player/wallHangLeft.png", this.width, this.height, 70, 65)
-        this.wallHangRight = new Sprite("player/wallHang.png", this.width, this.height, 70, 65)
+        this.wallHangLeft = new Sprite("player/wallHangL.png", this.width, this.height, 70, 65)
+        this.wallHangRight = new Sprite("player/wallHangR.png", this.width, this.height, 70, 65)
 
         this.playerImage.img.onload = () => {
             this.loaded = true
