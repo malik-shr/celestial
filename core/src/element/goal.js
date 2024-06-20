@@ -8,7 +8,7 @@ export default class Goal extends Element {
         this.game = game
         this.isActive = false
 
-        this.sprite = new Sprite("goal.png", 32, 32, 32, 32)
+        this.sprite = new Sprite("rocket.png", 32, 96, 32, 96)
     }
 
     handleCollisionX(player) {
