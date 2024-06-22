@@ -29,7 +29,7 @@ export default class Bubble extends Element {
                 new Particles(
                     this.position.x,
                     this.position.y,
-                    ["#f3ffff", "#beeaff", "#beeaff", "#beeaff"],
+                    ["#ffdf29", "#ffc20e", "#fcec90"],
                     0
                 )
             )

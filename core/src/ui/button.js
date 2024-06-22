@@ -218,9 +218,9 @@ export class LevelButton extends Button {
     }
 
     draw(ctx) {
-        ++this.clickedFrames
+        if (!this.meta.show) return
 
-        this.updateProgress()
+        ++this.clickedFrames
 
         ctx.save()
 
@@ -234,6 +234,12 @@ export class LevelButton extends Button {
             primaryColor = "#f8f9fa"
             secondaryColor = "#adb5bd"
             hoverColor = "#e9ecef"
+        }
+
+        if (this.meta.name === "GODMODE") {
+            primaryColor = "#ff3e3e"
+            secondaryColor = "#ff6666"
+            hoverColor = "#ff2b2b"
         }
 
         ctx.fillStyle = this.hover ? hoverColor : primaryColor
@@ -250,7 +256,7 @@ export class LevelButton extends Button {
 
         ctx.strokeStyle = secondaryColor
         ctx.lineWidth = 3
-        if (this.meta.unlocked) {
+        if (this.meta.unlocked || this.meta.name === "GODMODE") {
             ctx.lineWidth = this.hover ? 2 + this.strokeScale * 3 - 1 : 2 + this.strokeScale * 3
         }
         ctx.stroke()
@@ -268,7 +274,11 @@ export class LevelButton extends Button {
         ctx.lineWidth = 6
         ctx.stroke()
 
-        this.drawHoverBox(ctx)
+        const temp = true
+        if (temp) {
+            this.drawHoverBox(ctx)
+            this.updateProgress()
+        }
 
         ctx.closePath()
 

@@ -131,10 +131,12 @@ export default class Player extends Element {
     }
 
     action() {
-        if (keysPressed.get("s")) {
+        const temp = true
+
+        if (keysPressed.get("s") && temp) {
             this.godmode = !this.godmode
         }
-        if (this.godmode === false) {
+        if (!temp || this.godmode === false) {
             this.checkDeath()
 
             if (!this.isDead) {

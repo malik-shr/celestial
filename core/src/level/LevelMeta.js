@@ -12,6 +12,7 @@ export default class LevelMeta {
         }
 
         this.unlocked = false
+        this.show = true
         this.data = this.parse()
     }
 

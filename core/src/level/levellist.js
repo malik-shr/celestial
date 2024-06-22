@@ -1,3 +1,4 @@
+import { getGodModeMeta } from "../utils"
 import LevelMeta from "./LevelMeta"
 
 export default class LevelList {
@@ -27,6 +28,11 @@ export default class LevelList {
     get(name) {
         // Always reassign levelMetas to get actual data of local storage
         this.refresh()
+
+        if (name === "GODMODE") {
+            return getGodModeMeta()
+        }
+
         return this.levelMetas.find((item) => item.name === name)
     }
 
@@ -47,8 +53,6 @@ export default class LevelList {
 
             new LevelMeta("Level 7", "levels/level7.json", "saturn", 400, 350),
             new LevelMeta("Level 8", "levels/level8.json", "saturn", 500, 380),
-
-            new LevelMeta("GODMODE", "levels/godmode.json", "saturn", 550, 340),
         ]
 
         let previousUnlocked = true
@@ -108,7 +112,7 @@ export default class LevelList {
         this.stats.overall.averageTime = this.stats.overall.totalBestTime / totalLevelCount
     }
 
-    shouldShowStats() {
+    completedAll() {
         for (const levelMeta of this.levelMetas) {
             if (!levelMeta.data.completed) {
                 return false

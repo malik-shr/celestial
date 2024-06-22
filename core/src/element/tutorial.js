@@ -35,22 +35,32 @@ export default class Tutorial extends Element {
     draw(ctx) {
         if (!this.isActive) return
 
+        ctx.fillStyle = "rgba(0,0,0,0.4)"
+        ctx.roundRect(
+            Math.abs(this.game.camera.position.x) + this.game.canvas.width / 4 - 350 / 2,
+            30 - Math.abs(this.game.camera.position.y),
+            350,
+            40,
+            [12]
+        )
+        ctx.fill()
+
         ctx.beginPath()
 
-        ctx.fillStyle = "#e9d700"
-        ctx.font = "600 11px Montserrat"
-        ctx.textAlign = "center"
+        ctx.fillStyle = "#FFF455"
+        ctx.font = "500 10px Montserrat"
+        ctx.textAlign = "left"
 
         wrapText(
             ctx,
             this.text,
-            Math.abs(this.game.camera.position.x) + this.game.canvas.width / 4,
-            50 - Math.abs(this.game.camera.position.y),
-            300,
+            Math.abs(this.game.camera.position.x) + this.game.canvas.width / 4 - 350 / 2 + 8,
+            40 - Math.abs(this.game.camera.position.y),
+            350,
             15
         )
 
-        ctx.fillStyle = "#e9d700"
+        ctx.fillStyle = "#FFF455"
         ctx.font = "72px Montserrat"
         ctx.textAlign = "center"
 

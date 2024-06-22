@@ -39,26 +39,29 @@ export default class Help extends Modal {
         super.drawBox(ctx)
         super.drawTitle(ctx)
 
-        const firstCol = this.box.position.x + 40
+        const firstCol = this.box.position.x + 30
         const firstRow = this.box.position.y + 100
 
         drawText(ctx, "Move Left", { x: firstCol, y: firstRow })
-        drawText(ctx, "Arrow Left", { x: firstCol + 150, y: firstRow }, 140, 25)
+        drawText(ctx, "Arrow Left", { x: firstCol + 150, y: firstRow })
 
-        drawText(ctx, "Move Right", { x: firstCol, y: firstRow + 35 })
-        drawText(ctx, "Arrow Right", { x: firstCol + 150, y: firstRow + 35 }, 140, 25)
+        drawText(ctx, "Move Right", { x: firstCol, y: firstRow + 30 })
+        drawText(ctx, "Arrow Right", { x: firstCol + 150, y: firstRow + 30 })
 
-        drawText(ctx, "Move Up", { x: firstCol, y: firstRow + 70 })
-        drawText(ctx, "Arrow Up", { x: firstCol + 150, y: firstRow + 70 }, 140, 25)
+        drawText(ctx, "Move Up", { x: firstCol, y: firstRow + 60 })
+        drawText(ctx, "Arrow Up", { x: firstCol + 150, y: firstRow + 60 })
 
-        drawText(ctx, "Move Down", { x: firstCol, y: firstRow + 105 })
-        drawText(ctx, "Arrow Down", { x: firstCol + 150, y: firstRow + 105 }, 140, 25)
+        drawText(ctx, "Move Down", { x: firstCol, y: firstRow + 90 })
+        drawText(ctx, "Arrow Down", { x: firstCol + 150, y: firstRow + 90 })
 
-        drawText(ctx, "Dash", { x: firstCol, y: firstRow + 160 })
-        drawText(ctx, "Shift", { x: firstCol + 150, y: firstRow + 160 }, 140, 25)
+        drawText(ctx, "Dash", { x: firstCol, y: firstRow + 130 })
+        drawText(ctx, "Shift", { x: firstCol + 150, y: firstRow + 130 })
 
-        drawText(ctx, "Jump", { x: firstCol, y: firstRow + 195 })
-        drawText(ctx, "Space", { x: firstCol + 150, y: firstRow + 195 }, 140, 25)
+        drawText(ctx, "Jump", { x: firstCol, y: firstRow + 160 })
+        drawText(ctx, "Space", { x: firstCol + 150, y: firstRow + 160 })
+
+        drawText(ctx, "Godmode", { x: firstCol, y: firstRow + 200 })
+        drawText(ctx, "Strg/Left Click/s", { x: firstCol + 150, y: firstRow + 200 })
 
         this.buttonList.draw(ctx)
 
