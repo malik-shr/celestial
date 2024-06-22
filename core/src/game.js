@@ -74,12 +74,14 @@ export default class Game {
         const timeInS =
             (performance.now() - this.startTime - this.pause.time + this.savedTime * 1000) / 1000
 
-        if (!this.goal.isActive) {
+        if (this.goal === null || !this.goal.isActive) {
             this.time = timeInS.toFixed(1)
         }
 
         this.level.elementList.action()
-        this.goal.handle()
+        if (this.goal !== null) {
+            this.goal.handle()
+        }
 
         this.player.checkCollision()
 
