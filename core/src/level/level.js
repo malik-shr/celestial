@@ -63,7 +63,7 @@ export default class Level {
     }
 
     loadLevel() {
-        const player = this.getPlayer()
+        const player = this.elementList.getPlayer()
 
         if (
             this.meta.data.respawnPoint.x !== Number.MAX_SAFE_INTEGER &&
@@ -121,16 +121,6 @@ export default class Level {
         }
     }
 
-    getPlayer() {
-        for (const element of this.elementList) {
-            if (element instanceof Player) {
-                return element
-            }
-        }
-
-        return null
-    }
-
     insertTutorialBlocks() {
         const amountTutorials = this.elementList.getAmountTutorial()
 
@@ -165,7 +155,7 @@ export default class Level {
     }
 
     write() {
-        const player = this.getPlayer()
+        const player = this.elementList.getPlayer()
 
         const prev = localStorage.getItem(this.name)
 

@@ -12,7 +12,7 @@ export default class Goal extends Element {
         this.sprite = new Sprite("rocket.png", 32, 96, 32, 96)
     }
 
-    action() {
+    handle() {
         if (this.isActive) {
             this.counter += 1
         }
@@ -44,6 +44,7 @@ export default class Goal extends Element {
         if (this.isActive) return
 
         this.isActive = true
+        player.shouldDraw = false
     }
 
     draw(ctx) {

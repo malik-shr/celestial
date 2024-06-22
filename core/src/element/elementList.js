@@ -1,4 +1,5 @@
 import Checkpoint from "./checkpoint"
+import Goal from "./goal"
 import MovingPlatform from "./movingPlatform"
 import Player from "./player"
 import Tutorial from "./tutorial"
@@ -62,6 +63,26 @@ export default class ElementList extends Array {
         }
 
         return count
+    }
+
+    getPlayer() {
+        for (const elementItem of this) {
+            if (elementItem instanceof Player) {
+                return elementItem
+            }
+        }
+
+        return null
+    }
+
+    getGoal() {
+        for (const elementItem of this) {
+            if (elementItem instanceof Goal) {
+                return elementItem
+            }
+        }
+
+        return null
     }
 
     action() {
