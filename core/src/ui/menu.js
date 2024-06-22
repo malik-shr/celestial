@@ -6,6 +6,8 @@ import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
 import Stats from "./modal/stats"
+import LevelMeta from "../level/LevelMeta"
+import { getGodModeMeta } from "../utils"
 
 export default class Menu {
     constructor(levelList, game, canvas) {
@@ -71,6 +73,18 @@ export default class Menu {
                 )
             }
         }
+
+        const godModeMeta = getGodModeMeta()
+
+        this.godModeButton = new LevelButton(
+            () => this.selectLevel(godModeMeta.name),
+            godModeMeta.button.position.x,
+            godModeMeta.button.position.y,
+            this,
+            godModeMeta
+        )
+
+        this.planetList["saturn"].buttonList.add(this.godModeButton)
 
         this.activePlanet = this.planetList[this.planetKeys[this.currentPlanetIndex]]
         this.activePlanet.buttonList.isActive = true
@@ -192,6 +206,8 @@ export default class Menu {
                 button.meta = this.levelList.get(button.meta.name)
             }
         }
+
+        this.godModeButton.meta.show = this.levelList.completedAll() ? true : false
     }
 
     close() {

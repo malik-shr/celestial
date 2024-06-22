@@ -55,7 +55,11 @@ export default class Level {
         await this.parse()
 
         this.elementList.add(new Player(0, 0, this.game))
-        this.elementList.add(new LevelEditor(this.game, this))
+
+        const temp = true
+        if (temp) {
+            this.elementList.add(new LevelEditor(this.game, this))
+        }
     }
 
     loadLevel() {

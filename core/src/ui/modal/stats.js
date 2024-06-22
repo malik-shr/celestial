@@ -114,7 +114,7 @@ export default class Stats extends Modal {
         drawText(ctx, "Overall", { x: firstCol, y: firstRow + 170 })
         drawText(
             ctx,
-            this.levelList.shouldShowStats()
+            this.levelList.completedAll()
                 ? toTime(this.levelList.stats.overall.totalBestTime)
                 : "-",
             { x: firstCol + 140, y: firstRow + 170 },
@@ -122,9 +122,7 @@ export default class Stats extends Modal {
         )
         drawText(
             ctx,
-            this.levelList.shouldShowStats()
-                ? toTime(this.levelList.stats.overall.averageTime)
-                : "-",
+            this.levelList.completedAll() ? toTime(this.levelList.stats.overall.averageTime) : "-",
             { x: firstCol + 260, y: firstRow + 170 },
             "center"
         )

@@ -1,3 +1,5 @@
+import LevelMeta from "./level/LevelMeta"
+
 export function toTime(seconds) {
     const date = new Date(null)
     date.setMilliseconds(seconds * 1000)
@@ -43,4 +45,8 @@ export function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
         ctx.fillText(textLines[tl], x, y)
         y += lineHeight
     }
+}
+
+export function getGodModeMeta() {
+    return new LevelMeta("GODMODE", "levels/godmode.json", "moon", 550, 340)
 }
