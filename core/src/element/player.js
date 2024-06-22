@@ -33,6 +33,7 @@ export default class Player extends Element {
         this.isDashing = false
         this.isDead = false
         this.canDash = true
+        this.dancing = true
 
         // collision flags
         this.isGrounded = false
@@ -53,6 +54,7 @@ export default class Player extends Element {
         this.collidedUpCounter = 5
         this.collidedLeftCounter = 5
         this.collidedRightCounter = 5
+        this.dancingCounter = 0
 
         this.collidingWithPlatformCounter = 0
 
@@ -131,12 +133,10 @@ export default class Player extends Element {
     }
 
     action() {
-        const temp = true
-
-        if (keysPressed.get("s") && temp) {
+        if (keysPressed.get("s")) {
             this.godmode = !this.godmode
         }
-        if (!temp || this.godmode === false) {
+        if (this.godmode === false) {
             this.checkDeath()
 
             if (!this.isDead) {
@@ -467,6 +467,25 @@ export default class Player extends Element {
 
         if (!keysPressed.get("Shift")) {
             this.letGoOfShift = true
+        }
+
+        //dance
+        if (keysPressed.get("d")) {
+            this.dancing = true
+
+            this.dancingCounter += 1
+
+            if (this.dancing) {
+                if (Math.floor(this.dancingCounter / 25) % 2 === 0) {
+                    this.currentSprite = this.sprites.jump.right
+                } else {
+                    this.currentSprite = this.sprites.jump.left
+                }
+            }
+
+            if (this.dancingCounter >= 95) {
+                this.dancingCounter = 0
+            }
         }
     }
 

@@ -4,7 +4,6 @@ import UILayer from "./ui/uiLayer"
 import { Screen, currentScreen, setCurrentScreen } from "./listener/store"
 import Menu from "./ui/menu"
 import Pause from "./ui/modal/pause"
-import Sprite from "./element/sprite"
 import Completed from "./ui/modal/completed"
 import LevelList from "./level/levellist"
 import KeyboardListener from "./listener/keyboardListener"
@@ -45,7 +44,8 @@ export default class Game {
         this.completed = new Completed(this, this.canvas)
         this.pause = new Pause(this.levelList, this, this.canvas)
 
-        this.player = this.level.getPlayer()
+        this.player = this.level.elementList.getPlayer()
+        this.goal = this.level.elementList.getGoal()
 
         this.camera = new Camera(0, 0, this.canvas, this.player)
 
@@ -73,9 +73,15 @@ export default class Game {
 
         const timeInS =
             (performance.now() - this.startTime - this.pause.time + this.savedTime * 1000) / 1000
-        this.time = timeInS.toFixed(1)
+
+        if (this.goal === null || !this.goal.isActive) {
+            this.time = timeInS.toFixed(1)
+        }
 
         this.level.elementList.action()
+        if (this.goal !== null) {
+            this.goal.handle()
+        }
 
         this.player.checkCollision()
 
