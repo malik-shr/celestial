@@ -235,7 +235,7 @@ export default class Player extends Element {
         // when moving to the right or left and meanwhile dashing the player holds the dash speed (15) even after the dash
 
         const maxSpeedX = 5
-        const terminalVelocity = 16
+        const terminalVelocity = 15
 
         // gravity (with terminal velocity) and wallslide
         if (

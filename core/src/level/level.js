@@ -171,13 +171,21 @@ export default class Level {
         }
 
         const cameraPos = {
-            x: this.game.camera.previous.position.x,
-            y: this.game.camera.previous.position.y,
+            x: Number.MAX_SAFE_INTEGER,
+            y: Number.MAX_SAFE_INTEGER,
         }
 
         const bgLayer = {
-            x: this.game.camera.previous.bgLayer.position.x,
-            y: this.game.camera.previous.bgLayer.position.x,
+            x: Number.MAX_SAFE_INTEGER,
+            y: Number.MAX_SAFE_INTEGER,
+        }
+
+        if (this.game.camera.previous !== null) {
+            cameraPos.x = this.game.camera.previous.position.x
+            cameraPos.y = this.game.camera.previous.position.y
+
+            bgLayer.x = this.game.camera.previous.bgLayer.position.x
+            bgLayer.y = this.game.camera.previous.bgLayer.position.y
         }
 
         let time = this.game.time
@@ -187,8 +195,6 @@ export default class Level {
         if (this.completed) {
             respawnPoint.x = Number.MAX_SAFE_INTEGER
             respawnPoint.y = Number.MAX_SAFE_INTEGER
-            cameraPos.x = Number.MAX_SAFE_INTEGER
-            cameraPos.y = Number.MAX_SAFE_INTEGER
             bgLayer.x = Number.MAX_SAFE_INTEGER
             bgLayer.y = Number.MAX_SAFE_INTEGER
             time = 0

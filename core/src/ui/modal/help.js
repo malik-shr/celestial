@@ -4,7 +4,7 @@ import Modal from "./modal"
 
 export default class Help extends Modal {
     constructor(game, canvas) {
-        super("Controls", 350, 410, game, canvas)
+        super("Controls", 350, 440, game, canvas)
 
         this.close = this.close.bind(this)
 
@@ -60,8 +60,11 @@ export default class Help extends Modal {
         drawText(ctx, "Jump", { x: firstCol, y: firstRow + 160 })
         drawText(ctx, "Space", { x: firstCol + 150, y: firstRow + 160 })
 
-        drawText(ctx, "Godmode", { x: firstCol, y: firstRow + 200 })
-        drawText(ctx, "Strg/Left Click/s", { x: firstCol + 150, y: firstRow + 200 })
+        drawText(ctx, "Dance", { x: firstCol, y: firstRow + 190 })
+        drawText(ctx, "D", { x: firstCol + 150, y: firstRow + 190 })
+
+        drawText(ctx, "Godmode", { x: firstCol, y: firstRow + 230 })
+        drawText(ctx, "Strg/Left Click/s", { x: firstCol + 150, y: firstRow + 230 })
 
         this.buttonList.draw(ctx)
 
