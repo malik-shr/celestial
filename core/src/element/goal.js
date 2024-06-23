@@ -59,7 +59,7 @@ export default class Goal extends Element {
             this.game.level.elementList.add(
                 new Particles(
                     this.position.x + 80,
-                    this.position.y - 60,
+                    this.position.y - 40,
                     ["#ff0000", "#ff5252", "#ff7b7b"],
                     1
                 )
@@ -70,7 +70,7 @@ export default class Goal extends Element {
             this.game.level.elementList.add(
                 new Particles(
                     this.position.x - 80,
-                    this.position.y - 80,
+                    this.position.y - 30,
                     ["#03396c", "#005b96", "#6497b1"],
                     1
                 )
@@ -81,7 +81,7 @@ export default class Goal extends Element {
             this.game.level.elementList.add(
                 new Particles(
                     this.position.x + 50,
-                    this.position.y - 100,
+                    this.position.y - 60,
                     ["#059212", "#06D001", "#9BEC00"],
                     1
                 )

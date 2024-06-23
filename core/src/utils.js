@@ -48,5 +48,5 @@ export function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 }
 
 export function getGodModeMeta() {
-    return new LevelMeta("GODMODE", "levels/godmode.json", "moon", 550, 340)
+    return new LevelMeta("GODMODE", "levels/godmode.json", "moon", 550, 360)
 }
