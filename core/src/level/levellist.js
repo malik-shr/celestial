@@ -47,12 +47,13 @@ export default class LevelList {
             new LevelMeta("Level 2", "levels/level2.json", "moon", 500, 310),
             new LevelMeta("Level 3", "levels/level3.json", "moon", 580, 400),
 
-            new LevelMeta("Level 4", "levels/level4.json", "mars", 400, 350),
-            new LevelMeta("Level 5", "levels/level5.json", "mars", 480, 430),
-            new LevelMeta("Level 6", "levels/level6.json", "mars", 580, 400),
+            new LevelMeta("Level 4", "levels/level4.json", "mars", 380, 350),
+            new LevelMeta("Level 5", "levels/level5.json", "mars", 440, 400),
+            new LevelMeta("Level 6", "levels/level6.json", "mars", 520, 430),
+            new LevelMeta("Level 7", "levels/level7.json", "mars", 600, 420),
 
-            new LevelMeta("Level 7", "levels/level7.json", "saturn", 400, 350),
             new LevelMeta("Level 8", "levels/level8.json", "saturn", 500, 380),
+            new LevelMeta("Level 8", "levels/level9.json", "saturn", 500, 380),
         ]
 
         let previousUnlocked = true
