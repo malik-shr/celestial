@@ -8,28 +8,37 @@ export default class Music {
     }
 
     startMusicMenu(){
-        this.audioStartLevel.pause()
-        this.audioMainLevel.pause()
-        if(this.mute === true){return}
-        this.audioStartMenu.play()
-        setTimeout((start) => {
-            while(this.mute === false){
-                this.audioMainMenu.play()
-                setTimeout((loop) => { },106000)
+        this.audioStartLevel.pause();
+        this.audioMainLevel.pause();
+        this.audioStartLevel.currentTime = 0;
+        this.audioMainLevel.currentTime = 0;
+        
+        if(this.mute) return;
+        
+        this.audioStartMenu.play();
+        this.audioStartMenu.onended = () => {
+            if(!this.mute) {
+                this.audioMainMenu.loop = true;
+                this.audioMainMenu.play();
             }
-        },15000)
+        };
     }
+
     startMusicLevel(){
-        this.audioStartMenu.pause()
-        this.audioMainMenu.pause()
-        if(this.mute === true){return}
-        this.audioStartLevel.play()
-        setTimeout((start) => {
-            while(this.mute === false){
-                this.audioMainLevel.play()
-                setTimeout((Loop) => {},106000)
+        this.audioStartMenu.pause();
+        this.audioMainMenu.pause();
+        this.audioStartMenu.currentTime = 0;
+        this.audioMainMenu.currentTime = 0;
+        
+        if(this.mute) return;
+        
+        this.audioStartLevel.play();
+        this.audioStartLevel.onended = () => {
+            if(!this.mute) {
+                this.audioMainLevel.loop = true;
+                this.audioMainLevel.play();
             }
-        },15000)
+        };
     }
     muteVolume(){
         this.mute = !this.mute
