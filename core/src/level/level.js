@@ -12,6 +12,7 @@ import Goal from "../element/goal"
 import Particles from "../element/particle"
 import Tutorial from "../element/tutorial"
 import Sprite from "../element/sprite"
+import Music from "../music/music"
 
 export default class Level {
     constructor(meta, planet, game) {
@@ -28,7 +29,7 @@ export default class Level {
 
         let bgSrc = ""
         let bgTopSrc = ""
-
+        
         switch (planet) {
             case "moon":
                 bgSrc = "moon/bg.png"
@@ -47,19 +48,20 @@ export default class Level {
 
         this.bgTop = new Sprite(bgTopSrc, 1024 * 2, 640 * 2, 1024 * 2, 640 * 2)
         this.bg = new Sprite(bgSrc, 1024, 640, 1024, 640)
-
+        
         this.completed = false
     }
 
-    async initLevel() {
+    async initLevel() { 
         await this.parse()
-
         this.elementList.add(new Player(0, 0, this.game))
 
         const temp = true
         if (temp) {
             this.elementList.add(new LevelEditor(this.game, this))
         }
+        const music = new Music()
+        music.startMusicLevel() 
     }
 
     loadLevel() {
