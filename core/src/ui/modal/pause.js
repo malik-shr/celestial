@@ -79,12 +79,28 @@ export default class Pause extends Modal {
         const savedItem = localStorage.getItem(this.game.level.name)
 
         if (savedItem) {
-            const storage = savedItem.split(",")
+            const storage = JSON.parse(savedItem)
 
-            localStorage.setItem(
-                this.game.level.name,
-                `${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},${Number.MAX_SAFE_INTEGER},0,0,0,${storage[9]}`
-            )
+            const newData = {
+                respawnPoint: {
+                    x: Number.MAX_SAFE_INTEGER,
+                    y: Number.MAX_SAFE_INTEGER,
+                },
+                camera: {
+                    x: Number.MAX_SAFE_INTEGER,
+                    y: Number.MAX_SAFE_INTEGER,
+                },
+                bgLayer: {
+                    x: Number.MAX_SAFE_INTEGER,
+                    y: Number.MAX_SAFE_INTEGER,
+                },
+                time: 0,
+                deaths: 0,
+                tutorialIndex: 0,
+                best: storage.best,
+            }
+
+            localStorage.setItem(this.game.level.name, JSON.stringify(newData))
         }
 
         this.game.startLevel(this.levelList.get(this.game.level.name))

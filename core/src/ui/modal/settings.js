@@ -1,4 +1,3 @@
-import { drawText } from "../../utils"
 import { Checkbox, MenuButton } from "../button"
 import Modal from "./modal"
 
@@ -74,7 +73,9 @@ export default class Settings extends Modal {
     }
 
     clearLocalStorage() {
-        localStorage.clear()
+        for (const meta of this.game.levelList.levelMetas) {
+            localStorage.removeItem(meta.name)
+        }
 
         this.game.levelList.refresh()
         this.menu.updateButtonMeta()

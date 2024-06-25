@@ -62,7 +62,7 @@ export default class LevelList {
                 levelMeta.unlocked = true
             }
 
-            if (levelMeta.data.completed) {
+            if (levelMeta.completed) {
                 previousUnlocked = true
             } else {
                 previousUnlocked = false
@@ -115,7 +115,7 @@ export default class LevelList {
 
     completedAll() {
         for (const levelMeta of this.levelMetas) {
-            if (!levelMeta.data.completed) {
+            if (!levelMeta.completed) {
                 return false
             }
         }
@@ -127,7 +127,7 @@ export default class LevelList {
         const planetMetas = this.getLevelPlanets(planet)
 
         for (const levelMeta of planetMetas) {
-            if (!levelMeta.data.completed) {
+            if (!levelMeta.completed) {
                 return false
             }
         }

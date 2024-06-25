@@ -14,6 +14,8 @@ export default class LevelMeta {
         this.unlocked = false
         this.show = true
         this.data = this.parse()
+
+        this.completed = this.data.best === Number.MAX_SAFE_INTEGER ? false : true
     }
 
     parse() {
@@ -25,7 +27,7 @@ export default class LevelMeta {
                     x: Number.MAX_SAFE_INTEGER,
                     y: Number.MAX_SAFE_INTEGER,
                 },
-                cameraPos: {
+                camera: {
                     x: Number.MAX_SAFE_INTEGER,
                     y: Number.MAX_SAFE_INTEGER,
                 },
@@ -37,30 +39,9 @@ export default class LevelMeta {
                 deaths: 0,
                 tutorialIndex: 0,
                 best: Number.MAX_SAFE_INTEGER,
-                completed: false,
             }
         }
 
-        const storage = item.split(",")
-
-        return {
-            respawnPoint: {
-                x: parseFloat(storage[0]),
-                y: parseFloat(storage[1]),
-            },
-            cameraPos: {
-                x: parseFloat(storage[2]),
-                y: parseFloat(storage[3]),
-            },
-            bgLayerPos: {
-                x: parseFloat(storage[4]),
-                y: parseFloat(storage[5]),
-            },
-            time: parseFloat(storage[6]),
-            deaths: parseInt(storage[7]),
-            tutorialIndex: parseInt(storage[8]),
-            best: parseFloat(storage[9]),
-            completed: parseFloat(storage[9]) === Number.MAX_SAFE_INTEGER ? false : true,
-        }
+        return JSON.parse(item)
     }
 }

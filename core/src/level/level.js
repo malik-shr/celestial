@@ -78,16 +78,16 @@ export default class Level {
         player.deaths = this.meta.data.deaths
 
         if (
-            this.meta.data.cameraPos.x !== Number.MAX_SAFE_INTEGER &&
-            this.meta.data.cameraPos.y !== Number.MAX_SAFE_INTEGER &&
-            this.meta.data.bgLayerPos.x !== Number.MAX_SAFE_INTEGER &&
-            this.meta.data.bgLayerPos.y !== Number.MAX_SAFE_INTEGER
+            this.meta.data.camera.x !== Number.MAX_SAFE_INTEGER &&
+            this.meta.data.camera.y !== Number.MAX_SAFE_INTEGER &&
+            this.meta.data.bgLayer.x !== Number.MAX_SAFE_INTEGER &&
+            this.meta.data.bgLayer.y !== Number.MAX_SAFE_INTEGER
         ) {
-            this.game.camera.position.x = this.meta.data.cameraPos.x
-            this.game.camera.position.y = this.meta.data.cameraPos.y
+            this.game.camera.position.x = this.meta.data.camera.x
+            this.game.camera.position.y = this.meta.data.camera.y
 
-            this.game.camera.bgLayer.position.x = this.meta.data.bgLayerPos.x
-            this.game.camera.bgLayer.position.y = this.meta.data.bgLayerPos.y
+            this.game.camera.bgLayer.position.x = this.meta.data.bgLayer.x
+            this.game.camera.bgLayer.position.y = this.meta.data.bgLayer.y
 
             this.game.camera.save()
         }
@@ -158,56 +158,53 @@ export default class Level {
 
         const prev = localStorage.getItem(this.name)
 
-        let best = Number.MAX_SAFE_INTEGER
-        const respawnPoint = {
-            x: player.respawnPoint.x,
-            y: player.respawnPoint.y,
+        const storageItem = {
+            respawnPoint: {
+                x: player.respawnPoint.x,
+                y: player.respawnPoint.y,
+            },
+            camera: {
+                x: Number.MAX_SAFE_INTEGER,
+                y: Number.MAX_SAFE_INTEGER,
+            },
+            bgLayer: {
+                x: Number.MAX_SAFE_INTEGER,
+                y: Number.MAX_SAFE_INTEGER,
+            },
+            time: this.game.time,
+            deaths: this.game.player.deaths,
+            tutorialIndex: this.tutorialIndex,
+            best: Number.MAX_SAFE_INTEGER,
         }
 
         if (prev) {
-            const data = prev.split(",")
-            best = data[9]
-        }
-
-        const cameraPos = {
-            x: Number.MAX_SAFE_INTEGER,
-            y: Number.MAX_SAFE_INTEGER,
-        }
-
-        const bgLayer = {
-            x: Number.MAX_SAFE_INTEGER,
-            y: Number.MAX_SAFE_INTEGER,
+            const data = JSON.parse(prev)
+            storageItem.best = data.best
         }
 
         if (this.game.camera.previous !== null) {
-            cameraPos.x = this.game.camera.previous.position.x
-            cameraPos.y = this.game.camera.previous.position.y
+            storageItem.camera.x = this.game.camera.previous.position.x
+            storageItem.camera.y = this.game.camera.previous.position.y
 
-            bgLayer.x = this.game.camera.previous.bgLayer.position.x
-            bgLayer.y = this.game.camera.previous.bgLayer.position.y
+            storageItem.bgLayer.x = this.game.camera.previous.bgLayer.position.x
+            storageItem.bgLayer.y = this.game.camera.previous.bgLayer.position.y
         }
-
-        let time = this.game.time
-        let tutorialIndex = this.tutorialIndex
-        let deaths = this.game.player.deaths
 
         if (this.completed) {
-            respawnPoint.x = Number.MAX_SAFE_INTEGER
-            respawnPoint.y = Number.MAX_SAFE_INTEGER
-            bgLayer.x = Number.MAX_SAFE_INTEGER
-            bgLayer.y = Number.MAX_SAFE_INTEGER
-            time = 0
-            deaths = 0
-            tutorialIndex = 0
+            storageItem.respawnPoint.x = Number.MAX_SAFE_INTEGER
+            storageItem.respawnPoint.y = Number.MAX_SAFE_INTEGER
+            storageItem.bgLayer.x = Number.MAX_SAFE_INTEGER
+            storageItem.bgLayer.y = Number.MAX_SAFE_INTEGER
+            storageItem.time = 0
+            storageItem.deaths = 0
+            storageItem.tutorialIndex = 0
         }
 
-        if (this.completed && parseFloat(this.game.time) < parseFloat(best)) {
-            best = this.game.time
+        if (this.completed && parseFloat(this.game.time) < parseFloat(storageItem.best)) {
+            storageItem.best = this.game.time
         }
 
-        const newData = `${respawnPoint.x},${respawnPoint.y},${cameraPos.x},${cameraPos.y},${bgLayer.x},${bgLayer.y},${time},${deaths},${tutorialIndex},${best}`
-
-        localStorage.setItem(this.name, newData)
+        localStorage.setItem(this.name, JSON.stringify(storageItem))
     }
 
     async parse() {
