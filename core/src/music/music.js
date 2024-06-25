@@ -8,6 +8,7 @@ export default class Music {
 
         this.bubbleSound.volume = 0.5
         this.jumppadSound.volume = 0.8
+        this.dashSound.volume = 0.9
 
         this.mute = this.get()
     }

@@ -41,7 +41,7 @@ export default class Tutorial extends Element {
             30 - Math.abs(this.game.camera.position.y),
             350,
             40,
-            [12]
+            [5]
         )
         ctx.fill()
 

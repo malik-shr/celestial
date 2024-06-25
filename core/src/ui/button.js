@@ -80,10 +80,10 @@ export class Checkbox extends Button {
             this.rect.position.y,
             this.rect.width,
             this.rect.height,
-            [6]
+            [4]
         )
         ctx.strokeStyle = "#487394"
-        ctx.lineWidth = 5
+        ctx.lineWidth = 4
         ctx.stroke()
 
         ctx.fillStyle = this.color

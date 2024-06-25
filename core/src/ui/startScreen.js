@@ -28,7 +28,7 @@ export default class StartScreen {
 
     draw(ctx) {
         if (this.opacity < 1 && this.fadeIn) {
-            this.opacity += 0.008
+            this.opacity += 0.01
 
             if (this.opacity >= 1) {
                 this.opacity = 1
@@ -37,10 +37,10 @@ export default class StartScreen {
         }
 
         if (!this.fadeIn) {
-            this.opacity -= 0.008
+            this.opacity -= 0.01
 
-            if (this.opacity <= 0.1) {
-                this.opacity = 0.1
+            if (this.opacity <= 0.2) {
+                this.opacity = 0.2
                 this.fadeIn = true
             }
         }

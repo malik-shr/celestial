@@ -15,8 +15,8 @@ export default class Settings extends Modal {
 
         this.soundButton = new Checkbox(
             this.handleSound,
-            this.box.position.x + this.marginX + 50,
-            this.box.position.y + this.height - 50 - 25 - 140,
+            this.box.position.x + this.marginX + 45,
+            this.box.position.y + this.height - 50 - 25 - 135,
             30,
             30,
             "Sound",
@@ -101,7 +101,7 @@ export default class Settings extends Modal {
         ctx.fillText(
             "Sound",
             this.box.position.x + this.marginX / 2,
-            this.box.position.y + this.height - 50 - 25 - 125
+            this.box.position.y + this.height - 50 - 25 - 120
         )
 
         this.buttonList.draw(ctx)
