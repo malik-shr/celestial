@@ -93,6 +93,9 @@ export default class Menu {
         this.currentPlanetIndex = 0
         this.nextBtn.isActive = true
         this.prevBtn.isActive = false
+
+        this.logoAnimation = false
+        this.logoPosition = { x: this.canvas.width / 2 - this.logo.width / 2, y: 120 }
     }
 
     selectNext() {
@@ -174,7 +177,17 @@ export default class Menu {
     draw(ctx) {
         this.updateAnimationIndex()
         this.bg.draw(ctx, 0, 0, { x: 0, y: 0 })
-        this.logo.draw(ctx, 0, 0, { x: this.canvas.width / 2 - this.logo.width / 2, y: -40 })
+
+        if (this.logoPosition.y > -40) {
+            this.logoPosition.y -= 4
+        } else {
+            this.logoPosition.y = -40
+            this.logoAnimation = true
+        }
+
+        this.logo.draw(ctx, 0, 0, this.logoPosition)
+
+        if (!this.logoAnimation) return
 
         this.planets.draw(ctx, this.animationIndex, 0, { x: 0, y: 90 })
 

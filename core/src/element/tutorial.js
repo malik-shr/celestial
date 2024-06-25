@@ -35,7 +35,7 @@ export default class Tutorial extends Element {
     draw(ctx) {
         if (!this.isActive) return
 
-        ctx.fillStyle = "rgba(0,0,0,0.4)"
+        ctx.fillStyle = "rgba(0,0,0,0.5)"
         ctx.roundRect(
             Math.abs(this.game.camera.position.x) + this.game.canvas.width / 4 - 350 / 2,
             30 - Math.abs(this.game.camera.position.y),

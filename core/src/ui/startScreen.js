@@ -39,21 +39,21 @@ export default class StartScreen {
         if (!this.fadeIn) {
             this.opacity -= 0.008
 
-            if (this.opacity <= 0.3) {
-                this.opacity = 0.3
+            if (this.opacity <= 0.1) {
+                this.opacity = 0.1
                 this.fadeIn = true
             }
         }
 
         this.bg.draw(ctx, 0, 0, { x: 0, y: 0 })
-        this.logo.draw(ctx, 0, 0, { x: this.canvas.width / 2 - this.logo.width / 2, y: 80 })
+        this.logo.draw(ctx, 0, 0, { x: this.canvas.width / 2 - this.logo.width / 2, y: 120 })
 
         ctx.fillStyle = `rgba(227, 227, 210, ${this.opacity})`
         ctx.font = `500 36px Montserrat`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
 
-        ctx.fillText("Press any key...", this.canvas.width / 2, this.canvas.height / 2 + 60)
+        ctx.fillText("Press any key...", this.canvas.width / 2, this.canvas.height / 2 + 80)
     }
 
     start() {
