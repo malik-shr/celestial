@@ -17,4 +17,4 @@ game.start()
 // const ll = new LevelList()
 // game.startLevel(ll.get("Level 1"))
 
-game.menu.open()
+game.startScreen.open()

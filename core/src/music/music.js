@@ -1,51 +1,48 @@
 export default class Music {
-    constructor(){
-        this.audioStartMenu = new Audio("musicData/Start.mp3");
-        this.audioMainMenu =  new Audio("musicData/Main.mp3");
-        this.audioStartLevel = new Audio("musicData/Start.mp3");
-        this.audioMainLevel =  new Audio("musicData/Main.mp3");
-        this.mute = false;
+    constructor() {
+        this.mainMusic = new Audio("musicData/mainMusic.mp3")
+
+        this.mute = this.get()
     }
 
-    startMusicMenu(){
-        this.audioStartLevel.pause();
-        this.audioMainLevel.pause();
-        this.audioStartLevel.currentTime = 0;
-        this.audioMainLevel.currentTime = 0;
-        
-        if(this.mute) return;
-        
-        this.audioStartMenu.play();
-        this.audioStartMenu.onended = () => {
-            if(!this.mute) {
-                this.audioMainMenu.loop = true;
-                this.audioMainMenu.play();
-            }
-        };
+    startMusic() {
+        if (this.mute) return
+
+        this.mainMusic.currentTime = 0
+
+        if (!this.mute) {
+            this.mainMusic.loop = true
+            this.mainMusic.play()
+        }
     }
 
-    startMusicLevel(){
-        this.audioStartMenu.pause();
-        this.audioMainMenu.pause();
-        this.audioStartMenu.currentTime = 0;
-        this.audioMainMenu.currentTime = 0;
-        
-        if(this.mute) return;
-        
-        this.audioStartLevel.play();
-        this.audioStartLevel.onended = () => {
-            if(!this.mute) {
-                this.audioMainLevel.loop = true;
-                this.audioMainLevel.play();
-            }
-        };
-    }
-    muteVolume(){
-        this.mute = !this.mute
-        this.audioStartMenu.pause()
-        this.audioMainMenu.pause()
-        this.audioStartLevel.pause()
-        this.audioMainLevel.pause()
+    startLevelMusic() {
+        this.mainMusic.volume = 0.15
+        this.startMusic()
     }
 
+    startMenuMusic() {
+        this.mainMusic.volume = 0.25
+        this.startMusic()
+    }
+
+    muteVolume() {
+        if (!this.mute) {
+            this.mute = true
+            localStorage.setItem("sound", false)
+            this.mainMusic.pause()
+            return
+        }
+
+        this.mute = false
+        localStorage.setItem("sound", true)
+    }
+
+    get() {
+        const savedItem = localStorage.getItem("sound")
+
+        if (savedItem) return !JSON.parse(savedItem)
+
+        return false
+    }
 }

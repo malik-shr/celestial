@@ -7,7 +7,7 @@ export default class KeyboardListener {
         window.addEventListener("keydown", (event) => this.handleKeyDown(event))
         window.addEventListener("keyup", (event) => this.handleKeyUp(event))
 
-        window.addEventListener("keyup", (event) => this.openPause(event))
+        window.addEventListener("keydown", (event) => this.openPause(event))
     }
 
     handleKeyDown(event) {

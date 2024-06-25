@@ -7,6 +7,8 @@ import Pause from "./ui/modal/pause"
 import Completed from "./ui/modal/completed"
 import LevelList from "./level/levellist"
 import KeyboardListener from "./listener/keyboardListener"
+import Music from "./music/music"
+import StartScreen from "./ui/startScreen"
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -19,7 +21,10 @@ export default class Game {
 
         this.levelList = new LevelList()
 
-        this.menu = new Menu(this.levelList, this, this.canvas)
+        this.music = new Music()
+
+        this.menu = new Menu(this.levelList, this, this.music, this.canvas)
+        this.startScreen = new StartScreen(this.menu, this.canvas)
 
         this.keyboardListener = new KeyboardListener(this)
 
@@ -62,6 +67,8 @@ export default class Game {
         this.intervalLoop = window.setInterval(this.loop, 1000 / 40)
 
         setCurrentScreen(Screen.Game)
+
+        this.music.startLevelMusic()
     }
 
     stop() {
@@ -96,6 +103,10 @@ export default class Game {
 
         if (currentScreen === Screen.Menu) {
             this.menu.draw(this.ctx)
+        }
+
+        if (currentScreen === Screen.Start) {
+            this.startScreen.draw(this.ctx)
         }
 
         if (currentScreen === Screen.Game) {

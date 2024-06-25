@@ -13,6 +13,7 @@ export const keysPressed = new Map([
 ])
 
 export const Screen = {
+    Start: Symbol("start"),
     Menu: Symbol("menu"),
     Game: Symbol("game"),
 }

@@ -8,7 +8,7 @@ export function toTime(seconds) {
 
 export function drawText(ctx, text, position, style = "left") {
     ctx.fillStyle = "#e3e3d2"
-    ctx.font = "500 18px Montserrat"
+    ctx.font = `500 18px Montserrat`
     ctx.textAlign = style
     ctx.textBaseline = "middle"
 

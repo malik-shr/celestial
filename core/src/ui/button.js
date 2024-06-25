@@ -63,6 +63,46 @@ export class MenuButton extends Button {
     }
 }
 
+export class Checkbox extends Button {
+    constructor(action, x, y, width, height) {
+        super(action, x, y, width, height)
+
+        this.isChecked = true
+    }
+
+    draw(ctx) {
+        ctx.beginPath()
+
+        ctx.fillStyle = this.hover ? this.bgHover : this.bgColor
+
+        ctx.roundRect(
+            this.rect.position.x,
+            this.rect.position.y,
+            this.rect.width,
+            this.rect.height,
+            [6]
+        )
+        ctx.strokeStyle = "#487394"
+        ctx.lineWidth = 5
+        ctx.stroke()
+
+        ctx.fillStyle = this.color
+        ctx.font = `600 20px Montserrat`
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+
+        if (this.isChecked) {
+            ctx.fillText(
+                "✓",
+                this.rect.position.x + this.rect.width / 2,
+                this.rect.position.y + this.rect.height / 2
+            )
+        }
+
+        ctx.closePath()
+    }
+}
+
 export class TransparentButton extends Button {
     constructor(action, x, y, width, height, text, fontSize = 26) {
         super(action, x, y, width, height)

@@ -10,9 +10,10 @@ import LevelMeta from "../level/LevelMeta"
 import { getGodModeMeta } from "../utils"
 
 export default class Menu {
-    constructor(levelList, game, canvas) {
+    constructor(levelList, game, music, canvas) {
         this.canvas = canvas
         this.game = game
+        this.music = music
 
         this.levelList = levelList
 
@@ -198,6 +199,8 @@ export default class Menu {
         this.resetPlanetButtons()
         this.activePlanet.buttonList.isActive = true
         this.levelList.refreshStats()
+
+        this.music.startMenuMusic()
     }
 
     updateButtonMeta() {
