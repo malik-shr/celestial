@@ -127,7 +127,9 @@ export default class LevelEditor extends Element {
                     )
                     break
                 case 4:
-                    this.game.level.elementList.add(new JumpPad(this.positionX, this.positionY))
+                    this.game.level.elementList.add(
+                        new JumpPad(this.positionX, this.positionY, this.game)
+                    )
                     break
                 case 5:
                     switch (this.spikeType) {

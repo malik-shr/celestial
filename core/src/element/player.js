@@ -9,6 +9,7 @@ export default class Player extends Element {
 
         this.game = game
         this.level = game.level
+
         this.godmode = false
 
         this.previous = null
@@ -519,6 +520,10 @@ export default class Player extends Element {
                 this.currentFrame = 0
             }
 
+            if (this.dashCounter === 5) {
+                this.game.music.playSound(this.game.music.dashSound)
+            }
+
             if (this.dashCounter < 8) {
                 if (this.wasGrounded) {
                     this.collidedDownCounter = 0
@@ -835,6 +840,8 @@ export default class Player extends Element {
 
         const colors = ["#693a00", "#546d8e", "#ffffff", "#333a42"]
         this.level.elementList.add(new Particles(this.position.x, this.position.y, colors, 2))
+
+        this.game.music.playSound(this.game.music.deadSound)
     }
 
     resetValues() {

@@ -1,8 +1,10 @@
 import SolidBlock from "./solidBlock"
 import Sprite from "./sprite"
 export default class JumpPad extends SolidBlock {
-    constructor(x, y) {
+    constructor(x, y, game) {
         super(x, y)
+
+        this.game = game
 
         this.activeFrames = 0
         this.isActive = false
@@ -29,6 +31,7 @@ export default class JumpPad extends SolidBlock {
             this.isActive = true
             this.currentFrame = 0
             player.isGrounded = false
+            this.game.music.playSound(this.game.music.jumppadSound)
         }
 
         // save the object reference in case of reset

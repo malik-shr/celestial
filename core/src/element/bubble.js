@@ -53,6 +53,7 @@ export default class Bubble extends Element {
         if (!this.collided) {
             this.collided = true
             player.canDash = true
+            this.game.music.playSound(this.game.music.bubbleSound)
         }
     }
 

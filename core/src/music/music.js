@@ -1,6 +1,12 @@
 export default class Music {
     constructor() {
         this.mainMusic = new Audio("musicData/mainMusic.mp3")
+        this.jumppadSound = new Audio("musicData/Jumppad.mp3")
+        this.dashSound = new Audio("musicData/Dash.mp3")
+        this.bubbleSound = new Audio("musicData/Coin.mp3")
+        this.deadSound = new Audio("musicData/Death.mp3")
+
+        this.bubbleSound.volume = 0.5
 
         this.mute = this.get()
     }
@@ -24,6 +30,14 @@ export default class Music {
     startMenuMusic() {
         this.mainMusic.volume = 0.25
         this.startMusic()
+    }
+
+    playSound(sound) {
+        if (this.mute) return
+
+        sound.currentTime = 0
+
+        sound.play()
     }
 
     muteVolume() {

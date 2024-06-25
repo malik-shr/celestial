@@ -216,7 +216,7 @@ export default class Level {
         }
 
         for (const jumppad of levelObj.jumppads) {
-            this.elementList.add(new JumpPad(jumppad.x, jumppad.y))
+            this.elementList.add(new JumpPad(jumppad.x, jumppad.y, this.game))
         }
 
         for (const solidBlock of levelObj.solidBlocks) {
