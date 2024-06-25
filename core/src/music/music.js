@@ -7,6 +7,7 @@ export default class Music {
         this.deadSound = new Audio("musicData/Death.mp3")
 
         this.bubbleSound.volume = 0.5
+        this.jumppadSound.volume = 0.8
 
         this.mute = this.get()
     }
