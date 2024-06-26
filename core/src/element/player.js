@@ -520,7 +520,7 @@ export default class Player extends Element {
                 this.currentFrame = 0
             }
 
-            if (this.dashCounter === 4) {
+            if (this.dashCounter === 3) {
                 this.game.music.playSound(this.game.music.dashSound)
             }
 
