@@ -1,5 +1,4 @@
-import LevelMeta from "../../level/LevelMeta"
-import { getGodModeMeta, toTime } from "../../utils"
+import { toTime } from "../../utils"
 import { MenuButton } from "../button"
 import Modal from "./modal"
 

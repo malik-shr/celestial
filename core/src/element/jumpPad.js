@@ -1,5 +1,6 @@
 import SolidBlock from "./solidBlock"
 import Sprite from "./sprite"
+
 export default class JumpPad extends SolidBlock {
     constructor(x, y, game) {
         super(x, y)

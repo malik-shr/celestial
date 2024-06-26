@@ -6,7 +6,6 @@ import Help from "./modal/help"
 import Settings from "./modal/settings"
 import { getPlanets } from "../planets"
 import Stats from "./modal/stats"
-import LevelMeta from "../level/LevelMeta"
 import { getGodModeMeta } from "../utils"
 
 export default class Menu {

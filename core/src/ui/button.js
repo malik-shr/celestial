@@ -314,8 +314,7 @@ export class LevelButton extends Button {
         ctx.lineWidth = 6
         ctx.stroke()
 
-        const temp = true
-        if (temp) {
+        if (this.meta.unlocked || this.meta.name === "GODMODE") {
             this.drawHoverBox(ctx)
             this.updateProgress()
         }

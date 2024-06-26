@@ -55,8 +55,7 @@ export default class Level {
         await this.parse()
         this.elementList.add(new Player(0, 0, this.game))
 
-        const temp = true
-        if (temp) {
+        if (this.name !== "GODMODE") {
             this.elementList.add(new LevelEditor(this.game, this))
         }
     }
@@ -106,7 +105,7 @@ export default class Level {
 
         const highestX = Math.ceil(this.elementList.getHighestX() / 2048)
 
-        for (let i = 0; i < highestX; i++) {
+        for (let i = 0; i < highestX + 1; i++) {
             this.bgTop.draw(
                 ctx,
                 0,

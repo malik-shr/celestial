@@ -134,10 +134,10 @@ export default class Player extends Element {
     }
 
     action() {
-        if (keysPressed.get("s")) {
+        if (keysPressed.get("s") && this.level.name === "GODMODE") {
             this.godmode = !this.godmode
         }
-        if (this.godmode === false) {
+        if (!this.godmode || this.level.name !== "GODMODE") {
             this.checkDeath()
 
             if (!this.isDead) {
@@ -193,21 +193,7 @@ export default class Player extends Element {
         }
 
         ctx.filter = "none"
-
         ctx.globalAlpha = 1
-
-        // this.updateFrames()
-
-        // console.log("velocity x: " + this.velocity.x)
-        // console.log("velocity y: " + this.velocity.y)
-        // console.log(this.currentSprite.img)
-        // // console.log("grounded: " + this.isGrounded)
-        // console.log("falling: " + this.falling)
-        // console.log("Dash: " + this.isDashing)
-        // console.log("Movingplatform: " + this.standingOnMovingPlatform)
-        // console.log("frames: " + this.currentFrame)
-        // console.log("Elapsedframes: " + this.elapsedFrames)
-        // console.log("isjumping: " + this.jummping)
 
         ctx.fill()
 
@@ -520,7 +506,7 @@ export default class Player extends Element {
                 this.currentFrame = 0
             }
 
-            if (this.dashCounter === 4) {
+            if (this.dashCounter === 3) {
                 this.game.music.playSound(this.game.music.dashSound)
             }
 

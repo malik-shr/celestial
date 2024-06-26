@@ -1,4 +1,3 @@
-import Checkpoint from "./checkpoint"
 import Goal from "./goal"
 import MovingPlatform from "./movingPlatform"
 import Player from "./player"

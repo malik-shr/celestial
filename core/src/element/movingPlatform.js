@@ -1,5 +1,6 @@
 import Element from "./element"
 import Sprite from "./sprite"
+
 export default class MovingPlatform extends Element {
     constructor(x, y, velocityX = 0, velocityY = 0, maxX, maxY, traveledX, traveledY, type) {
         super(x, y, 64, 16)
@@ -16,7 +17,7 @@ export default class MovingPlatform extends Element {
         this.traveledX = traveledX
         this.traveledY = traveledY
 
-        if (this.type == 1) {
+        if (this.type === 1) {
             this.velocity = { x: 0, y: 0 }
         }
 
@@ -39,7 +40,7 @@ export default class MovingPlatform extends Element {
             player.previous.position.y - player.previous.velocity.y - 1 <=
             this.position.y - player.height - this.velocity.y
         ) {
-            if (this.activated === false && this.type == 1) {
+            if (this.activated === false && this.type === 1) {
                 this.velocity = structuredClone(this.startVelocity)
             }
             this.activated = true
@@ -196,7 +197,7 @@ export default class MovingPlatform extends Element {
     }
 
     reset() {
-        if (this.type == 1) {
+        if (this.type === 1) {
             this.position = structuredClone(this.startPosition)
             this.velocity = { x: 0, y: 0 }
             this.activated = false
