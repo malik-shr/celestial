@@ -55,7 +55,7 @@ export default class Level {
         await this.parse()
         this.elementList.add(new Player(0, 0, this.game))
 
-        if (this.name !== "GODMODE") {
+        if (this.name === "GODMODE") {
             this.elementList.add(new LevelEditor(this.game, this))
         }
     }
